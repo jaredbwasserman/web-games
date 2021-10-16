@@ -1,0 +1,159 @@
+html, body {
+    background-color: #1d2025;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Title */
+.title {
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 3em;
+    line-height: 1.2;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+/* View scores */
+.viewScores {
+    margin-bottom: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    width: 40%;
+}
+
+/* Join game text area */
+#joinGameCode {
+    resize: none;
+    font-size: 2em;
+    outline: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+    width: 35%;
+    white-space: normal;
+    text-align: center;
+    -moz-text-align-last: center; /* Firefox 12+ */
+    text-align-last: center;
+    padding: 0;
+    border: 0;
+}
+
+.joinGame {
+    margin-bottom: 100px;
+}
+
+/* Create game area */
+.gridContainer {
+    display: grid;
+    /* grid-template-columns: auto auto auto; */
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+    background-color: none;
+    width: 35%;
+    outline: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    padding: 0;
+    border: 0;
+}
+
+.gridItem {
+    margin-bottom: 10px;
+    height: 100px;
+    padding: 0;
+    border: 0;
+}
+
+/* View Scores/Join Game/Create Game Buttons */
+.btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    width: 35%;
+    margin-bottom: 0;
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 2em;
+    line-height: 1.2;
+    text-align: center;
+    background-color: #1a71e4;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    padding: 0;
+    border: 0;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.btn:hover,
+.btn:focus {
+    color: #ffffff;
+    background-color: rgb(55, 137, 245);
+    text-decoration: none;
+}
+
+.btn:active,
+.btn.active {
+    outline: 0;
+    transform: translateY(4px);
+}
+
+/* Game Buttons */
+.gameBtn {
+    display: block;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    height: 90%;
+    width: 90%;
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 1.5em;
+    line-height: 1.2;
+    text-align: center;
+    background-color: #491b5e;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    border: 10px solid #491b5e;
+    padding: none;
+}
+
+.gameBtn:focus {
+    outline: none;
+}
+
+.gameBtn:hover,
+.gameBtn:focus {
+    border: 10px solid rgb(136, 46, 211);
+}
+
+.gameBtn:active,
+.gameBtn.active {
+    border: 10px solid rgb(136, 46, 211);
+    transform: translateY(4px);
+}

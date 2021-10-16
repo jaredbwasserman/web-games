@@ -2,13 +2,75 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+
+    <!-- Ensure that everything scales appropriately on a mobile device -->
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+    <!-- Let's borrow a cool looking Font from Google -->
+    <link href='https://fonts.googleapis.com/css?family=Quicksand:300,400,700' rel='stylesheet' type='text/css'>
+
+    <link href="css/styles.css" rel="stylesheet">
 </head>
 
 <body>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.0.0/dist/phaser.min.js"></script>
-    <script src="js/game.js"></script>
+    <div class="entryScreen">
+        <div class="title">
+            Web Games
+        </div>
+
+        <div class="viewScores">
+            <button id="btnViewScores" class="btn">VIEW SCORES</button>
+        </div>
+
+        <div class="joinGame">
+            <textarea id="joinGameCode" rows="1" cols="20" maxlength="20" placeholder="ENTER GAME CODE"></textarea>
+            <button id="btnJoinGame" class="btn">JOIN GAME</button>
+        </div>
+
+        <div class="createGame">
+            <div class="gridContainer">
+                <div class="gridItem">
+                    <button id="game1" class="gameBtn">GAME 1</button>
+                </div>
+                <div class="gridItem">
+                    <button id="game2" class="gameBtn">GAME 2</button>
+                </div>
+                <div class="gridItem">
+                    <button id="game3" class="gameBtn">GAME 3</button>
+                </div>
+                <div class="gridItem">
+                    <button id="game4" class="gameBtn">GAME 4</button>
+                </div>
+            </div>
+            <button id="btnCreateGame" class="btn">CREATE GAME</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+
+    <!-- jQuery! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- TextFit resizes text to fill a container.
+        It's used so the titles and game words fit properly on any size screen.
+        https://github.com/STRML/textFit   -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/textfit/2.4.0/textFit.min.js"></script>
+
+    <!-- FastClick is used to eliminate the 300ms delay when clicking items on a mobile device
+        https://github.com/ftlabs/fastclick -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+
+    <!-- If Socket.IO is used with Express, then the /socket.io/ path will
+        serve the proper Socket.IO javascript files used by the browser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+
+    <!-- Phaser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0-beta.1/phaser.min.js"></script>
+
+    <!-- Main app -->
+    <script src="js/app.js"></script>
 </body>
 
 </html>
