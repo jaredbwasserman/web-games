@@ -37,5 +37,5 @@ function createGame(data) {
     // TODO: Remove
     console.log('New game');
 
-    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host', gameType: data.gameType });
+    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host' });
 };

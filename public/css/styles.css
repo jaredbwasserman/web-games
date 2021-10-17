@@ -6,7 +6,7 @@ html, body {
     padding: 0;
 }
 
-/* Title */
+/* Text */
 .title {
     color: #ffffff;
     font-family: 'Quicksand', sans-serif;
@@ -20,9 +20,27 @@ html, body {
     margin-bottom: 20px;
 }
 
+.smallTitle {
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 2.5em;
+    line-height: 1.2;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+
 /* View scores */
-.viewScores {
-    margin-bottom: 100px;
+#viewScores {
+    margin-bottom: 50px;
+}
+
+/* Nickname */
+#nickNameArea {
+    margin-bottom: 50px;
 }
 
 /* Join game text area */
@@ -44,29 +62,7 @@ textarea {
 }
 
 .joinGame {
-    margin-bottom: 100px;
-}
-
-/* Create game area */
-.gridContainer {
-    display: grid;
-    /* grid-template-columns: auto auto auto; */
-    grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
-    background-color: none;
-    width: 40%;
-    outline: none;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 0;
-    padding: 0;
-    border: 0;
-}
-
-.gridItem {
-    margin-bottom: 10px;
-    height: 100px;
-    padding: 0;
-    border: 0;
+    margin-bottom: 50px;
 }
 
 /* View Scores/Join Game/Create Game Buttons */
@@ -111,6 +107,41 @@ textarea {
 .btn.active {
     outline: 0;
     transform: translateY(4px);
+}
+
+/* Lobby */
+#btnReturnHome {
+    margin-bottom: 50px;
+}
+
+#shareGameCode {
+    margin-bottom: 50px;
+}
+
+#playersArea {
+    margin-bottom: 50px;
+}
+
+/* Create game area */
+.gridContainer {
+    display: grid;
+    /* grid-template-columns: auto auto auto; */
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+    background-color: none;
+    width: 40%;
+    outline: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    padding: 0;
+    border: 0;
+}
+
+.gridItem {
+    margin-bottom: 10px;
+    height: 100px;
+    padding: 0;
+    border: 0;
 }
 
 /* Game Buttons */
@@ -158,34 +189,4 @@ textarea {
 .gameBtn:disabled {
     background-color: #120716;
     border: 10px solid #120716;
-}
-
-/* Lobby */
-#btnReturnHome {
-    margin-bottom: 100px;
-}
-
-#shareGameCode {
-    margin-bottom: 100px;
-}
-
-#gameCodeLabel {
-    color: #ffffff;
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 700;
-    font-size: 2em;
-    line-height: 1.2;
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#lobbyInfo {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    height: 100%;
-    width: 100%;
-    text-align: center;
 }

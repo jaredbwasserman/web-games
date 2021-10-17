@@ -36,31 +36,24 @@ jQuery(function ($) {
 
             // Bind events
             App.bindEvents();
-
-            // Initialize the fastclick library
-            FastClick.attach(document.body);
-
-            // Default game is the first available game
-            var foundDefault = false;
-            Array.from(document.getElementsByClassName("gameBtn")).forEach(gameButton => {
-                if (!foundDefault && !gameButton.disabled) {
-                    gameButton.click();
-                    gameButton.focus();
-                    foundDefault = true;
-                }
-            });
         },
 
         bindEvents: function () {
             document.getElementById('btnJoinGame').addEventListener('click', App.onJoinClick);
             document.getElementById('btnCreateGame').addEventListener('click', App.onCreateClick);
-            Array.from(document.getElementsByClassName("gameBtn")).forEach(gameButton => {
-                gameButton.addEventListener('click', App.onGameButtonClick);
-            });
         },
 
         onJoinClick: function () {
             console.log('Clicked "Join A Game"'); // TODO: Remove
+
+            if ('' === document.getElementById('nickname').value) {
+                alert('Must enter nickname!');
+                return;
+            }
+            if ('' === document.getElementById('joinGameCode').value) {
+                alert('Must enter game code!');
+                return;
+            }
 
             // Get the game code
             const gameId = document.getElementById('joinGameCode').value
@@ -70,7 +63,13 @@ jQuery(function ($) {
 
         onCreateClick: function () {
             console.log('Clicked "Create A Game"'); // TODO: Remove
-            IO.socket.emit('createGame', {gameType: App.gameType});
+
+            if ('' === document.getElementById('nickname').value) {
+                alert('Must enter nickname!');
+                return;
+            }
+
+            IO.socket.emit('createGame');
         },
 
         onGameButtonClick: function () {
@@ -91,9 +90,6 @@ jQuery(function ($) {
             // Update current html
             document.getElementById('currentScreen').innerHTML = document.getElementById('lobbyTemplate').innerHTML
 
-            // Update title
-            document.getElementById('lobbyTitle').innerHTML = `${App.gameType} LOBBY`;
-
             // Return home button
             document.getElementById('btnReturnHome').addEventListener('click', () => window.location.reload());
 
@@ -102,8 +98,26 @@ jQuery(function ($) {
             new ClipboardJS('#copyGameCode');
 
             // Only host can start game
-            if (App.role !== 'host') {
-                document.getElementById('btnStartGame').remove();
+            if (App.role === 'host') {
+                // Game button clicks change gameType
+                Array.from(document.getElementsByClassName("gameBtn")).forEach(gameButton => {
+                    gameButton.addEventListener('click', App.onGameButtonClick);
+                });
+
+                // Default game is the first available game
+                var foundDefault = false;
+                Array.from(document.getElementsByClassName("gameBtn")).forEach(gameButton => {
+                    if (!foundDefault && !gameButton.disabled) {
+                        gameButton.click();
+                        gameButton.focus();
+                        foundDefault = true;
+                    }
+                });
+
+                document.getElementById('waitingArea').remove();
+            }
+            else {
+                document.getElementById('startGameArea').remove();
             }
         },
 

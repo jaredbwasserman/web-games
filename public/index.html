@@ -21,8 +21,12 @@
         <div class="introScreen">
             <div class="title">WEB GAMES</div>
 
-            <div class="viewScores">
+            <div id="viewScores">
                 <button id="btnViewScores" class="btn">VIEW SCORES</button>
+            </div>
+
+            <div id="nickNameArea">
+                <textarea id="nickname" rows="1" cols="20" maxlength="20" placeholder="ENTER NICKNAME"></textarea>
             </div>
 
             <div class="joinGame">
@@ -31,7 +35,31 @@
             </div>
 
             <div class="createGame">
-                <div class="gridContainer">
+                <button id="btnCreateGame" class="btn">CREATE GAME</button>
+            </div>
+        </div>
+    </script>
+
+    <!-- Lobby template -->
+    <script id="lobbyTemplate" type="text/template">
+        <div class="lobbyScreen">
+            <div id="lobbyTitle" class="title">LOBBY</div>
+
+            <div class="returnHome">
+                <button id="btnReturnHome" class="btn">RETURN HOME</button>
+            </div>
+
+            <div id="shareGameCode">
+                <textarea readonly id="gameCode" rows="1" cols="36" maxlength="36" placeholder="GAME CODE"></textarea>
+                <button id="copyGameCode" class="btn" data-clipboard-target="#gameCode">COPY GAME CODE</button>
+            </div>
+
+            <div id="playersArea" class="smallTitle">PLAYERS</div>
+
+            <div id="waitingArea" class="smallTitle">WAITING FOR HOST...</div>
+
+            <div id="startGameArea">
+                <div id="gameGrid" class="gridContainer">
                     <div class="gridItem">
                         <button id="CLAPPER" class="gameBtn">CLAPPER</button>
                     </div>
@@ -51,31 +79,8 @@
                         <button disabled id="game6" class="gameBtn">COMING SOON</button>
                     </div>
                 </div>
-                <button id="btnCreateGame" class="btn">CREATE GAME</button>
-            </div>
-        </div>
-    </script>
-
-    <!-- Lobby template -->
-    <script id="lobbyTemplate" type="text/template">
-        <div class="lobbyScreen">
-            <div id="lobbyTitle" class="title"></div>
-
-            <div class="returnHome">
-                <button id="btnReturnHome" class="btn">RETURN HOME</button>
-            </div>
-
-            <div id="shareGameCode">
-                <div id="gameCodeLabel">GAME CODE</div>
-                <textarea readonly id="gameCode" rows="1" cols="36" maxlength="36" placeholder="GAME CODE"></textarea>
-                <button id="copyGameCode" class="btn" data-clipboard-target="#gameCode">COPY TO CLIPBOARD</button>
-            </div>
-
-            <div id="startGameArea">
-                <textarea id="enterNickname" rows="1" cols="36" maxlength="36" placeholder="ENTER NICKNAME"></textarea>
                 <button id="btnStartGame" class="btn">START GAME</button>
             </div>
-            
         </div>
     </script>
 
@@ -94,9 +99,6 @@
 
     <!-- Resizes text to fill a container https://github.com/STRML/textFit -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/textfit/2.4.0/textFit.min.js"></script>
-
-    <!-- Eliminate delay when clicking on mobile https://github.com/ftlabs/fastclick -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
 
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
