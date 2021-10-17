@@ -9,3 +9,5 @@ A collection of web games.
 1. Add more games
 1. Add instructions for how to add games.
 1. Add instructions for local setup and running.
+1. Clean up server memory (when a game finishes, when a player leaves, etc).
+1. Update URLs so browser back button works

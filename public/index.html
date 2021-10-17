@@ -20,7 +20,7 @@
     <script id="introTemplate" type="text/template">
         <div class="introScreen">
             <div class="title">
-                Web Games
+                WEB GAMES
             </div>
 
             <div class="viewScores">
@@ -56,15 +56,24 @@
     <script id="lobbyTemplate" type="text/template">
         <div class="lobbyScreen">
             <div class="title">
-                Lobby
+                LOBBY
             </div>
 
             <div class="returnHome">
                 <button id="btnReturnHome" class="btn">RETURN HOME</button>
             </div>
 
-            <div id="lobbyGame"></div>
-            <div id="lobbyInfo"></div> 
+            <div id="shareGameCode">
+                <div id="gameCodeLabel">GAME CODE</div>
+                <textarea readonly id="gameCode" rows="1" cols="36" maxlength="36" placeholder="GAME CODE"></textarea>
+                <button id="copyGameCode" class="btn" data-clipboard-target="#gameCode">COPY TO CLIPBOARD</button>
+            </div>
+
+            <div id="startGameArea">
+                <textarea id="enterNickname" rows="1" cols="36" maxlength="36" placeholder="ENTER NICKNAME"></textarea>
+                <button id="btnStartGame" class="btn">START GAME</button>
+            </div>
+            
         </div>
     </script>
 
@@ -78,17 +87,17 @@
 
     <!-- Start JavaScript Libraries -->
 
-    <!-- jQuery! -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Copy to clipboard https://github.com/zenorocha/clipboard.js/ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 
-    <!-- TextFit resizes text to fill a container.
-        It's used so the titles and game words fit properly on any size screen.
-        https://github.com/STRML/textFit   -->
+    <!-- Resizes text to fill a container https://github.com/STRML/textFit -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/textfit/2.4.0/textFit.min.js"></script>
 
-    <!-- FastClick is used to eliminate the 300ms delay when clicking items on a mobile device
-        https://github.com/ftlabs/fastclick -->
+    <!-- Eliminate delay when clicking on mobile https://github.com/ftlabs/fastclick -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Phaser -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0-beta.1/phaser.min.js"></script>

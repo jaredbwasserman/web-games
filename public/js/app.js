@@ -75,16 +75,20 @@ jQuery(function ($) {
             // Return home button
             document.getElementById('btnReturnHome').addEventListener('click', () => window.location.reload());
 
-            // Host and players get a slightly different view
-            if (App.role === 'host') {
-                document.getElementById('lobbyInfo').innerHTML = 'You are host' // TODO: Update
-            }
-            else {
-                document.getElementById('lobbyInfo').innerHTML = 'You are player' // TODO: Update
-            }
+            // Share game code
+            document.getElementById('gameCode').value = App.gameId;
+            new ClipboardJS('#copyGameCode');
 
-            // Load lobby game
-            $.getScript("js/lobby.js", function (data, textStatus, jqxhr) { });
+            // Only host can start game
+            if (App.role !== 'host') {
+                document.getElementById('btnStartGame').remove();
+            }
+        },
+
+        toGame: function (data) {
+            // TODO: Finish implementing
+            // Load game
+            $.getScript("js/games/{GAME}.js", function (data, textStatus, jqxhr) { });
         }
     }
 

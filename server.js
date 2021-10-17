@@ -26,7 +26,7 @@ function joinGame(data) {
     // TODO: Remove
     console.log('Join game');
 
-    this.emit('gameJoined', {gameId: gameId, socketId: this.id, role: 'player'});
+    this.emit('gameJoined', { gameId: gameId, socketId: this.id, role: 'player' });
 }
 
 function createGame() {
@@ -36,5 +36,5 @@ function createGame() {
     // TODO: Remove
     console.log('New game');
 
-    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host'});
+    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host' });
 };
