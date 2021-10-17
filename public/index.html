@@ -15,40 +15,68 @@
 </head>
 
 <body>
-    <div class="entryScreen">
-        <div class="title">
-            Web Games
-        </div>
 
-        <div class="viewScores">
-            <button id="btnViewScores" class="btn">VIEW SCORES</button>
-        </div>
-
-        <div class="joinGame">
-            <textarea id="joinGameCode" rows="1" cols="20" maxlength="20" placeholder="ENTER GAME CODE"></textarea>
-            <button id="btnJoinGame" class="btn">JOIN GAME</button>
-        </div>
-
-        <div class="createGame">
-            <div class="gridContainer">
-                <div class="gridItem">
-                    <button id="game1" class="gameBtn">GAME 1</button>
-                </div>
-                <div class="gridItem">
-                    <button id="game2" class="gameBtn">GAME 2</button>
-                </div>
-                <div class="gridItem">
-                    <button id="game3" class="gameBtn">GAME 3</button>
-                </div>
-                <div class="gridItem">
-                    <button id="game4" class="gameBtn">GAME 4</button>
-                </div>
+    <!-- Intro template -->
+    <script id="introTemplate" type="text/template">
+        <div class="introScreen">
+            <div class="title">
+                Web Games
             </div>
-            <button id="btnCreateGame" class="btn">CREATE GAME</button>
-        </div>
-    </div>
 
-    <!-- JavaScript Libraries -->
+            <div class="viewScores">
+                <button id="btnViewScores" class="btn">VIEW SCORES</button>
+            </div>
+
+            <div class="joinGame">
+                <textarea id="joinGameCode" rows="1" cols="36" maxlength="36" placeholder="ENTER GAME CODE"></textarea>
+                <button id="btnJoinGame" class="btn">JOIN GAME</button>
+            </div>
+
+            <div class="createGame">
+                <div class="gridContainer">
+                    <div class="gridItem">
+                        <button id="game1" class="gameBtn">GAME 1</button>
+                    </div>
+                    <div class="gridItem">
+                        <button id="game2" class="gameBtn">GAME 2</button>
+                    </div>
+                    <div class="gridItem">
+                        <button id="game3" class="gameBtn">GAME 3</button>
+                    </div>
+                    <div class="gridItem">
+                        <button id="game4" class="gameBtn">GAME 4</button>
+                    </div>
+                </div>
+                <button id="btnCreateGame" class="btn">CREATE GAME</button>
+            </div>
+        </div>
+    </script>
+
+    <!-- Lobby template -->
+    <script id="lobbyTemplate" type="text/template">
+        <div class="lobbyScreen">
+            <div class="title">
+                Lobby
+            </div>
+
+            <div class="returnHome">
+                <button id="btnReturnHome" class="btn">RETURN HOME</button>
+            </div>
+
+            <div id="lobbyGame"></div>
+            <div id="lobbyInfo"></div> 
+        </div>
+    </script>
+
+    <!-- Game template -->
+    <script id="gameTemplate" type="text/template">
+        <div class="gameScreen"></div>
+    </script>
+
+    <!-- Current screen -->
+    <div id="currentScreen"></div>
+
+    <!-- Start JavaScript Libraries -->
 
     <!-- jQuery! -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -62,12 +90,13 @@
         https://github.com/ftlabs/fastclick -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
 
-    <!-- If Socket.IO is used with Express, then the /socket.io/ path will
-        serve the proper Socket.IO javascript files used by the browser -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
-
     <!-- Phaser -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0-beta.1/phaser.min.js"></script>
+
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- End JavaScript Libraries -->
 
     <!-- Main app -->
     <script src="js/app.js"></script>

@@ -23,11 +23,6 @@ html, body {
 /* View scores */
 .viewScores {
     margin-bottom: 100px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    height: 100%;
-    width: 40%;
 }
 
 /* Join game text area */
@@ -39,7 +34,7 @@ html, body {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 0px;
-    width: 35%;
+    width: 40%;
     white-space: normal;
     text-align: center;
     -moz-text-align-last: center; /* Firefox 12+ */
@@ -58,7 +53,7 @@ html, body {
     /* grid-template-columns: auto auto auto; */
     grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
     background-color: none;
-    width: 35%;
+    width: 40%;
     outline: none;
     margin-left: auto;
     margin-right: auto;
@@ -80,7 +75,7 @@ html, body {
     margin-left: auto;
     margin-right: auto;
     height: 100%;
-    width: 35%;
+    width: 40%;
     margin-bottom: 0;
     color: #ffffff;
     font-family: 'Quicksand', sans-serif;
@@ -156,4 +151,27 @@ html, body {
 .gameBtn.active {
     border: 10px solid rgb(136, 46, 211);
     transform: translateY(4px);
+}
+
+/* Lobby */
+#btnReturnHome {
+    margin-bottom: 50px;
+}
+
+#lobbyGame {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+#lobbyInfo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    width: 100%;
+    text-align: center;
 }

@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+const { v4: uuidv4 } = require('uuid');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -14,8 +15,26 @@ server.listen(8080, function () {
 });
 
 io.on('connection', function (socket) {
-    console.log('a user connected'); // TODO: Remove?
-    socket.on('disconnect', function () {
-        console.log('user disconnected'); // TODO: Remove?
-    });
+    socket.on('joinGame', joinGame)
+    socket.on('createGame', createGame);
 });
+
+// TODO: Some checks on valid gameId and error if not
+function joinGame(data) {
+    const gameId = data.gameId;
+
+    // TODO: Remove
+    console.log('Join game');
+
+    this.emit('gameJoined', {gameId: gameId, socketId: this.id, role: 'player'});
+}
+
+function createGame() {
+    // Create a unique Socket.IO Room
+    const gameId = uuidv4();
+
+    // TODO: Remove
+    console.log('New game');
+
+    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host'});
+};
