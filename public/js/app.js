@@ -47,11 +47,23 @@ jQuery(function ($) {
             console.log('Clicked "Join A Game"'); // TODO: Remove
 
             if ('' === document.getElementById('nickname').value) {
-                alert('Must enter nickname!');
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Please enter a nickname.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 return;
             }
             if ('' === document.getElementById('joinGameCode').value) {
-                alert('Must enter game code!');
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Please enter a game code.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 return;
             }
 
@@ -65,7 +77,13 @@ jQuery(function ($) {
             console.log('Clicked "Create A Game"'); // TODO: Remove
 
             if ('' === document.getElementById('nickname').value) {
-                alert('Must enter nickname!');
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Please enter a nickname.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 return;
             }
 

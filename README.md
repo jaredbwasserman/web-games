@@ -16,3 +16,4 @@ A collection of web games.
    1. Real time update for nicknames of people in lobby using events
 1. Keep game button active even if click something else
 1. Make sure everything looks good on small computer screens
+1. Make the buttons un-highlight when hover exit (copy game code works but not the other ones)
