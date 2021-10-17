@@ -137,6 +137,7 @@ textarea {
     user-select: none;
     border: 10px solid #491b5e;
     padding: none;
+    transition: 0.1s ease;
 }
 
 .gameBtn:focus {
@@ -152,6 +153,11 @@ textarea {
 .gameBtn.active {
     border: 10px solid rgb(136, 46, 211);
     transform: translateY(4px);
+}
+
+.gameBtn:disabled {
+    background-color: #120716;
+    border: 10px solid #120716;
 }
 
 /* Lobby */

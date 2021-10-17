@@ -26,15 +26,16 @@ function joinGame(data) {
     // TODO: Remove
     console.log('Join game');
 
+    // TODO: Look up the game type that is stored and return it
     this.emit('gameJoined', { gameId: gameId, socketId: this.id, role: 'player' });
 }
 
-function createGame() {
+function createGame(data) {
     // Create a unique Socket.IO Room
     const gameId = uuidv4();
 
     // TODO: Remove
     console.log('New game');
 
-    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host' });
+    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host', gameType: data.gameType });
 };

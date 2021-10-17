@@ -39,11 +39,24 @@ jQuery(function ($) {
 
             // Initialize the fastclick library
             FastClick.attach(document.body);
+
+            // Default game is the first available game
+            var foundDefault = false;
+            Array.from(document.getElementsByClassName("gameBtn")).forEach(gameButton => {
+                if (!foundDefault && !gameButton.disabled) {
+                    gameButton.click();
+                    gameButton.focus();
+                    foundDefault = true;
+                }
+            });
         },
 
         bindEvents: function () {
             document.getElementById('btnJoinGame').addEventListener('click', App.onJoinClick);
             document.getElementById('btnCreateGame').addEventListener('click', App.onCreateClick);
+            Array.from(document.getElementsByClassName("gameBtn")).forEach(gameButton => {
+                gameButton.addEventListener('click', App.onGameButtonClick);
+            });
         },
 
         onJoinClick: function () {
@@ -57,7 +70,12 @@ jQuery(function ($) {
 
         onCreateClick: function () {
             console.log('Clicked "Create A Game"'); // TODO: Remove
-            IO.socket.emit('createGame');
+            IO.socket.emit('createGame', {gameType: App.gameType});
+        },
+
+        onGameButtonClick: function () {
+            console.log(`Clicked ${this.id}`); // TODO: Remove
+            App.gameType = this.id;
         },
 
         toHome: function () {
@@ -68,9 +86,13 @@ jQuery(function ($) {
             App.gameId = data.gameId;
             App.socketId = data.socketId;
             App.role = data.role;
+            App.gameType = data.gameType;
 
             // Update current html
             document.getElementById('currentScreen').innerHTML = document.getElementById('lobbyTemplate').innerHTML
+
+            // Update title
+            document.getElementById('lobbyTitle').innerHTML = `${App.gameType} LOBBY`;
 
             // Return home button
             document.getElementById('btnReturnHome').addEventListener('click', () => window.location.reload());

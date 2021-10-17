@@ -19,9 +19,7 @@
     <!-- Intro template -->
     <script id="introTemplate" type="text/template">
         <div class="introScreen">
-            <div class="title">
-                WEB GAMES
-            </div>
+            <div class="title">WEB GAMES</div>
 
             <div class="viewScores">
                 <button id="btnViewScores" class="btn">VIEW SCORES</button>
@@ -35,16 +33,22 @@
             <div class="createGame">
                 <div class="gridContainer">
                     <div class="gridItem">
-                        <button id="game1" class="gameBtn">GAME 1</button>
+                        <button id="CLAPPER" class="gameBtn">CLAPPER</button>
                     </div>
                     <div class="gridItem">
-                        <button id="game2" class="gameBtn">GAME 2</button>
+                        <button id="DOGFIGHT" class="gameBtn">DOGFIGHT</button>
                     </div>
                     <div class="gridItem">
-                        <button id="game3" class="gameBtn">GAME 3</button>
+                        <button disabled id="game3" class="gameBtn">COMING SOON</button>
                     </div>
                     <div class="gridItem">
-                        <button id="game4" class="gameBtn">GAME 4</button>
+                        <button disabled id="game4" class="gameBtn">COMING SOON</button>
+                    </div>
+                    <div class="gridItem">
+                        <button disabled id="game5" class="gameBtn">COMING SOON</button>
+                    </div>
+                    <div class="gridItem">
+                        <button disabled id="game6" class="gameBtn">COMING SOON</button>
                     </div>
                 </div>
                 <button id="btnCreateGame" class="btn">CREATE GAME</button>
@@ -55,9 +59,7 @@
     <!-- Lobby template -->
     <script id="lobbyTemplate" type="text/template">
         <div class="lobbyScreen">
-            <div class="title">
-                LOBBY
-            </div>
+            <div id="lobbyTitle" class="title"></div>
 
             <div class="returnHome">
                 <button id="btnReturnHome" class="btn">RETURN HOME</button>
