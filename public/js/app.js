@@ -12,8 +12,17 @@ jQuery(function ($) {
         },
 
         bindEvents: function () {
+            IO.socket.on('connected', IO.onConnected );
             IO.socket.on('gameJoined', IO.onGameJoined);
             IO.socket.on('gameCreated', IO.onGameCreated);
+        },
+
+        onConnected : function() {
+            // TODO: Is this needed?
+            // Cache a copy of the client's socket.IO session ID on the App
+            // App.mySocketId = IO.socket.socket.sessionid;
+
+            console.log('connected!'); // TODO: Remove
         },
 
         onGameJoined: function (data) {
