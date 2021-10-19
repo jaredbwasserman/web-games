@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 
 var io;
 var socket;
+var gameState;
 
 /**
  * This function is called by server.js to initialize a new game instance.
@@ -12,21 +13,14 @@ var socket;
 exports.init = function (ioIn, socketIn) {
     io = ioIn;
     socket = socketIn;
-    socket.emit('connected', { message: "You are connected!" });
+    socket.emit('connected', { message: 'You are connected!' });
 
-    socket.on('joinGame', joinGame);
     socket.on('createGame', createGame);
-}
+    socket.on('joinGame', joinGame);
 
-// TODO: Some checks on valid gameId and error if not
-function joinGame(data) {
-    const gameId = data.gameId;
-
-    // TODO: Remove
-    console.log('Join game');
-
-    // TODO: Look up the game type that is stored and return it
-    this.emit('gameJoined', { gameId: gameId, socketId: this.id, role: 'player' });
+    // TODO: Delete game state for games once they are over
+    // Keep track of state per game
+    gameState = {};
 }
 
 function createGame(data) {
@@ -36,5 +30,52 @@ function createGame(data) {
     // TODO: Remove
     console.log('New game');
 
-    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host' });
+    // Create and join room
+    this.join(gameId);
+
+    // Add game state
+    gameState[gameId] = {};
+    gameState[gameId]['players'] = new Set();
+    gameState[gameId]['players'].add(data.name);
+
+    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host', name: data.name });
+
+    // Emit all players in room
+    io.sockets.in(gameId).emit('playersUpdate', { players: Array.from(gameState[gameId]['players']) });
+}
+
+// TODO: Some checks on valid gameId and error if not
+function joinGame(data) {
+    const gameId = data.gameId;
+
+    // TODO: Remove
+    console.log('Join game');
+
+    // A reference to the player's Socket.IO socket object
+    const sock = this;
+
+    // Error if room does not exist
+    if (undefined === gameState[gameId]) {
+        this.emit('error', { message: 'Room does not exist.' });
+        return;
+    }
+
+    // Error if name is taken
+    if (gameState[gameId]['players'].has(data.name)) {
+        this.emit('error', { message: `Name "${data.name}" taken. Please choose another name.` });
+        return;
+    }
+
+    // Join the room
+    sock.join(gameId);
+
+    // Add to list of players
+    gameState[gameId]['players'].add(data.name);
+
+    //console.log('Player ' + data.playerName + ' joining game: ' + data.gameId );
+
+    sock.emit('gameJoined', { gameId: gameId, socketId: sock.id, role: 'player', name: data.name });
+
+    // Emit all players in room
+    io.sockets.in(gameId).emit('playersUpdate', { players: Array.from(gameState[gameId]['players']) });
 }

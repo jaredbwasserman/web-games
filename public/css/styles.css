@@ -30,7 +30,7 @@ html, body {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 
 /* View scores */
@@ -38,8 +38,8 @@ html, body {
     margin-bottom: 50px;
 }
 
-/* Nickname */
-#nickNameArea {
+/* Name */
+#nameArea {
     margin-bottom: 50px;
 }
 
@@ -109,6 +109,10 @@ textarea {
     transform: translateY(4px);
 }
 
+.btn:disabled {
+    background-color: #232c38;
+}
+
 /* Lobby */
 #btnReturnHome {
     margin-bottom: 50px;
@@ -118,8 +122,19 @@ textarea {
     margin-bottom: 50px;
 }
 
-#playersArea {
+#startGameArea {
     margin-bottom: 50px;
+}
+
+#playersList {
+    display: table;
+    margin: 0 auto;
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 2em;
+    line-height: 1.2;
+    margin-top: 0px;
 }
 
 /* Create game area */

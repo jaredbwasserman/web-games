@@ -13,8 +13,13 @@ A collection of web games.
 1. Update URLs so browser back button works
 1. Game type stored in client/server
 1. Show who is in lobby
-   1. Real time update for nicknames of people in lobby using events
+   1. Real time update for names of people in lobby using events
 1. Keep game button active even if click something else
 1. Make sure everything looks good on small computer screens
 1. Make the buttons un-highlight when hover exit (copy game code works but not the other ones)
 1. Make the game grid centered better
+1. Remove player from list of players if they disconnect
+1. Make list of players take up more horizontal space and less vertical space
+1. Make the buttons of the games not clickable for players (only host can click them)
+   1. Make the buttons of the games reflect the current selection of the host (selected game is highlighted with border)
+1. Cool background images in places

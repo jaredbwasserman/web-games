@@ -12,12 +12,14 @@ jQuery(function ($) {
         },
 
         bindEvents: function () {
-            IO.socket.on('connected', IO.onConnected );
+            IO.socket.on('connected', IO.onConnected);
             IO.socket.on('gameJoined', IO.onGameJoined);
             IO.socket.on('gameCreated', IO.onGameCreated);
+            IO.socket.on('playersUpdate', IO.onPlayersUpdated);
+            IO.socket.on('error', IO.onError);
         },
 
-        onConnected : function() {
+        onConnected: function () {
             // TODO: Is this needed?
             // Cache a copy of the client's socket.IO session ID on the App
             // App.mySocketId = IO.socket.socket.sessionid;
@@ -27,13 +29,43 @@ jQuery(function ($) {
 
         onGameJoined: function (data) {
             // TODO: Handle error cases
-            console.log("Join game!"); // TODO: Remove
+            console.log(`${data.name} joined game!`); // TODO: Remove
+
             App.toLobby(data);
         },
 
         onGameCreated: function (data) {
-            console.log("New game! " + data.gameId + " " + data.socketId); // TODO: Remove
+            console.log(`${data.name} new game with gameId ${data.gameId}`); // TODO: Remove
             App.toLobby(data);
+        },
+
+        onPlayersUpdated: function (data) {
+            // TODO: Remove
+            console.log(`New list of players!`);
+            for (let i = 0; i < data.players.length; i++) {
+                console.log(data.players[i]);
+            }
+
+            const playersList = document.getElementById('playersList');
+            if (undefined !== playersList) {
+                // Remove previous list
+                while (playersList.firstChild) {
+                    playersList.removeChild(playersList.firstChild);
+                }
+
+                // Add new list
+                playersList.appendChild(Util.makeUL(data.players));
+            }
+        },
+
+        onError: function (data) {
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: data.message,
+                showConfirmButton: false,
+                timer: 1500
+            });
         }
     };
 
@@ -55,11 +87,12 @@ jQuery(function ($) {
         onJoinClick: function () {
             console.log('Clicked "Join A Game"'); // TODO: Remove
 
-            if ('' === document.getElementById('nickname').value) {
+            const name = document.getElementById('name').value;
+            if ('' === name) {
                 Swal.fire({
                     position: 'top',
                     icon: 'error',
-                    title: 'Please enter a nickname.',
+                    title: 'Please enter a name.',
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -79,24 +112,25 @@ jQuery(function ($) {
             // Get the game code
             const gameId = document.getElementById('joinGameCode').value
 
-            IO.socket.emit('joinGame', { gameId: gameId });
+            IO.socket.emit('joinGame', { gameId: gameId, name: name });
         },
 
         onCreateClick: function () {
             console.log('Clicked "Create A Game"'); // TODO: Remove
 
-            if ('' === document.getElementById('nickname').value) {
+            const name = document.getElementById('name').value;
+            if ('' === name) {
                 Swal.fire({
                     position: 'top',
                     icon: 'error',
-                    title: 'Please enter a nickname.',
+                    title: 'Please enter a name.',
                     showConfirmButton: false,
                     timer: 1500
                 });
                 return;
             }
 
-            IO.socket.emit('createGame');
+            IO.socket.emit('createGame', { name: name });
         },
 
         onGameButtonClick: function () {
@@ -140,11 +174,9 @@ jQuery(function ($) {
                         foundDefault = true;
                     }
                 });
-
-                document.getElementById('waitingArea').remove();
             }
             else {
-                document.getElementById('startGameArea').remove();
+                document.getElementById('btnStartGame').disabled = true;
             }
         },
 
@@ -153,7 +185,29 @@ jQuery(function ($) {
             // Load game
             $.getScript("js/games/{GAME}.js", function (data, textStatus, jqxhr) { });
         }
-    }
+    };
+
+    // Util
+    const Util = {
+        makeUL: function (array) {
+            // Create the list element:
+            const list = document.createElement('ul');
+
+            for (var i = 0; i < array.length; i++) {
+                // Create the list item:
+                var item = document.createElement('li');
+
+                // Set its contents:
+                item.appendChild(document.createTextNode(array[i]));
+
+                // Add it to the list:
+                list.appendChild(item);
+            }
+
+            // Finally, return the constructed list:
+            return list;
+        }
+    };
 
     IO.init();
     App.init();
