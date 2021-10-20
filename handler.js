@@ -17,7 +17,7 @@ exports.init = function (ioIn, socketIn) {
 
     socket.on('createGame', onCreateGame);
     socket.on('joinGame', onJoinGame);
-    socket.on('gameTypeChanged', gameTypeChanged);
+    socket.on('gameTypeChanged', onGameTypeChanged);
 
     // TODO: Delete game state for games once they are over
     // Keep track of state per game
@@ -81,8 +81,6 @@ function onJoinGame(data) {
     io.sockets.in(gameId).emit('playersUpdate', { players: Array.from(gameState[gameId]['players']) });
 }
 
-function gameTypeChanged(data) {
-    console.log(`game type changed to ${data.gameType}`); // TODO: Remove
-
+function onGameTypeChanged(data) {
     io.sockets.in(data.gameId).emit('gameTypeChanged', { gameType: data.gameType });
 }
