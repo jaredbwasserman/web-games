@@ -57,7 +57,7 @@ function onJoinGame(data) {
 
     // Error if room does not exist
     if (undefined === gameState[gameId]) {
-        this.emit('error', { message: 'Room does not exist.' });
+        this.emit('error', { message: 'Game does not exist.' });
         return;
     }
 
