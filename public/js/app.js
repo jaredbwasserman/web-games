@@ -16,6 +16,7 @@ jQuery(function ($) {
             IO.socket.on('gameJoined', IO.onGameJoined);
             IO.socket.on('gameCreated', IO.onGameCreated);
             IO.socket.on('playersUpdate', IO.onPlayersUpdated);
+            IO.socket.on('gameTypeChanged', IO.onGameTypeChanged);
             IO.socket.on('error', IO.onError);
         },
 
@@ -56,6 +57,25 @@ jQuery(function ($) {
                 // Add new list
                 playersList.appendChild(Util.makeUL(data.players));
             }
+
+            // Tell server game type so new player can see game type
+            if ('host' === App.role) {
+                IO.socket.emit('gameTypeChanged', { gameId: App.gameId, gameType: App.gameType });
+            }
+        },
+
+        onGameTypeChanged: function (data) {
+            console.log(`game type is now ${data.gameType}`); // TODO: Remove
+
+            if ('player' === App.role) {
+                // Remove curGame from all the game buttons
+                App.gameButtons.forEach(gameButton => {
+                    gameButton.removeAttribute('curGame');
+                });
+
+                // Set curGame for clicked game button
+                document.getElementById(data.gameType).setAttribute('curGame', true);
+            }
         },
 
         onError: function (data) {
@@ -71,6 +91,12 @@ jQuery(function ($) {
 
     // App
     const App = {
+        gameId: '',
+        socketId: '',
+        role: '',
+        gameType: '',
+        gameButtons: [],
+
         init: function () {
             // Entry page
             this.toHome();
@@ -135,7 +161,20 @@ jQuery(function ($) {
 
         onGameButtonClick: function () {
             console.log(`Clicked ${this.id}`); // TODO: Remove
+
+            // Remove curGame from all the game buttons
+            App.gameButtons.forEach(gameButton => {
+                gameButton.removeAttribute('curGame');
+            });
+
+            // Set curGame for clicked game button
+            this.setAttribute('curGame', true);
+
+            // Set App gameType
             App.gameType = this.id;
+
+            // Tell server different game type
+            IO.socket.emit('gameTypeChanged', { gameId: App.gameId, gameType: App.gameType });
         },
 
         toHome: function () {
@@ -158,24 +197,27 @@ jQuery(function ($) {
             document.getElementById('gameCode').value = App.gameId;
             new ClipboardJS('#copyGameCode');
 
+            // Init game buttons
+            App.gameButtons = Array.from(document.getElementsByClassName('gameBtn'));
+
             // Only host can start game
-            if (App.role === 'host') {
+            if ('host' === App.role) {
                 // Game button clicks change gameType
-                Array.from(document.getElementsByClassName("gameBtn")).forEach(gameButton => {
+                App.gameButtons.forEach(gameButton => {
                     gameButton.addEventListener('click', App.onGameButtonClick);
                 });
 
-                // Default game is the first available game
-                var foundDefault = false;
-                Array.from(document.getElementsByClassName("gameBtn")).forEach(gameButton => {
-                    if (!foundDefault && !gameButton.disabled) {
-                        gameButton.click();
-                        gameButton.focus();
-                        foundDefault = true;
-                    }
-                });
+                // Default game is random
+                const defaultGameIndex = Util.getRandomInt(App.gameButtons.length);
+                App.gameButtons[defaultGameIndex].click();
             }
             else {
+                // Game buttons disabled
+                App.gameButtons.forEach(gameButton => {
+                    gameButton.disabled = true;
+                });
+
+                // Start game disabled
                 document.getElementById('btnStartGame').disabled = true;
             }
         },
@@ -183,7 +225,7 @@ jQuery(function ($) {
         toGame: function (data) {
             // TODO: Finish implementing
             // Load game
-            $.getScript("js/games/{GAME}.js", function (data, textStatus, jqxhr) { });
+            // $.getScript("js/games/{GAME}.js", function (data, textStatus, jqxhr) { });
         }
     };
 
@@ -206,6 +248,12 @@ jQuery(function ($) {
 
             // Finally, return the constructed list:
             return list;
+        },
+
+        // Max is exclusive so it's [0, max)
+        // And since it's integer, it's [0, max-1]
+        getRandomInt: function (maxExclusive) {
+            return Math.floor(Math.random() * maxExclusive);
         }
     };
 

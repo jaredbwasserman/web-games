@@ -207,6 +207,9 @@ ul {
 }
 
 .gameBtn:disabled {
-    background-color: #120716;
-    border: 10px solid #120716;
+    border: 10px solid #491b5e;
+}
+
+.gameBtn[curGame=true] {
+    border: 10px solid rgb(176, 88, 248);
 }

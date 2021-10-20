@@ -15,15 +15,16 @@ exports.init = function (ioIn, socketIn) {
     socket = socketIn;
     socket.emit('connected', { message: 'You are connected!' });
 
-    socket.on('createGame', createGame);
-    socket.on('joinGame', joinGame);
+    socket.on('createGame', onCreateGame);
+    socket.on('joinGame', onJoinGame);
+    socket.on('gameTypeChanged', gameTypeChanged);
 
     // TODO: Delete game state for games once they are over
     // Keep track of state per game
     gameState = {};
 }
 
-function createGame(data) {
+function onCreateGame(data) {
     // Create a unique Socket.IO Room
     const gameId = uuidv4();
 
@@ -45,7 +46,7 @@ function createGame(data) {
 }
 
 // TODO: Some checks on valid gameId and error if not
-function joinGame(data) {
+function onJoinGame(data) {
     const gameId = data.gameId;
 
     // TODO: Remove
@@ -78,4 +79,10 @@ function joinGame(data) {
 
     // Emit all players in room
     io.sockets.in(gameId).emit('playersUpdate', { players: Array.from(gameState[gameId]['players']) });
+}
+
+function gameTypeChanged(data) {
+    console.log(`game type changed to ${data.gameType}`); // TODO: Remove
+
+    io.sockets.in(data.gameId).emit('gameTypeChanged', { gameType: data.gameType });
 }
