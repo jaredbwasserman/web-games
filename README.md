@@ -15,4 +15,5 @@ A collection of web games.
 1. Make the buttons un-highlight when hover exit (copy game code works but not the other ones)
 1. Make the game grid centered better
 1. Cool background images in places
-1. Test what happens if host disconnects during game
+1. Test what happens if host or player disconnects during game
+1. Add game status so you cannot join a game that is in progress or one that has ended
