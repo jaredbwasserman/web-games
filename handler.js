@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 
 var io;
 var socket;
-var gameState;
+var players;
 
 /**
  * This function is called by server.js to initialize a new game instance.
@@ -15,13 +15,34 @@ exports.init = function (ioIn, socketIn) {
     socket = socketIn;
     socket.emit('connected', { message: 'You are connected!' });
 
+    socket.on('disconnect', onDisconnect);
     socket.on('createGame', onCreateGame);
     socket.on('joinGame', onJoinGame);
     socket.on('gameTypeChanged', onGameTypeChanged);
 
-    // TODO: Delete game state for games once they are over
-    // Keep track of state per game
-    gameState = {};
+    // Keep track of players (game, socket, name, role)
+    players = [];
+}
+
+function onDisconnect(data) {
+    console.log(`user disconnected ${this.id}`); // TODO: Remove
+
+    // Game gameId of the player
+    const matchingPlayer = players.filter(player => player.socketId === this.id)[0];
+    if (undefined === matchingPlayer) {
+        // TODO: I do not think this is possible
+        return;
+    }
+    const gameId = matchingPlayer.gameId;
+
+    // Remove the player
+    players = players.filter(player => player.socketId !== this.id);
+
+    // Emit all players in room
+    io.sockets.in(gameId).emit('playersUpdate', { players: getPlayerNames(gameId) });
+
+    // TODO: Remove
+    console.log(`players is ${getPlayerNames(gameId)}`);
 }
 
 function onCreateGame(data) {
@@ -34,53 +55,68 @@ function onCreateGame(data) {
     // Create and join room
     this.join(gameId);
 
-    // Add game state
-    gameState[gameId] = {};
-    gameState[gameId]['players'] = new Set();
-    gameState[gameId]['players'].add(data.name);
+    // Add player
+    const playerEntry = {
+        gameId: gameId,
+        socketId: this.id,
+        name: data.name,
+        role: 'host'
+    };
+    players.push(playerEntry);
 
-    this.emit('gameCreated', { gameId: gameId, socketId: this.id, role: 'host', name: data.name });
+    this.emit('gameCreated', playerEntry);
 
     // Emit all players in room
-    io.sockets.in(gameId).emit('playersUpdate', { players: Array.from(gameState[gameId]['players']) });
+    io.sockets.in(gameId).emit('playersUpdate', { players: getPlayerNames(gameId) });
 }
 
-// TODO: Some checks on valid gameId and error if not
 function onJoinGame(data) {
     const gameId = data.gameId;
 
     // TODO: Remove
     console.log('Join game');
 
-    // A reference to the player's Socket.IO socket object
-    const sock = this;
-
     // Error if room does not exist
-    if (undefined === gameState[gameId]) {
+    if (!Array.from(io.sockets.adapter.rooms.keys()).includes(gameId)) {
         this.emit('error', { message: 'Game does not exist.' });
         return;
     }
 
     // Error if name is taken
-    if (gameState[gameId]['players'].has(data.name)) {
-        this.emit('error', { message: `Name "${data.name}" taken. Please choose another name.` });
+    const matchingNames = players.filter(player => player.gameId === gameId && player.name === data.name);
+    if (matchingNames.length > 0) {
+        this.emit('error', { message: `Name "${data.name}" taken. Please select a different name.` });
         return;
     }
 
     // Join the room
-    sock.join(gameId);
+    this.join(gameId);
 
-    // Add to list of players
-    gameState[gameId]['players'].add(data.name);
+    // Add player
+    const playerEntry = {
+        gameId: gameId,
+        socketId: this.id,
+        name: data.name,
+        role: 'player'
+    };
+    players.push(playerEntry);
 
-    //console.log('Player ' + data.playerName + ' joining game: ' + data.gameId );
-
-    sock.emit('gameJoined', { gameId: gameId, socketId: sock.id, role: 'player', name: data.name });
+    this.emit('gameJoined', playerEntry);
 
     // Emit all players in room
-    io.sockets.in(gameId).emit('playersUpdate', { players: Array.from(gameState[gameId]['players']) });
+    io.sockets.in(gameId).emit('playersUpdate', { players: getPlayerNames(gameId) });
 }
 
 function onGameTypeChanged(data) {
     io.sockets.in(data.gameId).emit('gameTypeChanged', { gameType: data.gameType });
+}
+
+// Helper function to get a list of player names
+function getPlayerNames(gameId) {
+    const names = [];
+    const playersInGame = players.filter(player => player.gameId === gameId);
+    playersInGame.forEach(player => {
+        names.push(player.name);
+    });
+    return names;
 }

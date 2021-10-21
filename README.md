@@ -12,8 +12,7 @@ A collection of web games.
 1. Clean up server memory (when a game finishes, when a player leaves, etc)
 1. Update URLs so browser back button works?
 1. Game type stored in client/server
-1. Make sure everything looks good on small computer screens
 1. Make the buttons un-highlight when hover exit (copy game code works but not the other ones)
 1. Make the game grid centered better
-1. Remove player from list of players if they disconnect
 1. Cool background images in places
+1. Test what happens if host disconnects during game
