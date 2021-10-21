@@ -10,33 +10,32 @@ var players;
  * @param sio The Socket.IO library
  * @param socket The socket object for the connected client.
  */
-exports.init = function (ioIn, socketIn) {
+exports.init = function (ioIn, socketIn, playersIn) {
     io = ioIn;
     socket = socketIn;
+    players = playersIn;
+
+    console.log(`new connection, num players is ${players.length}`); // TODO: Remove
+
     socket.emit('connected', { message: 'You are connected!' });
 
     socket.on('disconnect', onDisconnect);
     socket.on('createGame', onCreateGame);
     socket.on('joinGame', onJoinGame);
     socket.on('gameTypeChanged', onGameTypeChanged);
-
-    // Keep track of players (game, socket, name, role)
-    players = [];
 }
 
 function onDisconnect(data) {
     console.log(`user disconnected ${this.id}`); // TODO: Remove
 
     // Game gameId of the player
-    const matchingPlayer = players.filter(player => player.socketId === this.id)[0];
-    if (undefined === matchingPlayer) {
-        // TODO: I do not think this is possible
+    if (undefined === players[this.id]) {
         return;
     }
-    const gameId = matchingPlayer.gameId;
+    const gameId = players[this.id].gameId;
 
     // Remove the player
-    players = players.filter(player => player.socketId !== this.id);
+    delete players[this.id];
 
     // Emit all players in room
     io.sockets.in(gameId).emit('playersUpdate', { players: getPlayerNames(gameId) });
@@ -62,7 +61,7 @@ function onCreateGame(data) {
         name: data.name,
         role: 'host'
     };
-    players.push(playerEntry);
+    players[this.id] = playerEntry;
 
     this.emit('gameCreated', playerEntry);
 
@@ -83,8 +82,13 @@ function onJoinGame(data) {
     }
 
     // Error if name is taken
-    const matchingNames = players.filter(player => player.gameId === gameId && player.name === data.name);
-    if (matchingNames.length > 0) {
+    var foundMatch = false;
+    for (const [socketId, player] of Object.entries(players)) {
+        if (player.gameId === gameId && player.name === data.name) {
+            foundMatch = true;
+        }
+    }
+    if (foundMatch) {
         this.emit('error', { message: `Name "${data.name}" taken. Please select a different name.` });
         return;
     }
@@ -99,7 +103,7 @@ function onJoinGame(data) {
         name: data.name,
         role: 'player'
     };
-    players.push(playerEntry);
+    players[this.id] = playerEntry;
 
     this.emit('gameJoined', playerEntry);
 
@@ -114,9 +118,10 @@ function onGameTypeChanged(data) {
 // Helper function to get a list of player names
 function getPlayerNames(gameId) {
     const names = [];
-    const playersInGame = players.filter(player => player.gameId === gameId);
-    playersInGame.forEach(player => {
-        names.push(player.name);
-    });
+    for (const [socketId, player] of Object.entries(players)) {
+        if (player.gameId === gameId) {
+            names.push(player.name);
+        }
+    }
     return names;
 }

@@ -21,17 +21,11 @@ jQuery(function ($) {
         },
 
         onConnected: function () {
-            // TODO: Is this needed?
-            // Cache a copy of the client's socket.IO session ID on the App
-            // App.mySocketId = IO.socket.socket.sessionid;
-
             console.log('connected!'); // TODO: Remove
         },
 
         onGameJoined: function (data) {
-            // TODO: Handle error cases
             console.log(`${data.name} joined game!`); // TODO: Remove
-
             App.toLobby(data);
         },
 
@@ -93,6 +87,7 @@ jQuery(function ($) {
     const App = {
         gameId: '',
         socketId: '',
+        name: '',
         role: '',
         gameType: '',
         gameButtons: [],
@@ -184,8 +179,8 @@ jQuery(function ($) {
         toLobby: function (data) {
             App.gameId = data.gameId;
             App.socketId = data.socketId;
+            App.name = data.name;
             App.role = data.role;
-            App.gameType = data.gameType;
 
             // Update current html
             document.getElementById('currentScreen').innerHTML = document.getElementById('lobbyTemplate').innerHTML
