@@ -149,7 +149,7 @@ function onStartGame(data) {
     }
 
     // Update game
-    games[gameId].status = 'inProgress';
+    games[gameId].status = 'in progress';
     games[gameId].gameType = data.gameType;
 
     // Broadcast game started to everyone
