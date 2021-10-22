@@ -1,26 +1,32 @@
-const config = {
-    type: Phaser.AUTO,
-    parent: 'lobbyGame',
-    width: 800,
-    height: 600,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            debug: false,
-            gravity: { y: 0 }
-        }
+const dogfight = {
+    game: undefined,
+
+    init: function () {
+        const config = {
+            type: Phaser.AUTO,
+            parent: 'gameScreen',
+            width: 800,
+            height: 600,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    debug: false,
+                    gravity: { y: 0 }
+                }
+            },
+            scene: {
+                preload: this.preload,
+                create: this.create,
+                update: this.update
+            }
+        };
+
+        game = new Phaser.Game(config);
     },
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
-    }
-};
 
-const game = new Phaser.Game(config);
+    preload: function () { },
 
-function preload() { }
+    create: function () { },
 
-function create() { }
-
-function update() { }
+    update: function () { }
+}

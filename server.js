@@ -14,9 +14,12 @@ server.listen(8080, function () {
     console.log(`Listening on ${server.address().port}`);
 });
 
+// Keep track of games (gameId -> {gameId, gameType, status})
+const games = [];
+
 // Keep track of players (socketId -> {gameId, socketId, name, role})
-var players = [];
+const players = [];
 
 io.on('connection', function (socket) {
-    handler.init(io, socket, players);
+    handler.init(io, socket, games, players);
 });

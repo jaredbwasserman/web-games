@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 
 var io;
 var socket;
+var games;
 var players;
 
 /**
@@ -10,9 +11,10 @@ var players;
  * @param sio The Socket.IO library
  * @param socket The socket object for the connected client.
  */
-exports.init = function (ioIn, socketIn, playersIn) {
+exports.init = function (ioIn, socketIn, gamesIn, playersIn) {
     io = ioIn;
     socket = socketIn;
+    games = gamesIn;
     players = playersIn;
 
     console.log(`new connection, num players is ${players.length}`); // TODO: Remove
@@ -23,6 +25,7 @@ exports.init = function (ioIn, socketIn, playersIn) {
     socket.on('createGame', onCreateGame);
     socket.on('joinGame', onJoinGame);
     socket.on('gameTypeChanged', onGameTypeChanged);
+    socket.on('startGame', onStartGame);
 }
 
 function onDisconnect(data) {
@@ -63,6 +66,13 @@ function onCreateGame(data) {
     };
     players[this.id] = playerEntry;
 
+    // Add game
+    const gameEntry = {
+        gameId: gameId,
+        status: 'pending'
+    };
+    games[gameId] = gameEntry;
+
     this.emit('gameCreated', playerEntry);
 
     // Emit all players in room
@@ -76,8 +86,14 @@ function onJoinGame(data) {
     console.log('Join game');
 
     // Error if room does not exist
-    if (!Array.from(io.sockets.adapter.rooms.keys()).includes(gameId)) {
+    if (!gameExists(gameId)) {
         this.emit('error', { message: 'Game does not exist.' });
+        return;
+    }
+
+    // Error if game is in progress
+    if (games[gameId] && games[gameId].status !== 'pending') {
+        this.emit('error', { message: `Unable to join ${games[gameId].status} game.` });
         return;
     }
 
@@ -113,6 +129,36 @@ function onJoinGame(data) {
 
 function onGameTypeChanged(data) {
     io.sockets.in(data.gameId).emit('gameTypeChanged', { gameType: data.gameType });
+}
+
+function onStartGame(data) {
+    const gameId = data.gameId;
+
+    console.log(`Start game ${gameId} with gameType ${data.gameType}`); // TODO: Remove
+
+    // Error if room does not exist
+    if (!gameExists(gameId)) {
+        this.emit('error', { message: 'Game does not exist.' });
+        return;
+    }
+
+    // Error if game entry does not exist
+    if (!games[gameId]) {
+        this.emit('error', { message: 'Game does not exist.' });
+        return;
+    }
+
+    // Update game
+    games[gameId].status = 'inProgress';
+    games[gameId].gameType = data.gameType;
+
+    // Broadcast game started to everyone
+    io.sockets.in(gameId).emit('gameStarted', games[gameId]);
+}
+
+// Helper function to return whether a game exists
+function gameExists(gameId) {
+    return Array.from(io.sockets.adapter.rooms.keys()).includes(gameId);
 }
 
 // Helper function to get a list of player names

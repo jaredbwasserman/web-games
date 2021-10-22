@@ -17,6 +17,7 @@ jQuery(function ($) {
             IO.socket.on('gameCreated', IO.onGameCreated);
             IO.socket.on('playersUpdate', IO.onPlayersUpdated);
             IO.socket.on('gameTypeChanged', IO.onGameTypeChanged);
+            IO.socket.on('gameStarted', IO.onGameStarted);
             IO.socket.on('error', IO.onError);
         },
 
@@ -72,6 +73,11 @@ jQuery(function ($) {
             }
         },
 
+        onGameStarted: function (data) {
+            console.log(`started game ${data.gameId}`); // TODO: Remove
+            App.toGame(data);
+        },
+
         onError: function (data) {
             Swal.fire({
                 position: 'top',
@@ -91,6 +97,7 @@ jQuery(function ($) {
         role: '',
         gameType: '',
         gameButtons: [],
+        games: [],
 
         init: function () {
             // Entry page
@@ -98,11 +105,18 @@ jQuery(function ($) {
 
             // Bind events
             App.bindEvents();
+
+            // Add games
+            App.addGames();
         },
 
         bindEvents: function () {
             document.getElementById('btnJoinGame').addEventListener('click', App.onJoinClick);
             document.getElementById('btnCreateGame').addEventListener('click', App.onCreateClick);
+        },
+
+        addGames: function () {
+            App.games['dogfight'] = dogfight;
         },
 
         onJoinClick: function () {
@@ -172,8 +186,13 @@ jQuery(function ($) {
             IO.socket.emit('gameTypeChanged', { gameId: App.gameId, gameType: App.gameType });
         },
 
+        onStartClick: function () {
+            // Tell server to start the game
+            IO.socket.emit('startGame', { gameId: App.gameId, gameType: App.gameType });
+        },
+
         toHome: function () {
-            document.getElementById('currentScreen').innerHTML = document.getElementById('introTemplate').innerHTML
+            document.getElementById('currentScreen').innerHTML = document.getElementById('introTemplate').innerHTML;
         },
 
         toLobby: function (data) {
@@ -183,10 +202,10 @@ jQuery(function ($) {
             App.role = data.role;
 
             // Update current html
-            document.getElementById('currentScreen').innerHTML = document.getElementById('lobbyTemplate').innerHTML
+            document.getElementById('currentScreen').innerHTML = document.getElementById('lobbyTemplate').innerHTML;
 
             // Return home button
-            document.getElementById('btnReturnHome').addEventListener('click', () => window.location.reload());
+            document.getElementById('btnReturnHomeLobby').addEventListener('click', () => window.location.reload());
 
             // Share game code
             document.getElementById('gameCode').value = App.gameId;
@@ -205,6 +224,9 @@ jQuery(function ($) {
                 // Default game is random
                 const defaultGameIndex = Util.getRandomInt(App.gameButtons.length);
                 App.gameButtons[defaultGameIndex].click();
+
+                // Start game button
+                document.getElementById('btnStartGame').addEventListener('click', App.onStartClick);
             }
             else {
                 // Game buttons disabled
@@ -218,9 +240,29 @@ jQuery(function ($) {
         },
 
         toGame: function (data) {
-            // TODO: Finish implementing
+            // Error if no game
+            if (!App.games[data.gameType]) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Game type does not exist.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                return;
+            }
+
+            // Switch to game template
+            document.getElementById('currentScreen').innerHTML = document.getElementById('gameTemplate').innerHTML;
+
+            // Update title
+            document.getElementById('gameTitle').innerHTML = data.gameType.toUpperCase();
+
+            // Return home button
+            document.getElementById('btnReturnHomeGame').addEventListener('click', () => window.location.reload());
+
             // Load game
-            // $.getScript("js/games/{GAME}.js", function (data, textStatus, jqxhr) { });
+            App.games[data.gameType].init();
         }
     };
 

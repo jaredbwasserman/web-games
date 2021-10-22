@@ -46,7 +46,7 @@
             <div id="lobbyTitle" class="title">LOBBY</div>
 
             <div class="returnHome">
-                <button id="btnReturnHome" class="btn">RETURN HOME</button>
+                <button id="btnReturnHomeLobby" class="btn">RETURN HOME</button>
             </div>
 
             <div id="shareGameCode">
@@ -57,7 +57,7 @@
             <div id="startGameArea">
                 <div id="gameGrid" class="gridContainer">
                     <div class="gridItem">
-                        <button id="game1" class="gameBtn">GAME 1</button>
+                        <button id="dogfight" class="gameBtn">DOGFIGHT</button>
                     </div>
                     <div class="gridItem">
                         <button id="game2" class="gameBtn">GAME 2</button>
@@ -86,7 +86,13 @@
 
     <!-- Game template -->
     <script id="gameTemplate" type="text/template">
-        <div class="gameScreen"></div>
+        <div id="gameTitle" class="title"></div>
+
+        <div class="returnHome">
+            <button id="btnReturnHomeGame" class="btn">RETURN HOME</button>
+        </div>
+
+        <div id="gameScreen"></div>
     </script>
 
     <!-- Current screen -->
@@ -113,6 +119,13 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <!-- End JavaScript Libraries -->
+
+    <!-- Start Games -->
+
+    <!-- dogfight -->
+    <script src="js/games/dogfight.js"></script>
+
+    <!-- End Games -->
 
     <!-- Main app -->
     <script src="js/app.js"></script>

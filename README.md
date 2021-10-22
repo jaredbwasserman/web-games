@@ -17,3 +17,7 @@ A collection of web games.
 1. Cool background images in places
 1. Test what happens if host or player disconnects during game
 1. Add game status so you cannot join a game that is in progress or one that has ended
+1. Add player number lower and upper bounds when starting game and error if not met
+1. Send error and terminate client side game if room no longer exists (host leaves and causes room to drop)
+   1. Clean up games entry for this case
+1. Make no games able to be played that do not exist (remove placeholders)

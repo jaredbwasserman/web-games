@@ -115,7 +115,7 @@ textarea {
 }
 
 /* Lobby */
-#btnReturnHome {
+#btnReturnHomeLobby {
     margin-bottom: 50px;
 }
 
@@ -214,4 +214,13 @@ ul {
 
 .gameBtn[curGame=true] {
     border: 10px solid rgb(176, 88, 248);
+}
+
+/* Game */
+#btnReturnHomeGame {
+    margin-bottom: 50px;
+}
+
+#gameScreen {
+    text-align: center;
 }
