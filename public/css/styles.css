@@ -111,6 +111,7 @@ textarea {
 
 .btn:disabled {
     background-color: #232c38;
+    cursor: default;
 }
 
 /* Lobby */
@@ -208,6 +209,7 @@ ul {
 
 .gameBtn:disabled {
     border: 10px solid #491b5e;
+    cursor: default;
 }
 
 .gameBtn[curGame=true] {
