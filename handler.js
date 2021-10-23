@@ -5,6 +5,7 @@ var io;
 var socket;
 var games;
 var players;
+var gameHandler;
 
 /**
  * This function is called by server.js to initialize a new game instance.
@@ -27,6 +28,7 @@ exports.init = function (ioIn, socketIn, gamesIn, playersIn) {
     socket.on('joinGame', onJoinGame);
     socket.on('gameTypeChanged', onGameTypeChanged);
     socket.on('startGame', onStartGame);
+    socket.on('gameStarted', onGameStarted);
 }
 
 function onDisconnect(data) {
@@ -160,8 +162,20 @@ function onStartGame(data) {
     games[gameId].status = 'in progress';
     games[gameId].gameType = gameType;
 
+    // Get game handler
+    gameHandler = game[data.gameType](io, this, games, players, gameId, gameType);
+
     // Init game
-    game[data.gameType].init(io, socket, games, players, gameId, gameType);
+    data.players = players;
+    gameHandler.init(data);
+}
+
+function onGameStarted(data) {
+    // Host already has gameHandler
+    if (this.id !== data.socketId) {
+        gameHandler = game[data.gameType](io, this, games, data.players, data.gameId, data.gameType);
+    }
+    gameHandler.handleEvents();
 }
 
 // Helper function to return whether a game exists

@@ -1,6 +1,7 @@
 var dogfightGame;
 var dogfightShip;
 var dogfightPlayers;
+var dogfightEnemies; // TODO: Might be redundant on dogfightPlayers
 var dogfightKeyA;
 var dogfightKeyS;
 var dogfightKeyD;
@@ -30,6 +31,18 @@ function dogfightInit(data) {
 
     // Copy initial players
     dogfightPlayers = data.players;
+    dogfightEnemies = {};
+
+    IO.socket.on('playerMoved', dogfightOnPlayerMoved);
+}
+
+function dogfightOnPlayerMoved(data) {
+    for (const [socketId, enemy] of Object.entries(dogfightEnemies)) {
+        if (socketId === data.socketId) {
+            enemy.setRotation(data.rotation);
+            enemy.setPosition(data.x, data.y);
+        }
+    }
 }
 
 function dogfightPreload() {
@@ -55,14 +68,11 @@ function dogfightCreate() {
     this.dogfightKeyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.dogfightKeyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.dogfightKeyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-
-    // TODO: Update
-    // IO.socket.on('gameStarted', onGameStarted);
 }
 
 function dogfightUpdate() {
     if (!this.dogfightShip) {
-        console.log('no ship');
+        console.log('no ship'); // TODO: Remove
         return;
     }
 
@@ -81,6 +91,28 @@ function dogfightUpdate() {
     }
 
     this.physics.world.wrap(this.dogfightShip, 5); // TODO: What is a good padding amt?
+
+    // Emit player movement
+    const curX = this.dogfightShip.x;
+    const curY = this.dogfightShip.y;
+    const curR = this.dogfightShip.rotation;
+    if (this.dogfightShip.oldPosition && (
+        curX !== this.dogfightShip.oldPosition.x ||
+        curY !== this.dogfightShip.oldPosition.y ||
+        curR !== this.dogfightShip.oldPosition.rotation)) {
+        IO.socket.emit('playerMovement', {
+            x: this.dogfightShip.x,
+            y: this.dogfightShip.y,
+            rotation: this.dogfightShip.rotation
+        });
+    }
+
+    // Save old position data
+    this.dogfightShip.oldPosition = {
+        x: curX,
+        y: curY,
+        rotation: curR
+    };
 }
 
 function dogfightAddPlayer(self, player) {
@@ -91,8 +123,9 @@ function dogfightAddPlayer(self, player) {
 }
 
 function dogfightAddEnemy(self, player) {
-    // TODO: Need to add some state
-    self.physics.add.image(player.x, player.y, 'enemyShip').setOrigin(0.5, 0.5);
+    const enemy = self.add.sprite(player.x, player.y, 'enemyShip').setOrigin(0.5, 0.5);
+    enemy.socketId = player.socketId;
+    dogfightEnemies[enemy.socketId] = enemy;
 }
 
 App.games['dogfight'] = {};

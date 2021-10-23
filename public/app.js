@@ -73,6 +73,11 @@ const IO = {
 
     onGameStarted: function (data) {
         console.log(`started game ${JSON.stringify(data, null, 4)}`); // TODO: Remove
+
+        // Tell server to handle events
+        IO.socket.emit('gameStarted', data);
+
+        // Update client
         App.toGame(data);
     },
 
@@ -179,7 +184,7 @@ const App = {
 
     onStartClick: function () {
         // Tell server to start the game
-        IO.socket.emit('startGame', { gameId: App.gameId, gameType: App.gameType });
+        IO.socket.emit('startGame', { gameId: App.gameId, gameType: App.gameType, socketId: App.socketId });
     },
 
     toHome: function () {
