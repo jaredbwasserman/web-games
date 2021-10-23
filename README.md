@@ -22,3 +22,4 @@ A collection of web games.
 1. Send error and terminate client side game if room no longer exists (host leaves and causes room to drop)
    1. Clean up games entry for this case
 1. Make no games able to be played that do not exist (remove placeholders)
+1. Add logic to remove players from game when they disconnect (see tutorial)
