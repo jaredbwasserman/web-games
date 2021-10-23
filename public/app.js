@@ -1,3 +1,18 @@
+// Cookieconsent
+window.cookieconsent.initialise({
+    'palette': {
+        'popup': {
+            'background': '#237afc'
+        },
+        'button': {
+            'background': '#fff',
+            'text': '#237afc'
+        }
+    },
+    'theme': 'edgeless',
+    'position': 'top'
+});
+
 // Socket IO
 const IO = {
     socket: undefined,
@@ -118,17 +133,11 @@ const App = {
     onJoinClick: function () {
         console.log('Clicked "Join A Game"'); // TODO: Remove
 
-        const name = document.getElementById('name').value;
-        if ('' === name) {
-            Swal.fire({
-                position: 'top',
-                icon: 'error',
-                title: 'Please enter a name.',
-                showConfirmButton: false,
-                timer: 1500
-            });
+        const name = Util.getName();
+        if (!name) {
             return;
         }
+
         if ('' === document.getElementById('joinGameCode').value) {
             Swal.fire({
                 position: 'top',
@@ -149,15 +158,8 @@ const App = {
     onCreateClick: function () {
         console.log('Clicked "Create A Game"'); // TODO: Remove
 
-        const name = document.getElementById('name').value;
-        if ('' === name) {
-            Swal.fire({
-                position: 'top',
-                icon: 'error',
-                title: 'Please enter a name.',
-                showConfirmButton: false,
-                timer: 1500
-            });
+        const name = Util.getName();
+        if (!name) {
             return;
         }
 
@@ -188,7 +190,11 @@ const App = {
     },
 
     toHome: function () {
+        // Intro template
         document.getElementById('currentScreen').innerHTML = document.getElementById('introTemplate').innerHTML;
+
+        // Name from cookie
+        document.getElementById('name').value = Util.getCookie('name');
     },
 
     toLobby: function (data) {
@@ -287,6 +293,44 @@ const Util = {
     // And since it's integer, it's [0, max-1]
     getRandomInt: function (maxExclusive) {
         return Math.floor(Math.random() * maxExclusive);
+    },
+
+    setCookie: function (cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        let expires = 'expires=' + d.toUTCString();
+        document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+    },
+
+    getCookie: function (cname) {
+        let name = cname + '=';
+        let ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    },
+
+    getName: function () {
+        const name = document.getElementById('name').value;
+        if ('' === name) {
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'Please enter a name.',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            return '';
+        }
+        Util.setCookie('name', name, 365);
+        return name;
     }
 };
 

@@ -23,3 +23,5 @@ A collection of web games.
    1. Clean up games entry for this case
 1. Make no games able to be played that do not exist (remove placeholders)
 1. Add logic to remove players from game when they disconnect (see tutorial)
+1. Add countdown before game starts (3 2 1 - for all games)
+1. What to do if user does not consent to cookies?
