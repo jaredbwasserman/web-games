@@ -1,9 +1,10 @@
 # Web Game
 A collection of web games.
 
-## References
+## Notes
 1. Code based on [Create a Basic Multiplayer Game in Phaser 3 with Socket.io](https://gamedevacademy.org/create-a-basic-multiplayer-game-in-phaser-3-with-socket-io-part-1/).
 1. Code based on [anagrammatix](https://github.com/ericterpstra/anagrammatix).
+1. Assets from [Kenney](https://kenney.nl/).
 
 ## TODO
 1. Add more games

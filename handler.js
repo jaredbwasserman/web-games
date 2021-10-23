@@ -18,7 +18,7 @@ exports.init = function (ioIn, socketIn, gamesIn, playersIn) {
     games = gamesIn;
     players = playersIn;
 
-    console.log(`new connection, num players is ${players.length}`); // TODO: Remove
+    console.log(`new connection`); // TODO: Remove
 
     socket.emit('connected', { message: 'You are connected!' });
 
@@ -134,8 +134,9 @@ function onGameTypeChanged(data) {
 
 function onStartGame(data) {
     const gameId = data.gameId;
+    const gameType = data.gameType;
 
-    console.log(`Start game ${gameId} with gameType ${data.gameType}`); // TODO: Remove
+    console.log(`Start game ${gameId} with gameType ${gameType}`); // TODO: Remove
 
     // Error if room does not exist
     if (!gameExists(gameId)) {
@@ -150,17 +151,17 @@ function onStartGame(data) {
     }
 
     // Error if server code does not exist
-    if (!game[data.gameType]) {
+    if (!game[gameType]) {
         this.emit('error', { message: 'Game type does not exist.' });
         return;
     }
 
     // Update game
     games[gameId].status = 'in progress';
-    games[gameId].gameType = data.gameType;
+    games[gameId].gameType = gameType;
 
     // Init game
-    game[data.gameType].init(io, socket, games, players, gameId);
+    game[data.gameType].init(io, socket, games, players, gameId, gameType);
 }
 
 // Helper function to return whether a game exists

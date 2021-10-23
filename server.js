@@ -15,10 +15,10 @@ server.listen(8080, function () {
 });
 
 // Keep track of games (gameId -> {gameId, gameType, status})
-const games = [];
+const games = {};
 
 // Keep track of players (socketId -> {gameId, socketId, name, role})
-const players = [];
+const players = {};
 
 io.on('connection', function (socket) {
     handler.init(io, socket, games, players);
