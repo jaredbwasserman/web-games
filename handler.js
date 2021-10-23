@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const game = require('./game');
 
 var io;
 var socket;
@@ -148,12 +149,18 @@ function onStartGame(data) {
         return;
     }
 
+    // Error if server code does not exist
+    if (!game[data.gameType]) {
+        this.emit('error', { message: 'Game type does not exist.' });
+        return;
+    }
+
     // Update game
     games[gameId].status = 'in progress';
     games[gameId].gameType = data.gameType;
 
-    // Broadcast game started to everyone
-    io.sockets.in(gameId).emit('gameStarted', games[gameId]);
+    // Init game
+    game[data.gameType].init(io, socket, games, players, gameId);
 }
 
 // Helper function to return whether a game exists
