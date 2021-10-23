@@ -53,13 +53,17 @@ function dogfightPreload() {
 function dogfightCreate() {
     const self = this;
 
-    // Init my ship
+    // Init enemy ships
+    for (const [socketId, player] of Object.entries(dogfightPlayers)) {
+        if (socketId !== App.socketId) {
+            dogfightAddEnemy(self, player);
+        }
+    }
+    // Init my ship (so it draws on top)
     for (const [socketId, player] of Object.entries(dogfightPlayers)) {
         if (socketId === App.socketId) {
             dogfightAddPlayer(self, player);
-        }
-        else {
-            dogfightAddEnemy(self, player);
+            break;
         }
     }
 
@@ -85,7 +89,7 @@ function dogfightUpdate() {
     }
 
     if (this.dogfightKeyW.isDown) {
-        this.physics.velocityFromRotation(this.dogfightShip.rotation + 1.5, -100, this.dogfightShip.body.acceleration);
+        this.physics.velocityFromRotation(this.dogfightShip.rotation + Math.PI / 2.0, -100, this.dogfightShip.body.acceleration);
     } else {
         this.dogfightShip.setAcceleration(0);
     }
