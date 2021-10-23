@@ -9,6 +9,9 @@ window.cookieconsent.initialise({
             'text': '#237afc'
         }
     },
+    'content': {
+        'message': 'This website uses cookies.'
+    },
     'theme': 'edgeless',
     'position': 'top'
 });
