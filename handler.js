@@ -5,6 +5,7 @@ var io;
 var socket;
 var games;
 var players;
+var scores;
 var gameHandler;
 
 /**
@@ -13,11 +14,12 @@ var gameHandler;
  * @param sio The Socket.IO library
  * @param socket The socket object for the connected client.
  */
-exports.init = function (ioIn, socketIn, gamesIn, playersIn) {
+exports.init = function (ioIn, socketIn, gamesIn, playersIn, scoresIn) {
     io = ioIn;
     socket = socketIn;
     games = gamesIn;
     players = playersIn;
+    scores = scoresIn;
 
     console.log(`new connection`); // TODO: Remove
 
@@ -163,7 +165,7 @@ function onStartGame(data) {
     games[gameId].gameType = gameType;
 
     // Get game handler
-    gameHandler = game[data.gameType](io, this, games, players, gameId, gameType);
+    gameHandler = game[data.gameType](io, this, games, players, gameId, gameType, scores);
 
     // Init game
     data.players = players;
@@ -173,7 +175,7 @@ function onStartGame(data) {
 function onGameStarted(data) {
     // Host already has gameHandler
     if (this.id !== data.socketId) {
-        gameHandler = game[data.gameType](io, this, games, data.players, data.gameId, data.gameType);
+        gameHandler = game[data.gameType](io, this, games, data.players, data.gameId, data.gameType, scores);
     }
     gameHandler.handleEvents();
 }

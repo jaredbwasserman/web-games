@@ -10,6 +10,7 @@ var dogfightKeyA;
 var dogfightKeyS;
 var dogfightKeyD;
 var dogfightKeyW;
+var dogfightKilled;
 
 function dogfightInit(data) {
     // Create game
@@ -71,8 +72,9 @@ function dogfightOnBulletMoved(data) {
 
 function dogfightOnKilled(data) {
     if (App.socketId === data.socketId) {
-        // TODO: More logic
-        console.log('My ship is killed.'); // TODO: Remove
+        console.log(`My ship ${JSON.stringify(dogfightShip, null, 4)} is killed.`); // TODO: Remove
+        disableObject(dogfightShip);
+        dogfightKilled = true;
     }
 }
 
@@ -119,31 +121,30 @@ function dogfightCreate() {
 }
 
 function dogfightUpdate() {
-    if (!this.dogfightShip) {
-        console.log('no ship'); // TODO: Remove
+    if (dogfightKilled) {
         return;
     }
 
     // Handle movement
     if (this.dogfightKeyA.isDown) {
-        this.dogfightShip.setAngularVelocity(-150);
+        dogfightShip.setAngularVelocity(-150);
     } else if (this.dogfightKeyD.isDown) {
-        this.dogfightShip.setAngularVelocity(150);
+        dogfightShip.setAngularVelocity(150);
     } else {
-        this.dogfightShip.setAngularVelocity(0);
+        dogfightShip.setAngularVelocity(0);
     }
     if (this.dogfightKeyW.isDown) {
-        this.physics.velocityFromRotation(this.dogfightShip.rotation - Math.PI / 2.0, 100, this.dogfightShip.body.acceleration);
+        this.physics.velocityFromRotation(dogfightShip.rotation - Math.PI / 2.0, 100, dogfightShip.body.acceleration);
     } else {
-        this.dogfightShip.setAcceleration(0);
+        dogfightShip.setAcceleration(0);
     }
 
-    this.physics.world.wrap(this.dogfightShip, 5); // TODO: What is a good padding amt?
+    this.physics.world.wrap(dogfightShip, 5); // TODO: What is a good padding amt?
 
     // Handle disabling off-screen bullets
     dogfightPlayerBullets.forEach(bullet => {
         if (!onScreen(this, bullet)) {
-            disableBullet(bullet);
+            disableObject(bullet);
         }
     });
 
@@ -151,8 +152,8 @@ function dogfightUpdate() {
     const bullet = getFirstInactiveBullet();
     const dateNow = Date.now();
     if (bullet && this.input.activePointer.isDown && dateNow - dogfightLastFired > 1000) {
-        bullet.setPosition(this.dogfightShip.x, this.dogfightShip.y);
-        bullet.setRotation(this.dogfightShip.rotation);
+        bullet.setPosition(dogfightShip.x, dogfightShip.y);
+        bullet.setRotation(dogfightShip.rotation);
         bullet.setMaxVelocity(1000);
         this.physics.velocityFromRotation(bullet.rotation - Math.PI / 2.0, 1000, bullet.body.acceleration);
         bullet.setActive(true);
@@ -161,22 +162,22 @@ function dogfightUpdate() {
     }
 
     // Emit player movement
-    const curX = this.dogfightShip.x;
-    const curY = this.dogfightShip.y;
-    const curR = this.dogfightShip.rotation;
-    if (this.dogfightShip.oldPosition && (
-        curX !== this.dogfightShip.oldPosition.x ||
-        curY !== this.dogfightShip.oldPosition.y ||
-        curR !== this.dogfightShip.oldPosition.rotation)) {
+    const curX = dogfightShip.x;
+    const curY = dogfightShip.y;
+    const curR = dogfightShip.rotation;
+    if (dogfightShip.oldPosition && (
+        curX !== dogfightShip.oldPosition.x ||
+        curY !== dogfightShip.oldPosition.y ||
+        curR !== dogfightShip.oldPosition.rotation)) {
         IO.socket.emit('playerMovement', {
-            x: this.dogfightShip.x,
-            y: this.dogfightShip.y,
-            rotation: this.dogfightShip.rotation
+            x: dogfightShip.x,
+            y: dogfightShip.y,
+            rotation: dogfightShip.rotation
         });
     }
 
     // Save old position data
-    this.dogfightShip.oldPosition = {
+    dogfightShip.oldPosition = {
         x: curX,
         y: curY,
         rotation: curR
@@ -207,11 +208,11 @@ function dogfightUpdate() {
 }
 
 function dogfightAddPlayer(self, player) {
-    self.dogfightShip = self.physics.add.image(player.x, player.y, 'playerShip').setOrigin(0.5, 0.5);
-    self.dogfightShip.setDrag(100);
-    self.dogfightShip.setAngularDrag(100);
-    self.dogfightShip.setMaxVelocity(200);
-    self.dogfightShip.setDepth(10);
+    dogfightShip = self.physics.add.image(player.x, player.y, 'playerShip').setOrigin(0.5, 0.5);
+    dogfightShip.setDrag(100);
+    dogfightShip.setAngularDrag(100);
+    dogfightShip.setMaxVelocity(200);
+    dogfightShip.setDepth(10);
 }
 
 function dogfightAddEnemy(self, player) {
@@ -233,8 +234,9 @@ function dogfightAddPlayerBullet(self, bulletIn) {
     for (const [socketId, enemy] of Object.entries(dogfightEnemies)) {
         self.physics.add.overlap(enemy, bullet, function () {
             console.log(`bullet collide with enemy!`); // TODO: Remove
-            disableBullet(bullet);
-            IO.socket.emit('enemyHit', { socketId: socketId });
+            disableObject(bullet);
+            enemy.destroy();
+            IO.socket.emit('enemyHit', { socketId: socketId, killTime: Date.now() });
         }, null, self);
     }
 
@@ -263,12 +265,12 @@ function getFirstInactiveBullet() {
     return bulletToReturn;
 }
 
-function disableBullet(bullet) {
-    bullet.setPosition(-100, -100);
-    bullet.setRotation(0);
-    bullet.setVelocity(0, 0);
-    bullet.setActive(false);
-    bullet.setVisible(false);
+function disableObject(obj) {
+    obj.setPosition(-100, -100);
+    obj.setRotation(0);
+    obj.setVelocity(0, 0);
+    obj.setActive(false);
+    obj.setVisible(false);
 }
 
 function onScreen(self, object) {

@@ -27,4 +27,21 @@ A collection of web games.
 1. Add animations to dogfight for bullet collisions with enemies and enemy bullets with self
 1. Bullet cone in front of plane based on pointer position
 1. Server timer for 30 seconds and send game end event and have 3 second countdown client side (3 + 30 seconds)
+   1. Need to set game ended true for this case
 1. Add kill count stat for dogfight
+1. If player disconnects, need to handle in both game (remove ship) and final score
+1. There are race conditions in dogfight game end logic
+1. Implement View (All) Scores and redirect to score for ended game
+1. Persist scores to database or file
+1. Test cases
+   1. test disconnect works
+   1. test host can win
+   1. test player can win
+   1. test 3 people where one wins
+   1. test 3 people with timeout
+   1. check die and then disconnect
+   1. check disconnect before die
+   1. tie with 2 people alive 1 dead
+   1. tie with 3 people alive no dead
+1. Harder to hide with screen wrap in dogfight
+1. Make sure only one bullet collision event with enemy

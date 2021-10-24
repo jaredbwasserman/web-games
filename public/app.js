@@ -34,6 +34,7 @@ const IO = {
         IO.socket.on('playersUpdate', IO.onPlayersUpdated);
         IO.socket.on('gameTypeChanged', IO.onGameTypeChanged);
         IO.socket.on('gameStarted', IO.onGameStarted);
+        IO.socket.on('gameEnded', IO.onGameEnded);
         IO.socket.on('error', IO.onError);
     },
 
@@ -97,6 +98,11 @@ const IO = {
 
         // Update client
         App.toGame(data);
+    },
+
+    onGameEnded: function (data) {
+        console.log(`Game ended ${JSON.stringify(data, null, 4)}`); // TODO: Remove
+        // TODO: toScores
     },
 
     onError: function (data) {
