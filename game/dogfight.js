@@ -14,8 +14,22 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             for (const [socketId, player] of Object.entries(players)) {
                 if (player.gameId === gameId) {
                     player.rotation = 0;
-                    player.x = Math.floor(Math.random() * 784) + 16;
-                    player.y = Math.floor(Math.random() * 584) + 16;
+                    player.x = Math.floor(Math.random() * 700) + 50;
+                    player.y = Math.floor(Math.random() * 500) + 50;
+                }
+            }
+
+            // Init bullets
+            data.bullets = {};
+            for (const [socketId, player] of Object.entries(players)) {
+                data.bullets[socketId] = [];
+                for (var i = 0; i < 3; i++) {
+                    data.bullets[socketId].push({
+                        socketId: socketId,
+                        rotation: 0,
+                        x: -100,
+                        y: -100
+                    });
                 }
             }
 
