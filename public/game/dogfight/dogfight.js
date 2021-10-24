@@ -125,7 +125,7 @@ function dogfightUpdate() {
         this.dogfightShip.setAngularVelocity(0);
     }
     if (this.dogfightKeyW.isDown) {
-        this.physics.velocityFromRotation(this.dogfightShip.rotation + Math.PI / 2.0, -100, this.dogfightShip.body.acceleration);
+        this.physics.velocityFromRotation(this.dogfightShip.rotation - Math.PI / 2.0, 100, this.dogfightShip.body.acceleration);
     } else {
         this.dogfightShip.setAcceleration(0);
     }
@@ -146,7 +146,7 @@ function dogfightUpdate() {
         bullet.setPosition(this.dogfightShip.x, this.dogfightShip.y);
         bullet.setRotation(this.dogfightShip.rotation);
         bullet.setMaxVelocity(1000);
-        this.physics.velocityFromRotation(bullet.rotation + Math.PI / 2.0, -1000, bullet.body.acceleration);
+        this.physics.velocityFromRotation(bullet.rotation - Math.PI / 2.0, 1000, bullet.body.acceleration);
         bullet.setActive(true);
         bullet.setVisible(true);
         dogfightLastFired = dateNow;
