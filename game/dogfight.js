@@ -43,6 +43,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
         handleEvents: function () {
             socket.on('playerMovement', this.onPlayerMovement);
             socket.on('bulletMovement', this.onBulletMovement);
+            socket.on('enemyHit', this.onEnemyHit);
         },
 
         onPlayerMovement: function (data) {
@@ -65,6 +66,10 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Emit bullet movement to all players about the bullet that moved
             socket.broadcast.emit('bulletMoved', bullets[this.id][data.index]);
+        },
+
+        onEnemyHit: function (data) {
+            socket.broadcast.emit('killed', data);
         }
     };
 };

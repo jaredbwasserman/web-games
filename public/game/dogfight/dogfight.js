@@ -43,6 +43,7 @@ function dogfightInit(data) {
 
     IO.socket.on('playerMoved', dogfightOnPlayerMoved);
     IO.socket.on('bulletMoved', dogfightOnBulletMoved);
+    IO.socket.on('killed', dogfightOnKilled);
 }
 
 function dogfightOnPlayerMoved(data) {
@@ -65,6 +66,13 @@ function dogfightOnBulletMoved(data) {
                 }
             });
         }
+    }
+}
+
+function dogfightOnKilled(data) {
+    if (App.socketId === data.socketId) {
+        // TODO: More logic
+        console.log('My ship is killed.'); // TODO: Remove
     }
 }
 
@@ -226,6 +234,7 @@ function dogfightAddPlayerBullet(self, bulletIn) {
         self.physics.add.overlap(enemy, bullet, function () {
             console.log(`bullet collide with enemy!`); // TODO: Remove
             disableBullet(bullet);
+            IO.socket.emit('enemyHit', { socketId: socketId });
         }, null, self);
     }
 
