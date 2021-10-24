@@ -55,13 +55,16 @@ function dogfightOnPlayerMoved(data) {
 }
 
 function dogfightOnBulletMoved(data) {
-    // TODO
-
     // Handle enemy bullets
     for (const [socketId, bullets] of Object.entries(dogfightEnemyBullets)) {
-        bullets.forEach(bullet => {
-
-        });
+        if (socketId === data.socketId) {
+            bullets.forEach(bullet => {
+                if (bullet.index === data.index) {
+                    bullet.setRotation(data.rotation);
+                    bullet.setPosition(data.x, data.y);
+                }
+            });
+        }
     }
 }
 
@@ -105,7 +108,6 @@ function dogfightCreate() {
     this.dogfightKeyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.dogfightKeyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.dogfightKeyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.input.mouse.disableContextMenu();
 }
 
 function dogfightUpdate() {
@@ -133,11 +135,7 @@ function dogfightUpdate() {
     // Handle disabling off-screen bullets
     dogfightPlayerBullets.forEach(bullet => {
         if (!onScreen(this, bullet)) {
-            bullet.setPosition(-100, -100);
-            bullet.setRotation(0);
-            bullet.setVelocity(0, 0);
-            bullet.setActive(false);
-            bullet.setVisible(false);
+            disableBullet(bullet);
         }
     });
 
@@ -175,6 +173,29 @@ function dogfightUpdate() {
         y: curY,
         rotation: curR
     };
+
+    // Emit bullet movement
+    for (const [index, bullet] of Object.entries(dogfightPlayerBullets)) {
+        const curX = bullet.x;
+        const curY = bullet.y;
+        if (bullet.oldPosition && (
+            curX !== bullet.oldPosition.x ||
+            curY !== bullet.oldPosition.y)) {
+            IO.socket.emit('bulletMovement', {
+                socketId: App.socketId,
+                index: index,
+                x: bullet.x,
+                y: bullet.y,
+                rotation: bullet.rotation
+            });
+        }
+
+        // Save old position data
+        bullet.oldPosition = {
+            x: curX,
+            y: curY
+        };
+    }
 }
 
 function dogfightAddPlayer(self, player) {
@@ -182,11 +203,12 @@ function dogfightAddPlayer(self, player) {
     self.dogfightShip.setDrag(100);
     self.dogfightShip.setAngularDrag(100);
     self.dogfightShip.setMaxVelocity(200);
-    self.dogfightShip.setDepth(1);
+    self.dogfightShip.setDepth(10);
 }
 
 function dogfightAddEnemy(self, player) {
-    const enemy = self.add.sprite(player.x, player.y, 'enemyShip').setOrigin(0.5, 0.5);
+    const enemy = self.physics.add.sprite(player.x, player.y, 'enemyShip').setOrigin(0.5, 0.5);
+    enemy.setDepth(5);
     enemy.socketId = player.socketId;
     dogfightEnemies[enemy.socketId] = enemy;
 }
@@ -194,17 +216,32 @@ function dogfightAddEnemy(self, player) {
 function dogfightAddPlayerBullet(self, bulletIn) {
     const bullet = self.physics.add.image(bulletIn.x, bulletIn.y, 'playerBullet').setOrigin(0.5, 0.5).setDisplaySize(10, 17);
     bullet.setRotation(bulletIn.rotation);
+    bullet.setDrag(0);
+    bullet.setAngularDrag(0);
     bullet.setActive(false);
     bullet.setVisible(false);
+
+    // Collision handler
+    for (const [socketId, enemy] of Object.entries(dogfightEnemies)) {
+        self.physics.add.overlap(enemy, bullet, function () {
+            console.log(`bullet collide with enemy!`); // TODO: Remove
+            disableBullet(bullet);
+        }, null, self);
+    }
+
     dogfightPlayerBullets.push(bullet);
 }
 
-function dogfightAddEnemyBullet(self, bullet) {
-    // TODO
-    // dogfightEnemyBullets[bullet.socketId].push({
+function dogfightAddEnemyBullet(self, bulletIn) {
+    const bullet = self.physics.add.sprite(bulletIn.x, bulletIn.y, 'enemyBullet').setOrigin(0.5, 0.5).setDisplaySize(10, 17);
+    bullet.setRotation(bulletIn.rotation);
+    bullet.socketId = bulletIn.socketId;
+    bullet.index = bulletIn.index;
 
-    // });
-    // TODO: Set up collisions with enemy bullets
+    if (!dogfightEnemyBullets[bullet.socketId]) {
+        dogfightEnemyBullets[bullet.socketId] = [];
+    }
+    dogfightEnemyBullets[bullet.socketId].push(bullet);
 }
 
 function getFirstInactiveBullet() {
@@ -215,6 +252,14 @@ function getFirstInactiveBullet() {
         }
     });
     return bulletToReturn;
+}
+
+function disableBullet(bullet) {
+    bullet.setPosition(-100, -100);
+    bullet.setRotation(0);
+    bullet.setVelocity(0, 0);
+    bullet.setActive(false);
+    bullet.setVisible(false);
 }
 
 function onScreen(self, object) {

@@ -20,18 +20,21 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             }
 
             // Init bullets
-            data.bullets = {};
+            const bullets = {};
             for (const [socketId, player] of Object.entries(players)) {
-                data.bullets[socketId] = [];
+                bullets[socketId] = [];
                 for (var i = 0; i < 3; i++) {
-                    data.bullets[socketId].push({
+                    bullets[socketId].push({
                         socketId: socketId,
+                        index: i,
                         rotation: 0,
                         x: -100,
                         y: -100
                     });
                 }
             }
+            games[gameId].bullets = bullets;
+            data.bullets = bullets;
 
             // Broadcast game started to everyone
             io.sockets.in(gameId).emit('gameStarted', data);
@@ -39,6 +42,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
         handleEvents: function () {
             socket.on('playerMovement', this.onPlayerMovement);
+            socket.on('bulletMovement', this.onBulletMovement);
         },
 
         onPlayerMovement: function (data) {
@@ -49,6 +53,18 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Emit movement to all players about the player that moved
             socket.broadcast.emit('playerMoved', players[this.id]);
+        },
+
+        onBulletMovement: function (data) {
+            const bullets = games[gameId].bullets;
+
+            // Update bullet info
+            bullets[this.id][data.index].x = data.x;
+            bullets[this.id][data.index].y = data.y;
+            bullets[this.id][data.index].rotation = data.rotation;
+
+            // Emit bullet movement to all players about the bullet that moved
+            socket.broadcast.emit('bulletMoved', bullets[this.id][data.index]);
         }
     };
 };
