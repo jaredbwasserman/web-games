@@ -89,8 +89,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                     };
                 }
 
-                // Tell the enemy that was hit to destroy
-                io.sockets.in(gameId).emit('killed', data);
+                // Tell everone the enemy that was hit to destroy
+                socket.broadcast.emit('killed', data);
 
                 // TODO: Is it possible for 0 players to be alive?
                 // Check for game end

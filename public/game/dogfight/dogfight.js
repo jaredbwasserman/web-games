@@ -79,7 +79,7 @@ function dogfightOnKilled(data) {
     else {
         for (const [socketId, enemy] of Object.entries(dogfightEnemies)) {
             if (socketId === data.socketId) {
-                disableObject(enemy);
+                enemy.destroy();
             }
         }
     }
@@ -273,6 +273,10 @@ function getFirstInactiveBullet() {
 }
 
 function disableObject(obj) {
+    if (!obj) {
+        return;
+    }
+
     obj.setPosition(-100, -100);
     obj.setRotation(0);
     obj.setVelocity(0, 0);

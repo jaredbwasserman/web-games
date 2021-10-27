@@ -44,3 +44,6 @@ A collection of web games.
    1. tie with 3 people alive no dead
 1. Harder to hide with screen wrap in dogfight
 1. Make sure only one bullet collision event with enemy
+1. onPlayersUpdated should only trigger if game has not started yet
+   1. Otherwise, `Uncaught TypeError: Cannot read properties of null (reading 'firstChild')`
+1. Why are there late arriving events?
