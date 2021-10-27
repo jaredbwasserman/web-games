@@ -76,6 +76,13 @@ function dogfightOnKilled(data) {
         disableObject(dogfightShip);
         dogfightKilled = true;
     }
+    else {
+        for (const [socketId, enemy] of Object.entries(dogfightEnemies)) {
+            if (socketId === data.socketId) {
+                disableObject(enemy);
+            }
+        }
+    }
 }
 
 function dogfightPreload() {

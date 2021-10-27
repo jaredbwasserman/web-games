@@ -90,7 +90,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 }
 
                 // Tell the enemy that was hit to destroy
-                socket.broadcast.emit('killed', data);
+                io.sockets.in(gameId).emit('killed', data);
 
                 // TODO: Is it possible for 0 players to be alive?
                 // Check for game end
@@ -107,8 +107,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             const deathTimes = games[gameId].deathTimes;
 
             // Get total players
-            const totalPlayers = 0;
-            for (const [socketId, player] of Object.entries(deathTimes)) {
+            var totalPlayers = 0;
+            for (const [socketId, player] of Object.entries(players)) {
                 if (player.gameId === gameId) {
                     totalPlayers++;
                 }
