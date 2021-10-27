@@ -20,7 +20,7 @@ const games = {};
 // Keep track of players (socketId -> {gameId, socketId, name, role})
 const players = {};
 
-// Keep track of scores ({gameId, gameType, startTime, [{rank, name, stats}]})
+// Keep track of scores ({gameId, gameType, startTime, [{rank, name, ...}]})
 const scores = [];
 
 io.on('connection', function (socket) {

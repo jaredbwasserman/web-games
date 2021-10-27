@@ -40,9 +40,6 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             // Init death times
             games[gameId].deathTimes = {};
 
-            // Keep track of whether the game ended
-            games[gameId].ended = false;
-
             // Broadcast game started to everyone
             io.sockets.in(gameId).emit('gameStarted', data);
         },
@@ -78,7 +75,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
         onEnemyHit: function (self) {
             return function (data) {
                 // Race condition - the game might have already ended
-                if (games[gameId].ended) {
+                if ('ended' === games[gameId].status) {
                     console.log(`Late arriving event (game already ended): ${JSON.stringify(data, null, 4)}`); // TODO: Remove
                     return;
                 }
@@ -99,7 +96,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 // Check for game end
                 if (self.getNumPlayersAlive() <= 1) {
                     console.log(`Game ${gameType}:${gameId} over`); // TODO: Remove
-                    games[gameId].ended = true;
+                    games[gameId].status = 'ended';
                     self.addGameScores();
                     io.sockets.in(gameId).emit('gameEnded', { gameId: gameId, scores: scores });
                 }
