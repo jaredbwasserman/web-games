@@ -31,7 +31,6 @@ A collection of web games.
 1. Add kill count stat for dogfight
 1. If player disconnects, need to handle in both game (remove ship) and final score
 1. There are race conditions in dogfight game end logic
-1. Implement View (All) Scores and redirect to score for ended game
 1. Persist scores to database or file
 1. Test cases
    1. test disconnect works

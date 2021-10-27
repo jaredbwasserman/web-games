@@ -43,13 +43,6 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             // Keep track of whether the game ended
             games[gameId].ended = false;
 
-            // Init scores
-            scores[gameId] = {};
-            scores[gameId].gameId = gameId;
-            scores[gameId].gameType = gameType;
-            scores[gameId].startTime = Date.now();
-            scores[gameId].scores = [];
-
             // Broadcast game started to everyone
             io.sockets.in(gameId).emit('gameStarted', data);
         },
@@ -94,9 +87,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 const deathTimes = games[gameId].deathTimes;
                 if (!deathTimes[data.socketId]) {
                     deathTimes[data.socketId] = {
-                        deathTime: data.killTime
-                        // TODO: Killed by
-                        // TODO: List of other players someone killed (stored in players makes sense)
+                        deathTime: data.killTime,
+                        killedBy: players[data.killerSocketId].name
                     };
                 }
 
@@ -108,7 +100,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 if (self.getNumPlayersAlive() <= 1) {
                     console.log(`Game ${gameType}:${gameId} over`); // TODO: Remove
                     games[gameId].ended = true;
-                    io.sockets.in(gameId).emit('gameEnded', self.getFinalScore());
+                    self.addGameScores();
+                    io.sockets.in(gameId).emit('gameEnded', { gameId: gameId, scores: scores });
                 }
             }
         },
@@ -136,8 +129,15 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
         },
 
         // TODO: Call at 30 seconds over
-        getFinalScore: function () {
-            const gameScores = scores[gameId].scores;
+        addGameScores: function () {
+            const gameScores = {
+                data: {
+                    'GAME CODE': gameId,
+                    'GAME TYPE': gameType,
+                    'START TIME': new Date(games[gameId].startTime)
+                },
+                kids: []
+            };
             const deathTimes = games[gameId].deathTimes;
 
             // Rank count
@@ -147,11 +147,15 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             for (const [socketId, player] of Object.entries(players)) {
                 const deathInfo = deathTimes[socketId];
                 if (!deathInfo) {
-                    gameScores.push({
-                        rank: 1,
-                        name: player.name,
-                        data: {}
-                    });
+                    gameScores.kids.push(
+                        {
+                            data: {
+                                'RANK': 1,
+                                'NAME': player.name
+                            },
+                            kids: []
+                        }
+                    );
 
                     rankCount++;
                 }
@@ -190,18 +194,23 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                     prevDeathTime = deathTime;
                 }
 
-                gameScores.push({
-                    rank: curRank,
-                    name: player.name,
-                    data: {
-                        deathTime: deathTime
+                gameScores.kids.push(
+                    {
+                        data: {
+                            'RANK': curRank,
+                            'NAME': player.name,
+                            'KILLED AFTER': (deathTime - games[gameId].startTime) / 1000.0 + ' seconds',
+                            'KILLED BY': deathTimes[deathMap[deathTime]].killedBy
+                        },
+                        kids: []
                     }
-                });
+                );
 
                 rankCount++;
             }
 
-            return scores[gameId];
+            // Scores will be displayed with most recent at top
+            scores.unshift(gameScores);
         }
     };
 };

@@ -35,6 +35,7 @@ const IO = {
         IO.socket.on('gameTypeChanged', IO.onGameTypeChanged);
         IO.socket.on('gameStarted', IO.onGameStarted);
         IO.socket.on('gameEnded', IO.onGameEnded);
+        IO.socket.on('scoresReceived', IO.onScoresReceived);
         IO.socket.on('error', IO.onError);
     },
 
@@ -102,7 +103,11 @@ const IO = {
 
     onGameEnded: function (data) {
         console.log(`Game ended ${JSON.stringify(data, null, 4)}`); // TODO: Remove
-        // TODO: toScores
+        App.toScores(data);
+    },
+
+    onScoresReceived: function (data) {
+        App.toScores(data);
     },
 
     onError: function (data) {
@@ -135,8 +140,13 @@ const App = {
     },
 
     bindEvents: function () {
+        document.getElementById('btnViewScores').addEventListener('click', App.onViewScoresClick);
         document.getElementById('btnJoinGame').addEventListener('click', App.onJoinClick);
         document.getElementById('btnCreateGame').addEventListener('click', App.onCreateClick);
+    },
+
+    onViewScoresClick: function () {
+        IO.socket.emit('requestScores');
     },
 
     onJoinClick: function () {
@@ -274,6 +284,48 @@ const App = {
 
         // Load game
         App.games[data.gameType].init(data);
+    },
+
+    toScores: function (data) {
+        // Switch to scores template
+        document.getElementById('currentScreen').innerHTML = document.getElementById('scoresTemplate').innerHTML;
+
+        // Return home button
+        document.getElementById('btnReturnHomeScores').addEventListener('click', () => window.location.reload());
+
+        // Exit if there are no scores
+        if (data.scores.length <= 0) {
+            return;
+        }
+
+        // Load scores
+        const settings = {
+            iDisplayLength: 100,
+            bLengthChange: false,
+            bFilter: false,
+            bSort: false,
+            bInfo: false
+        };
+
+        const table = new nestedTables.TableHierarchy(
+            'scores',
+            data.scores,
+            settings
+        );
+        table.initializeTableHierarchy();
+
+        // Swal if just came from a game
+        if (data.gameId) {
+            Swal.fire({
+                position: 'top',
+                icon: 'info',
+                title: 'Game over!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            find(data.gameId);
+        }
     }
 };
 

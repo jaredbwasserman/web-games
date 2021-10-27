@@ -26,6 +26,7 @@ exports.init = function (ioIn, socketIn, gamesIn, playersIn, scoresIn) {
     socket.emit('connected', { message: 'You are connected!' });
 
     socket.on('disconnect', onDisconnect);
+    socket.on('requestScores', onRequestScores);
     socket.on('createGame', onCreateGame);
     socket.on('joinGame', onJoinGame);
     socket.on('gameTypeChanged', onGameTypeChanged);
@@ -50,6 +51,11 @@ function onDisconnect(data) {
 
     // TODO: Remove
     console.log(`players is ${getPlayerNames(gameId)}`);
+}
+
+function onRequestScores(data) {
+    console.log('giving scores'); // TODO: Remove
+    this.emit('scoresReceived', { scores: scores });
 }
 
 function onCreateGame(data) {
@@ -163,6 +169,7 @@ function onStartGame(data) {
     // Update game
     games[gameId].status = 'in progress';
     games[gameId].gameType = gameType;
+    games[gameId].startTime = Date.now();
 
     // Get game handler
     gameHandler = game[data.gameType](io, this, games, players, gameId, gameType, scores);

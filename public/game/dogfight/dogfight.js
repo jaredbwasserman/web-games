@@ -236,7 +236,7 @@ function dogfightAddPlayerBullet(self, bulletIn) {
             console.log(`bullet collide with enemy!`); // TODO: Remove
             disableObject(bullet);
             enemy.destroy();
-            IO.socket.emit('enemyHit', { socketId: socketId, killTime: Date.now() });
+            IO.socket.emit('enemyHit', { killerSocketId: App.socketId, socketId: socketId, killTime: Date.now() });
         }, null, self);
     }
 

@@ -12,9 +12,10 @@
     <link href='https://fonts.googleapis.com/css?family=Quicksand:300,400,700' rel='stylesheet' type='text/css'>
 
     <!-- CSS -->
-    <link href="css/styles.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
         href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <link href="css/styles.css" rel="stylesheet">
 </head>
 
 <body>
@@ -98,6 +99,16 @@
         <div id="gameScreen"></div>
     </script>
 
+    <script id="scoresTemplate" type="text/template">
+        <div id="scoresTitle" class="title">SCORES</div>
+
+        <div class="returnHome">
+            <button id="btnReturnHomeScores" class="btn">RETURN HOME</button>
+        </div>
+
+        <div id="scores" class="container"></div>
+    </script>
+
     <!-- Current screen -->
     <div id="currentScreen"></div>
 
@@ -114,6 +125,9 @@
 
     <!-- Cookieconsent -->
     <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+
+    <!-- Nested Datatables -->
+    <script src="https://cdn.jsdelivr.net/npm/nested-datatables@0.1.2/dist/nested.tables.min.js"></script>
 
     <!-- SweetAlert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

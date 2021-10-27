@@ -224,3 +224,18 @@ ul {
 #gameScreen {
     text-align: center;
 }
+
+/* Scores */
+#btnReturnHomeScores {
+    margin-bottom: 50px;
+}
+
+th {
+    color: #ffffff;
+    background-color: #15171b;
+}
+
+td {
+    color: #ffffff;
+    background-color: #15171b;
+}
