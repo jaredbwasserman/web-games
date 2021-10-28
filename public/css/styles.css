@@ -237,10 +237,12 @@ ul {
 
 th {
     color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
     background-color: #15171b;
 }
 
 td {
     color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
     background-color: #15171b;
 }
