@@ -42,6 +42,7 @@ A collection of web games.
    1. check disconnect before die
    1. tie with 2 people alive 1 dead
    1. tie with 3 people alive no dead
+   1. Test concurrent games
 1. Harder to hide with screen wrap in dogfight
 1. Make sure only one bullet collision event with enemy
 1. onPlayersUpdated should only trigger if game has not started yet

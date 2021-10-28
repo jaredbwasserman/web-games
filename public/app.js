@@ -95,7 +95,9 @@ const IO = {
         console.log(`started game ${JSON.stringify(data, null, 4)}`); // TODO: Remove
 
         // Tell server to handle events
-        IO.socket.emit('gameStarted', data);
+        if ('player' === App.role) {
+            IO.socket.emit('gameStarted', data);
+        }
 
         // Update client
         App.toGame(data);

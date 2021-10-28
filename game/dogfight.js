@@ -42,6 +42,9 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Broadcast game started to everyone
             io.sockets.in(gameId).emit('gameStarted', data);
+
+            // Handle events
+            this.handleEvents();
         },
 
         handleEvents: function () {
@@ -57,7 +60,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             players[this.id].rotation = data.rotation;
 
             // Emit movement to all players about the player that moved
-            socket.broadcast.emit('playerMoved', players[this.id]);
+            io.sockets.in(gameId).emit('playerMoved', players[this.id]);
         },
 
         onBulletMovement: function (data) {
@@ -69,7 +72,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             bullets[this.id][data.index].rotation = data.rotation;
 
             // Emit bullet movement to all players about the bullet that moved
-            socket.broadcast.emit('bulletMoved', bullets[this.id][data.index]);
+            io.sockets.in(gameId).emit('bulletMoved', bullets[this.id][data.index]);
         },
 
         onEnemyHit: function (self) {
@@ -90,7 +93,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 }
 
                 // Tell everone the enemy that was hit to destroy
-                socket.broadcast.emit('killed', data);
+                io.sockets.in(gameId).emit('killed', data);
 
                 // TODO: Is it possible for 0 players to be alive?
                 // Check for game end
