@@ -230,6 +230,11 @@ ul {
     margin-bottom: 50px;
 }
 
+#scores {
+    width: 80%;
+    margin: 0 auto;
+}
+
 th {
     color: #ffffff;
     background-color: #15171b;

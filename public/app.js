@@ -300,6 +300,13 @@ const App = {
             return;
         }
 
+        // Convert to local timezone
+        data.scores.forEach(score => {
+            if (score.data['START TIME']) {
+                score.data['START TIME'] = new Date(score.data['START TIME']).toLocaleString();
+            }
+        });
+
         // Load scores
         const settings = {
             iDisplayLength: 100,
@@ -308,7 +315,6 @@ const App = {
             bSort: false,
             bInfo: false
         };
-
         const table = new nestedTables.TableHierarchy(
             'scores',
             data.scores,

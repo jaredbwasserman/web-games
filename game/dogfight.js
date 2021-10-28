@@ -134,7 +134,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 data: {
                     'GAME CODE': gameId,
                     'GAME TYPE': gameType,
-                    'START TIME': new Date(games[gameId].startTime)
+                    'START TIME': games[gameId].startTime
                 },
                 kids: []
             };

@@ -11,6 +11,7 @@ A collection of web games.
 1. Add instructions for how to add games
 1. Add instructions for local setup and running
 1. Clean up server memory (when a game finishes, when a player leaves, etc)
+   1. Also when create game but exit out of lobby
 1. Update URLs so browser back button works?
 1. Game type stored in client/server
 1. Make the buttons un-highlight when hover exit (copy game code works but not the other ones)
