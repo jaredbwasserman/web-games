@@ -10,8 +10,6 @@ A collection of web games.
 1. Add more games
 1. Add instructions for how to add games
 1. Add instructions for local setup and running
-1. Clean up server memory (when a game finishes, when a player leaves, etc)
-   1. Also when create game but exit out of lobby
 1. Update URLs so browser back button works?
 1. Game type stored in client/server
 1. Make the buttons un-highlight when hover exit (copy game code works but not the other ones)
@@ -33,6 +31,7 @@ A collection of web games.
 1. If player disconnects, need to handle in both game (remove ship) and final score
 1. There are race conditions in dogfight game end logic
 1. Persist scores to database or file
+   1. Clean up scores array after persisting
 1. Test cases
    1. test disconnect works
    1. test host can win
@@ -46,6 +45,4 @@ A collection of web games.
    1. Test concurrent games
 1. Harder to hide with screen wrap in dogfight
 1. Make sure only one bullet collision event with enemy
-1. onPlayersUpdated should only trigger if game has not started yet
-   1. Otherwise, `Uncaught TypeError: Cannot read properties of null (reading 'firstChild')`
 1. Why are there late arriving events?

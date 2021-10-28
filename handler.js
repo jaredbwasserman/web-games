@@ -45,11 +45,27 @@ function onDisconnect(data) {
     // Remove the player
     delete players[this.id];
 
-    // Emit all players in room
-    io.sockets.in(gameId).emit('playersUpdate', { players: getPlayerNames(gameId) });
+    // Emit all players in room if the game is still in lobby
+    if ('pending' === games[gameId].status) {
+        io.sockets.in(gameId).emit('playersUpdate', { players: getPlayerNames(gameId) });
+    }
 
     // TODO: Remove
-    console.log(`players is ${getPlayerNames(gameId)}`);
+    // console.log(`players is ${getPlayerNames(gameId)}`);
+
+    // Check if the game has any players
+    var playerCount = 0;
+    for (const [socketId, player] of Object.entries(players)) {
+        if (gameId === player.gameId) {
+            playerCount++;
+        }
+    }
+    if (0 === playerCount) {
+        delete games[gameId];
+    }
+
+    // TODO: Remove
+    console.log(`games is ${JSON.stringify(games, null, 4)}`);
 }
 
 function onRequestScores(data) {
