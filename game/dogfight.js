@@ -101,8 +101,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 if (self.getNumPlayersAlive() <= 1) {
                     console.log(`Game ${gameType}:${gameId} over`); // TODO: Remove
                     games[gameId].status = 'ended';
-                    self.addGameScores();
-                    io.sockets.in(gameId).emit('gameEnded', { gameId: gameId, scores: scores });
+                    const gameScores = self.addGameScores();
+                    io.sockets.in(gameId).emit('gameEnded', { gameId: gameId, scores: [gameScores] });
                 }
             }
         },
@@ -212,6 +212,9 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Scores will be displayed with most recent at top
             scores.unshift(gameScores);
+
+            // Return scores for this game
+            return gameScores;
         }
     };
 };

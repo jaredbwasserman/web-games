@@ -332,7 +332,7 @@ const App = {
                 timer: 1500
             });
 
-            find(data.gameId);
+            document.getElementById('scorestab_0_row_0').click();
         }
     }
 };
