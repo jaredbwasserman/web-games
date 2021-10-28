@@ -2,7 +2,9 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
     const io = ioIn;
     const socket = socketIn;
     const games = gamesIn;
-    const players = playersIn;
+    const players = Object.fromEntries(
+        Object.entries(playersIn).filter(([socketId, player]) => gameIdIn === player.gameId)
+    );
     const gameId = gameIdIn;
     const gameType = gameTypeIn;
     const scores = scoresIn;
@@ -13,11 +15,9 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Init player positions
             for (const [socketId, player] of Object.entries(players)) {
-                if (player.gameId === gameId) {
-                    player.rotation = 0;
-                    player.x = Math.floor(Math.random() * 700) + 50;
-                    player.y = Math.floor(Math.random() * 500) + 50;
-                }
+                player.rotation = 0;
+                player.x = Math.floor(Math.random() * 700) + 50;
+                player.y = Math.floor(Math.random() * 500) + 50;
             }
 
             // Init bullets
@@ -41,6 +41,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             games[gameId].deathTimes = {};
 
             // Broadcast game started to everyone
+            data.players = players;
             io.sockets.in(gameId).emit('gameStarted', data);
 
             // Handle events

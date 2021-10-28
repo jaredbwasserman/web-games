@@ -171,7 +171,6 @@ function onStartGame(data) {
     games[gameId].startTime = Date.now();
 
     // Init game
-    data.players = players;
     game[data.gameType](io, this, games, players, gameId, gameType, scores).init(data);
 }
 
