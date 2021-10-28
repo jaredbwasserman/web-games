@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const generator = require('./util/generator');
 const game = require('./game');
 
 var io;
@@ -65,7 +65,7 @@ function onDisconnect(data) {
     }
 
     // TODO: Remove
-    console.log(`games is ${JSON.stringify(games, null, 4)}`);
+    // console.log(`games is ${JSON.stringify(games, null, 4)}`);
 }
 
 function onRequestScores(data) {
@@ -74,11 +74,11 @@ function onRequestScores(data) {
 }
 
 function onCreateGame(data) {
-    // Create a unique Socket.IO Room
-    const gameId = uuidv4();
+    // Create a unique room code
+    const gameId = generator.generateUniqueGameCode(games);
 
     // TODO: Remove
-    console.log('New game');
+    console.log(`New game ${gameId}`);
 
     // Create and join room
     this.join(gameId);
