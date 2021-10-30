@@ -40,6 +40,9 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             // Init death times
             games[gameId].deathTimes = {};
 
+            // Countdown timer 3 seconds
+            data.clientStartTime = games[gameId].startTime + 3000;
+
             // Broadcast game started to everyone
             data.players = players;
             io.sockets.in(gameId).emit('gameStarted', data);

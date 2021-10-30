@@ -221,6 +221,19 @@ ul {
     margin-bottom: 50px;
 }
 
+#countdownTimer {
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 10em;
+    text-align: center;
+    width: 800px;
+    height: 600px;
+    line-height: 500px;
+    display: table;
+    margin: 0 auto;
+}
+
 #gameScreen {
     text-align: center;
 }

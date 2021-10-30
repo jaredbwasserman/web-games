@@ -262,7 +262,7 @@ const App = {
         }
     },
 
-    toGame: function (data) {
+    toGame: async function (data) {
         // Error if no game
         if (!App.games[data.gameType]) {
             Swal.fire({
@@ -283,6 +283,18 @@ const App = {
 
         // Return home button
         document.getElementById('btnReturnHomeGame').addEventListener('click', () => window.location.reload());
+
+        // Countdown timer
+        if (data.clientStartTime) {
+            const interval = setInterval(function () {
+                const secondsRemaining = Math.ceil((data.clientStartTime - Date.now()) / 1000.0) % 60;
+                document.getElementById('countdownTimer').innerHTML = secondsRemaining;
+            }, 100);
+
+            await Util.sleep(data.clientStartTime - Date.now());
+            clearInterval(interval);
+        }
+        document.getElementById('countdownTimer').remove();
 
         // Load game
         App.games[data.gameType].init(data);
@@ -400,6 +412,10 @@ const Util = {
         }
         Util.setCookie('name', name, 365);
         return name;
+    },
+
+    sleep: async function (milliseconds) {
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
     }
 };
 
