@@ -216,6 +216,14 @@ const App = {
 
         // Name from cookie
         document.getElementById('name').value = Util.getCookie('name');
+
+        // Enter to join game
+        document.getElementById('joinGameCode').addEventListener('keypress', function (e) {
+            if (13 === e.which && !e.shiftKey) {
+                e.preventDefault();
+                document.getElementById('btnJoinGame').click();
+            }
+        });
     },
 
     toLobby: function (data) {
