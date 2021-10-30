@@ -42,7 +42,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Countdown timer 3 seconds
             games[gameId].clientStartTime = games[gameId].startTime + 3000;
-            data.clientStartTime = games[gameId].clientStartTime
+            data.clientStartTime = games[gameId].clientStartTime;
 
             // Game end timer 1 minute 30 seconds
             data.gameEndTime = data.clientStartTime + 90000;
