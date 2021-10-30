@@ -147,7 +147,7 @@ ul {
 .gridContainer {
     display: grid;
     /* grid-template-columns: auto auto auto; */
-    grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
     background-color: none;
     width: 40%;
     outline: none;
@@ -167,9 +167,9 @@ ul {
 
 /* Game Buttons */
 .gameBtn {
-    display: block;
-    margin-left: 0;
-    margin-right: 0;
+    display: table;
+    margin: 0 auto;
+    text-align: center;
     margin-bottom: 0;
     height: 90%;
     width: 90%;
@@ -177,8 +177,6 @@ ul {
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     font-size: 1.5em;
-    line-height: 1.2;
-    text-align: center;
     background-color: #491b5e;
     white-space: nowrap;
     cursor: pointer;
