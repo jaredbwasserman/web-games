@@ -45,3 +45,4 @@ A collection of web games.
 1. Why are there late arriving events?
 1. Ships immune for the first few seconds of dogfight
 1. Game controls and objective in lobby for each game
+1. Multicast pending games on intro page so you can click to enter rather than type game code
