@@ -218,8 +218,8 @@ const App = {
         document.getElementById('name').value = Util.getCookie('name');
 
         // Enter to join game
-        document.getElementById('joinGameCode').addEventListener('keypress', function (e) {
-            if (13 === e.which && !e.shiftKey) {
+        document.getElementById('joinGameCode').addEventListener('keydown', function (e) {
+            if ('Enter' === e.key && !e.shiftKey) {
                 e.preventDefault();
                 document.getElementById('btnJoinGame').click();
             }
