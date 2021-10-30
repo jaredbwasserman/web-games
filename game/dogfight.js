@@ -111,12 +111,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             const deathTimes = games[gameId].deathTimes;
 
             // Get total players
-            var totalPlayers = 0;
-            for (const [socketId, player] of Object.entries(players)) {
-                if (player.gameId === gameId) {
-                    totalPlayers++;
-                }
-            }
+            const totalPlayers = Object.keys(players).length;
 
             // Get dead players
             var deadPlayers = 0;
