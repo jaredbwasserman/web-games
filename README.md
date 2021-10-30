@@ -46,3 +46,4 @@ A collection of web games.
 1. Make sure only one bullet collision event with enemy
 1. Why are there late arriving events?
 1. Ships immune for the first few seconds of dogfight
+1. Game controls and objective in lobby for each game
