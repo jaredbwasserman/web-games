@@ -24,8 +24,6 @@ A collection of web games.
 1. What to do if user does not consent to cookies?
 1. Add animations to dogfight for bullet collisions with enemies and enemy bullets with self
 1. Bullet cone in front of plane based on pointer position
-1. Server timer for 30 seconds and send game end event and have 3 second countdown client side (3 + 30 seconds)
-   1. Need to set game ended true for this case
 1. Add kill count stat for dogfight
 1. If player disconnects, need to handle in both game (remove ship) and final score
 1. There are race conditions in dogfight game end logic
