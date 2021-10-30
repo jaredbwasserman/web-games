@@ -41,7 +41,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             games[gameId].deathTimes = {};
 
             // Countdown timer 3 seconds
-            data.clientStartTime = games[gameId].startTime + 3000;
+            games[gameId].clientStartTime = games[gameId].startTime + 3000;
+            data.clientStartTime = games[gameId].clientStartTime
 
             // Game end timer 1 minute 30 seconds
             data.gameEndTime = data.clientStartTime + 90000;
@@ -216,7 +217,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                         data: {
                             'RANK': curRank,
                             'NAME': player.name,
-                            'KILLED AFTER': (deathTime - games[gameId].startTime) / 1000.0 + ' seconds',
+                            'KILLED AFTER': (deathTime - games[gameId].clientStartTime) / 1000.0 + ' seconds',
                             'KILLED BY': deathTimes[deathMap[deathTime]].killedBy
                         },
                         kids: []
