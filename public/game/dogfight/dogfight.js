@@ -11,6 +11,7 @@ var dogfightKeyS;
 var dogfightKeyD;
 var dogfightKeyW;
 var dogfightKilled;
+var dogfightEndTime;
 
 function dogfightInit(data) {
     // Create game
@@ -41,6 +42,7 @@ function dogfightInit(data) {
     dogfightLastFired = 0;
     dogfightPlayers = data.players;
     dogfightEnemies = {};
+    dogfightEndTime = data.gameEndTime;
 
     IO.socket.on('playerMoved', dogfightOnPlayerMoved);
     IO.socket.on('bulletMoved', dogfightOnBulletMoved);
@@ -128,6 +130,15 @@ function dogfightCreate() {
 }
 
 function dogfightUpdate() {
+    // Game timer
+    if (dogfightEndTime) {
+        const minutesRemaining = String(Math.max(0, Math.floor((dogfightEndTime - Date.now()) / (60.0 * 1000.0)) % 60));
+        const secondsRemaining = String(Math.max(0, Math.floor((dogfightEndTime - Date.now()) / 1000.0) % 60));
+        document.getElementById('gameTimer').innerHTML = minutesRemaining.padStart(2, '0') +
+            ':' +
+            secondsRemaining.padStart(2, '0');
+    }
+
     if (dogfightKilled) {
         return;
     }

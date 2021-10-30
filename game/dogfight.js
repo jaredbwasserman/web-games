@@ -43,6 +43,10 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             // Countdown timer 3 seconds
             data.clientStartTime = games[gameId].startTime + 3000;
 
+            // Game end timer 1 minute 30 seconds
+            data.gameEndTime = data.clientStartTime + 90000;
+            setTimeout(this.onGameEnd(this), data.gameEndTime - Date.now());
+
             // Broadcast game started to everyone
             data.players = players;
             io.sockets.in(gameId).emit('gameStarted', data);
@@ -107,6 +111,21 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                     const gameScores = self.addGameScores();
                     io.sockets.in(gameId).emit('gameEnded', { gameId: gameId, scores: [gameScores] });
                 }
+            }
+        },
+
+        onGameEnd: function (self) {
+            return function () {
+                // Race condition - the game might have already ended
+                if ('ended' === games[gameId].status) {
+                    console.log(`Late game end for time run out`); // TODO: Remove
+                    return;
+                }
+
+                console.log(`Game ${gameType}:${gameId} over from time run out`); // TODO: Remove
+                games[gameId].status = 'ended';
+                const gameScores = self.addGameScores();
+                io.sockets.in(gameId).emit('gameEnded', { gameId: gameId, scores: [gameScores] });
             }
         },
 
