@@ -45,7 +45,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Game end timer 1 minute 30 seconds
             data.gameEndTime = data.clientStartTime + 90000;
-            setTimeout(this.onGameEnd(this), data.gameEndTime - Date.now());
+            setTimeout(this.onGameEnd(this), data.gameEndTime - games[gameId].startTime);
 
             // Broadcast game started to everyone
             data.players = players;
@@ -117,8 +117,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
         onGameEnd: function (self) {
             return function () {
                 // Race condition - the game might have already ended
-                if ('ended' === games[gameId].status) {
-                    console.log(`Late game end for time run out`); // TODO: Remove
+                if (!games[gameId] || 'ended' === games[gameId].status) {
                     return;
                 }
 
