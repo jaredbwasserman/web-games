@@ -326,13 +326,13 @@ const App = {
         document.getElementById('btnReturnHomeScores').addEventListener('click', () => window.location.reload());
 
         // Exit if there are no scores
-        if (data.scores.length <= 0) {
+        if (!data.scores || data.scores.length <= 0) {
             return;
         }
 
         // Convert to local timezone
         data.scores.forEach(score => {
-            if (score.data['START TIME']) {
+            if (score.data && score.data['START TIME']) {
                 score.data['START TIME'] = new Date(score.data['START TIME']).toLocaleString();
             }
         });

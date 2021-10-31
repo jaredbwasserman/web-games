@@ -16,8 +16,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             // Init player positions
             for (const [socketId, player] of Object.entries(players)) {
                 player.rotation = 0;
-                player.x = Math.floor(Math.random() * 700) + 50;
-                player.y = Math.floor(Math.random() * 500) + 50;
+                player.x = Math.floor(Math.random() * 701) + 50;
+                player.y = Math.floor(Math.random() * 501) + 50;
             }
 
             // Init bullets

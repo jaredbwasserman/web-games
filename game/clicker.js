@@ -13,16 +13,27 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
         init: function (data) {
             console.log('starting clicker server side code'); // TODO: Remove
 
+            // Button position
+            data.buttonPosition = {
+                x: Math.floor(Math.random() * 601) + 100,
+                y: Math.floor(Math.random() * 401) + 100
+            };
+
+            // Button delay
+            data.buttonDelay = Math.floor(Math.random() * 2001) + 1000;
+
+            // Button animal index (30 animals total)
+            data.buttonIndex = Math.floor(Math.random() * 30);
+
             // Countdown timer 3 seconds
             games[gameId].clientStartTime = games[gameId].startTime + 3000;
             data.clientStartTime = games[gameId].clientStartTime;
 
             // Game end timer 10 seconds
-            data.gameEndTime = data.clientStartTime + 10000;
+            data.gameEndTime = data.clientStartTime + 1000000;
             setTimeout(this.onGameEnd(this), data.gameEndTime - games[gameId].startTime);
 
             // Broadcast game started to everyone
-            data.players = players;
             io.sockets.in(gameId).emit('gameStarted', data);
 
             // Handle events
