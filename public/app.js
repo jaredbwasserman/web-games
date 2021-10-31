@@ -268,6 +268,16 @@ const App = {
             // Start game disabled
             document.getElementById('btnStartGame').disabled = true;
         }
+
+        // Tooltips
+        Array.from(document.querySelectorAll('[tippy-content]')).forEach(item => {
+            tippy(`#${item.id}`, {
+                allowHTML: true,
+                content: `${item.getAttribute('tippy-content')}`,
+                placement: `${item.getAttribute('tippy-placement')}`,
+                trigger: 'mouseenter'
+            });
+        });
     },
 
     toGame: async function (data) {

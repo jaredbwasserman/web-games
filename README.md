@@ -20,7 +20,6 @@ A collection of web games.
 
 ## TODO
 1. Add more games
-1. Add instructions for how to add games
 1. Cool background images in places
 1. Send error and terminate client side game if room no longer exists (host leaves and causes room to drop)
 1. What to do if user does not consent to cookies?
@@ -41,6 +40,5 @@ A collection of web games.
    1. tie with 3 people alive no dead
    1. test concurrent games
 1. Ships immune for the first few seconds of dogfight
-1. Game controls and objective in lobby for each game
 1. Multicast pending games on intro page so you can click to enter rather than type game code
 1. Add game duration to scores

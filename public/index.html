@@ -60,10 +60,10 @@
 
             <div id="startGameArea">
                 <div id="gameGrid" class="gridContainer">
-                    <div class="gridItem">
+                    <div id="clickerGridItem" class="gridItem" tippy-content="Click the box after it appears." tippy-placement="left">
                         <button id="clicker" class="gameBtn">CLICKER</button>
                     </div>
-                    <div class="gridItem">
+                    <div id="dogfightGridItem" class="gridItem" tippy-content="WASD to move.<br>Click to fire (hold down to fire repeatedly)." tippy-placement="right">
                         <button id="dogfight" class="gameBtn">DOGFIGHT</button>
                     </div>
                 </div>
@@ -124,6 +124,10 @@
 
     <!-- SweetAlert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Tippy -->
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 
     <!-- Socket.IO -->
     <script src="/socket.io/socket.io.js"></script>
