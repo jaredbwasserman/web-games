@@ -1,1 +1,2 @@
-exports['dogfight'] = require("./dogfight.js");
+exports['clicker'] = require('./clicker.js');
+exports['dogfight'] = require('./dogfight.js');
