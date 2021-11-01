@@ -45,9 +45,3 @@ A collection of web games.
 1. Ships immune for the first few seconds of dogfight
 1. Multicast pending games on intro page so you can click to enter rather than type game code
 1. Add game duration to scores
-1. Clicker
-   1. Randomly pick an animal to click on server and tell client index
-   1. Make sure same animal for all players
-   1. Random delay for animal to appear (calculated on server then same for all clients - send time to appear)
-   1. Make sure position for clicker buttons is always totally on screen
-1. Add Meta title html info
