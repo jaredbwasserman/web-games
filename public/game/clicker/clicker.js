@@ -4,6 +4,7 @@ var clickerButtonPosition;
 var clickerButtonAppearTime;
 var clickerButtonIndex;
 var clickerButton;
+var clickerEndTime;
 
 function clickerInit(data) {
     // Create game
@@ -63,6 +64,7 @@ function clickerInit(data) {
     clickerButtonPosition = data.buttonPosition;
     clickerButtonAppearTime = data.buttonAppearTime;
     clickerButtonIndex = data.buttonIndex;
+    clickerEndTime = data.gameEndTime;
 
     // TODO: Remove debug info
     console.log(`position is ${JSON.stringify(clickerButtonPosition, null, 4)}`);
@@ -87,7 +89,16 @@ function clickerCreate() {
     );
 }
 
-function clickerUpdate() { }
+function clickerUpdate() {
+    // Game timer
+    if (clickerEndTime) {
+        const minutesRemaining = String(Math.max(0, Math.floor((clickerEndTime - Date.now()) / (60.0 * 1000.0)) % 60));
+        const secondsRemaining = String(Math.max(0, Math.floor((clickerEndTime - Date.now()) / 1000.0) % 60));
+        document.getElementById('gameTimer').innerHTML = minutesRemaining.padStart(2, '0') +
+            ':' +
+            secondsRemaining.padStart(2, '0');
+    }
+}
 
 function clickerOnButtonClick() {
     const delayMilliseconds = Date.now() - clickerButtonAppearTime;
