@@ -177,7 +177,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 }
             }
 
-            // 2) Sorted reverse unique kill time (can tie)
+            // 2) Sorted reverse death time (can tie)
             const deathTimeList = [];
             for (const [socketId, player] of Object.entries(players)) {
                 const deathInfo = deathTimes[socketId];
