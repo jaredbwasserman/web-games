@@ -124,7 +124,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             const clickTimeList = [];
             for (const [socketId, player] of Object.entries(players)) {
                 const clickInfo = clickTimes[socketId];
-                if (clickInfo && !clickTimeList[clickInfo.clickTime]) {
+                if (clickInfo && !clickTimeList.includes(clickInfo.clickTime)) {
                     clickTimeList.push(clickInfo.clickTime);
                 }
             }

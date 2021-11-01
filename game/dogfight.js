@@ -181,7 +181,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             const deathTimeList = [];
             for (const [socketId, player] of Object.entries(players)) {
                 const deathInfo = deathTimes[socketId];
-                if (deathInfo && !deathTimeList[deathInfo.deathTime]) {
+                if (deathInfo && !deathTimeList.includes(deathInfo.deathTime)) {
                     deathTimeList.push(deathInfo.deathTime);
                 }
             }
