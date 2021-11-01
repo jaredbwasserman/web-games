@@ -1,7 +1,7 @@
 var clickerGame;
 var clickerAnimals;
 var clickerButtonPosition;
-var clickerButtonDelay;
+var clickerButtonAppearTime;
 var clickerButtonIndex;
 var clickerButton;
 
@@ -61,12 +61,12 @@ function clickerInit(data) {
         'zebra'
     ];
     clickerButtonPosition = data.buttonPosition;
-    clickerButtonDelay = data.buttonDelay;
+    clickerButtonAppearTime = data.buttonAppearTime;
     clickerButtonIndex = data.buttonIndex;
 
     // TODO: Remove debug info
     console.log(`position is ${JSON.stringify(clickerButtonPosition, null, 4)}`);
-    console.log(`delay is ${clickerButtonDelay}`);
+    console.log(`appear time is ${clickerButtonAppearTime}`);
     console.log(`index is ${clickerButtonIndex}`);
 }
 
@@ -78,23 +78,21 @@ function clickerPreload() {
 
 function clickerCreate() {
     setTimeout(
-        () => this.physics.add
+        () => clickerButton = this.physics.add
             .image(clickerButtonPosition.x, clickerButtonPosition.y, clickerAnimals[clickerButtonIndex])
             .setOrigin(0.5, 0.5)
             .setInteractive({ useHandCursor: true })
             .on('pointerdown', clickerOnButtonClick),
-        clickerButtonDelay
+        clickerButtonAppearTime - Date.now()
     );
 }
 
-function clickerUpdate() {
-    // TODO: Implement
-}
+function clickerUpdate() { }
 
 function clickerOnButtonClick() {
-    console.log('clicked!'); // TODO: Remove
-
-    // TODO: Implement
+    const delayMilliseconds = Date.now() - clickerButtonAppearTime;
+    clickerButton.destroy();
+    IO.socket.emit('buttonClick', { socketId: App.socketId, delayMilliseconds: delayMilliseconds });
 }
 
 App.games['clicker'] = {};
