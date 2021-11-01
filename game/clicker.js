@@ -121,52 +121,39 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             var rankCount = 1;
 
             // 1) Sorted click time (can tie)
-            // Get list of click times
-            // Get map from clickTime to socketId
             const clickTimeList = [];
-            const clickMap = {};
             for (const [socketId, player] of Object.entries(players)) {
                 const clickInfo = clickTimes[socketId];
-                if (clickInfo) {
+                if (clickInfo && !clickTimeList[clickInfo.clickTime]) {
                     clickTimeList.push(clickInfo.clickTime);
-                    clickMap[clickInfo.clickTime] = socketId;
                 }
             }
 
             // Sort click times
-            clickTimeList.sort();
+            clickTimeList.sort((a, b) => a - b);
 
             // Add ranks
-            var prevRank = 0;
-            var prevClickTime = 0;
             for (const [index, clickTime] of Object.entries(clickTimeList)) {
-                const player = players[clickMap[clickTime]];
-
-                // Check for tie
-                var curRank = rankCount;
-                if (prevClickTime === clickTime) {
-                    curRank = prevRank;
-                }
-                else {
-                    prevRank = curRank;
-                    prevClickTime = clickTime;
-                }
-
-                gameScores.kids.push(
-                    {
-                        data: {
-                            'RANK': curRank,
-                            'NAME': player.name,
-                            'CLICKED AFTER': clickTime + ' ms'
-                        },
-                        kids: []
+                const curRank = rankCount;
+                for (const [socketId, player] of Object.entries(players)) {
+                    const clickInfo = clickTimes[socketId];
+                    if (clickInfo && clickTime === clickInfo.clickTime) {
+                        gameScores.kids.push(
+                            {
+                                data: {
+                                    'RANK': curRank,
+                                    'NAME': player.name,
+                                    'CLICKED AFTER': clickTime + ' ms'
+                                },
+                                kids: []
+                            }
+                        );
+                        rankCount++;
                     }
-                );
-
-                rankCount++;
+                }
             }
 
-            // 2) Did not click
+            // 2) Did not click (can tie)
             for (const [socketId, player] of Object.entries(players)) {
                 const clickInfo = clickTimes[socketId];
                 if (!clickInfo) {

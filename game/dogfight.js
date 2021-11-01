@@ -44,8 +44,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             games[gameId].clientStartTime = games[gameId].startTime + 3000;
             data.clientStartTime = games[gameId].clientStartTime;
 
-            // Game end timer 1 minute 30 seconds
-            data.gameEndTime = data.clientStartTime + 90000;
+            // Game end timer 1 minute
+            data.gameEndTime = data.clientStartTime + 60000;
             setTimeout(this.onGameEnd(this), data.gameEndTime - games[gameId].startTime);
 
             // Broadcast game started to everyone
@@ -173,57 +173,42 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                             kids: []
                         }
                     );
-
                     rankCount++;
                 }
             }
 
-            // 2) Sorted reverse kill time (can tie)
-            // Get list of death times
-            // Get map from deathTime to socketId
+            // 2) Sorted reverse unique kill time (can tie)
             const deathTimeList = [];
-            const deathMap = {};
             for (const [socketId, player] of Object.entries(players)) {
                 const deathInfo = deathTimes[socketId];
-                if (deathInfo) {
+                if (deathInfo && !deathTimeList[deathInfo.deathTime]) {
                     deathTimeList.push(deathInfo.deathTime);
-                    deathMap[deathInfo.deathTime] = socketId;
                 }
             }
 
-            // Sort death times and reverse (so killed later is higher rank)
-            deathTimeList.sort();
-            deathTimeList.reverse();
+            // Sort death times in reverse (so killed later is higher rank)
+            deathTimeList.sort((a, b) => b - a);
 
             // Add ranks
-            var prevRank = 0;
-            var prevDeathTime = 0;
             for (const [index, deathTime] of Object.entries(deathTimeList)) {
-                const player = players[deathMap[deathTime]];
-
-                // Check for tie
-                var curRank = rankCount;
-                if (prevDeathTime === deathTime) {
-                    curRank = prevRank;
-                }
-                else {
-                    prevRank = curRank;
-                    prevDeathTime = deathTime;
-                }
-
-                gameScores.kids.push(
-                    {
-                        data: {
-                            'RANK': curRank,
-                            'NAME': player.name,
-                            'KILLED AFTER': Math.floor((deathTime - games[gameId].clientStartTime) / 1000.0) + ' s',
-                            'KILLED BY': deathTimes[deathMap[deathTime]].killedBy
-                        },
-                        kids: []
+                const curRank = rankCount;
+                for (const [socketId, player] of Object.entries(players)) {
+                    const deathInfo = deathTimes[socketId];
+                    if (deathInfo && deathTime === deathInfo.deathTime) {
+                        gameScores.kids.push(
+                            {
+                                data: {
+                                    'RANK': curRank,
+                                    'NAME': player.name,
+                                    'KILLED AFTER': Math.floor((deathTime - games[gameId].clientStartTime) / 1000.0) + ' s',
+                                    'KILLED BY': deathTimes[socketId].killedBy
+                                },
+                                kids: []
+                            }
+                        );
+                        rankCount++;
                     }
-                );
-
-                rankCount++;
+                }
             }
 
             // Scores will be displayed with most recent at top
