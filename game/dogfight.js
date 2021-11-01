@@ -216,7 +216,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                         data: {
                             'RANK': curRank,
                             'NAME': player.name,
-                            'KILLED AFTER': (deathTime - games[gameId].clientStartTime) / 1000.0 + ' s',
+                            'KILLED AFTER': Math.floor((deathTime - games[gameId].clientStartTime) / 1000.0) + ' s',
                             'KILLED BY': deathTimes[deathMap[deathTime]].killedBy
                         },
                         kids: []
