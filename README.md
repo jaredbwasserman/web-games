@@ -45,3 +45,4 @@ A collection of web games.
 1. Ships immune for the first few seconds of dogfight
 1. Multicast pending games on intro page so you can click to enter rather than type game code
 1. Add game duration to scores
+1. Separate log in from nickname so scores are tied to your real name but you can still use funny nicknames
