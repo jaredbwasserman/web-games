@@ -31,6 +31,10 @@ A collection of web games.
 1. Add kill count stat for dogfight
 1. Persist scores to database or file
    1. Clean up scores array after persisting
+   1. Score immediately following a game would come from memory
+   1. Scores in View Scores would populate from DB
+   1. Flush game score to DB after game socket room no longer exists (last player leaves)
+   1. Players table, Scores table, Games table
 1. Test cases
    1. test disconnect works
    1. test host can win
@@ -46,3 +50,10 @@ A collection of web games.
 1. Multicast pending games on intro page so you can click to enter rather than type game code
 1. Add game duration to scores
 1. Separate log in from nickname so scores are tied to your real name but you can still use funny nicknames
+1. Start new game with same players functionality
+   1. Everyone in the game returns to lobby following a game but it's a new game
+   1. Only host would have a button to "New Game with Existing Players" that would appear on the Scores page after a game is over
+   1. How to deal with people leaving the Scores page (since it would assign a new socket ID)? 
+1. Sanitize the game code so if you include an invisible carriage return at the end it still works
+   1. Test this with copy/paste from Zoom
+1. Add unique colors to dogfight instead of self blue enemy red
