@@ -57,3 +57,6 @@ A collection of web games.
 1. Sanitize the game code so if you include an invisible carriage return at the end it still works
    1. Test this with copy/paste from Zoom
 1. Add unique colors to dogfight instead of self blue enemy red
+1. Make sure bullets cannot float (seems to have happened)
+   1. Maybe someone got disconnected?
+1. Get rid of tooltips when game starts
