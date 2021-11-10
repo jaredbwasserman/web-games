@@ -60,3 +60,6 @@ A collection of web games.
 1. Make sure bullets cannot float (seems to have happened)
    1. Maybe someone got disconnected?
 1. Get rid of tooltips when game starts
+1. For dogfight, hold down does not work on track pad for firing bullets
+1. Left-over bullets hang around
+1. Consider making unique colors and tell the player during countdown what color you are
