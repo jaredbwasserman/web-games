@@ -64,3 +64,8 @@ A collection of web games.
 1. Left-over bullets hang around
 1. Consider making unique colors and tell the player during countdown what color you are
 1. Display player name above/below plane in dogfight game
+1. Bullets not tied to players except for scoring (so you could theoretically shoot yourself - although maybe not since when you first shoot it's overlapping)
+   1. And the game itself could simulate the bullets instead of players doing it for their own bullets
+   1. Invert bullet logic so you report if you get hit (not if you hit someone else)
+   1. Server sets a velocity for it and updates everyone else’s bullet on their own client. When you fire it sends creation even to server and server tells everyone about new bullet to simulate
+   1. Bullet create and bullet delete events instead of update
