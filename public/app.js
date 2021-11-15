@@ -159,7 +159,7 @@ const App = {
             return;
         }
 
-        if ('' === document.getElementById('joinGameCode').value) {
+        if ('' === document.getElementById('joinGameCode').value.trim()) {
             Swal.fire({
                 position: 'top',
                 icon: 'error',
@@ -171,7 +171,7 @@ const App = {
         }
 
         // Get the game code
-        const gameId = document.getElementById('joinGameCode').value
+        const gameId = document.getElementById('joinGameCode').value.trim()
 
         IO.socket.emit('joinGame', { gameId: gameId, name: name });
     },

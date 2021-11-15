@@ -52,9 +52,7 @@ A collection of web games.
 1. Start new game with same players functionality
    1. Everyone in the game returns to lobby following a game but it's a new game
    1. Only host would have a button to "New Game with Existing Players" that would appear on the Scores page after a game is over
-   1. How to deal with people leaving the Scores page (since it would assign a new socket ID)? 
-1. Sanitize the game code so if you include an invisible carriage return at the end it still works
-   1. Test this with copy/paste from Zoom
+   1. How to deal with people leaving the Scores page (since it would assign a new socket ID)?
 1. Add unique colors to dogfight instead of self blue enemy red
 1. Get rid of tooltips when game starts
 1. For dogfight, hold down does not work on track pad for firing bullets
