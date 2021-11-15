@@ -48,7 +48,6 @@ A collection of web games.
    1. test concurrent games
 1. Ships immune for the first few seconds of dogfight
 1. Multicast pending games on intro page so you can click to enter rather than type game code
-1. Add game duration to scores
 1. Separate log in from nickname so scores are tied to your real name but you can still use funny nicknames
 1. Start new game with same players functionality
    1. Everyone in the game returns to lobby following a game but it's a new game
@@ -57,11 +56,8 @@ A collection of web games.
 1. Sanitize the game code so if you include an invisible carriage return at the end it still works
    1. Test this with copy/paste from Zoom
 1. Add unique colors to dogfight instead of self blue enemy red
-1. Make sure bullets cannot float (seems to have happened)
-   1. Maybe someone got disconnected?
 1. Get rid of tooltips when game starts
 1. For dogfight, hold down does not work on track pad for firing bullets
-1. Left-over bullets hang around
 1. Consider making unique colors and tell the player during countdown what color you are
 1. Display player name above/below plane in dogfight game
 1. Bullets not tied to players except for scoring (so you could theoretically shoot yourself - although maybe not since when you first shoot it's overlapping)

@@ -252,8 +252,8 @@ const App = {
                 gameButton.addEventListener('click', App.onGameButtonClick);
             });
 
-            // Default game is random
-            const defaultGameIndex = Util.getRandomInt(App.gameButtons.length);
+            // Default game is the first game
+            const defaultGameIndex = 0;
             App.gameButtons[defaultGameIndex].click();
 
             // Start game button

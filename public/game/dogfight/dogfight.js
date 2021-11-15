@@ -139,22 +139,20 @@ function dogfightUpdate() {
             secondsRemaining.padStart(2, '0');
     }
 
-    if (dogfightKilled) {
-        return;
-    }
-
-    // Handle movement
-    if (this.dogfightKeyA.isDown) {
-        dogfightShip.setAngularVelocity(-150);
-    } else if (this.dogfightKeyD.isDown) {
-        dogfightShip.setAngularVelocity(150);
-    } else {
-        dogfightShip.setAngularVelocity(0);
-    }
-    if (this.dogfightKeyW.isDown) {
-        this.physics.velocityFromRotation(dogfightShip.rotation - Math.PI / 2.0, 100, dogfightShip.body.acceleration);
-    } else {
-        dogfightShip.setAcceleration(0);
+    if (!dogfightKilled) {
+        // Handle movement
+        if (this.dogfightKeyA.isDown) {
+            dogfightShip.setAngularVelocity(-150);
+        } else if (this.dogfightKeyD.isDown) {
+            dogfightShip.setAngularVelocity(150);
+        } else {
+            dogfightShip.setAngularVelocity(0);
+        }
+        if (this.dogfightKeyW.isDown) {
+            this.physics.velocityFromRotation(dogfightShip.rotation - Math.PI / 2.0, 100, dogfightShip.body.acceleration);
+        } else {
+            dogfightShip.setAcceleration(0);
+        }
     }
 
     this.physics.world.wrap(dogfightShip, 5); // TODO: What is a good padding amt?
@@ -166,17 +164,19 @@ function dogfightUpdate() {
         }
     });
 
-    // Handle firing bullets
-    const bullet = getFirstInactiveBullet();
-    const dateNow = Date.now();
-    if (bullet && this.input.activePointer.isDown && dateNow - dogfightLastFired > 1000) {
-        bullet.setPosition(dogfightShip.x, dogfightShip.y);
-        bullet.setRotation(dogfightShip.rotation);
-        bullet.setMaxVelocity(1000);
-        this.physics.velocityFromRotation(bullet.rotation - Math.PI / 2.0, 1000, bullet.body.acceleration);
-        bullet.setActive(true);
-        bullet.setVisible(true);
-        dogfightLastFired = dateNow;
+    if (!dogfightKilled) {
+        // Handle firing bullets
+        const bullet = getFirstInactiveBullet();
+        const dateNow = Date.now();
+        if (bullet && this.input.activePointer.isDown && dateNow - dogfightLastFired > 1000) {
+            bullet.setPosition(dogfightShip.x, dogfightShip.y);
+            bullet.setRotation(dogfightShip.rotation);
+            bullet.setMaxVelocity(1000);
+            this.physics.velocityFromRotation(bullet.rotation - Math.PI / 2.0, 1000, bullet.body.acceleration);
+            bullet.setActive(true);
+            bullet.setVisible(true);
+            dogfightLastFired = dateNow;
+        }
     }
 
     // Emit player movement
