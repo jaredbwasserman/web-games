@@ -64,3 +64,4 @@ A collection of web games.
    1. Server sets a velocity for it and updates everyone else’s bullet on their own client. When you fire it sends creation even to server and server tells everyone about new bullet to simulate
    1. Bullet create and bullet delete events instead of update
 1. Switch order so Create Game is above Join Game so that Join Game is just above list of games to join
+1. Add game code to URL so sharing link gets you into game
