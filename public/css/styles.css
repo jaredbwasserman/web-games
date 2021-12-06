@@ -61,6 +61,10 @@ textarea {
     border: 0;
 }
 
+.createGame {
+    margin-bottom: 50px;
+}
+
 .joinGame {
     margin-bottom: 50px;
 }
@@ -112,6 +116,50 @@ textarea {
 .btn:disabled {
     background-color: #232c38;
     cursor: default;
+}
+
+/* Game List Buttons */
+.gameListBtn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    width: 40%;
+    margin-bottom: 0;
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 2em;
+    line-height: 1.2;
+    text-align: center;
+    background-color: #16ad2a;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    padding: 0;
+    border: 0;
+    transition: 0.1s ease;
+}
+
+.gameListBtn:focus {
+    outline: none;
+}
+
+.gameListBtn:hover,
+.gameListBtn:focus {
+    color: #ffffff;
+    background-color: #44af52;
+    text-decoration: none;
+}
+
+.gameListBtn:active,
+.gameListBtn.active {
+    outline: 0;
+    transform: translateY(4px);
 }
 
 /* Lobby */

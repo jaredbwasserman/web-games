@@ -31,6 +31,7 @@ exports.init = function (ioIn, socketIn, gamesIn, playersIn, scoresIn) {
     socket.on('gameTypeChanged', onGameTypeChanged);
     socket.on('startGame', onStartGame);
     socket.on('gameStarted', onGameStarted);
+    socket.on('requestGames', onRequestGames);
 }
 
 function onDisconnect(data) {
@@ -62,6 +63,9 @@ function onDisconnect(data) {
     }
     if (0 === playerCount) {
         delete games[gameId];
+
+        // Emit updated game list
+        onRequestGames({ isUpdate: true });
     }
 
     // TODO: Remove
@@ -100,6 +104,9 @@ function onCreateGame(data) {
     games[gameId] = gameEntry;
 
     this.emit('gameCreated', playerEntry);
+
+    // Emit updated game list
+    onRequestGames({ isUpdate: true });
 
     // Emit all players in room
     io.sockets.in(gameId).emit('playersUpdate', { players: getPlayerNames(gameId) });
@@ -188,11 +195,32 @@ function onStartGame(data) {
 
     // Init game
     game[data.gameType](io, this, games, players, gameId, gameType, scores).init(data);
+
+    // Emit updated game list
+    onRequestGames({ isUpdate: true });
 }
 
 function onGameStarted(data) {
     // Only players (not host) will end up here
     game[data.gameType](io, this, games, data.players, data.gameId, data.gameType, scores).handleEvents();
+}
+
+function onRequestGames(data) {
+    const gamesToReturn = [];
+    for (const [gameId, gameObj] of Object.entries(games)) {
+        if (gameObj.status === 'pending') {
+            gamesToReturn.push(gameId);
+        }
+    }
+
+    if (data.isUpdate) {
+        // If a game was added or started, tell everyone
+        io.sockets.emit('gamesReceived', { games: gamesToReturn });
+    }
+    else {
+        // Return list to requestor
+        this.emit('gamesReceived', { games: gamesToReturn });
+    }
 }
 
 // Helper function to return whether a game exists

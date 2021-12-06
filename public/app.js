@@ -36,6 +36,7 @@ const IO = {
         IO.socket.on('gameStarted', IO.onGameStarted);
         IO.socket.on('gameEnded', IO.onGameEnded);
         IO.socket.on('scoresReceived', IO.onScoresReceived);
+        IO.socket.on('gamesReceived', IO.onGamesReceived);
         IO.socket.on('error', IO.onError);
     },
 
@@ -110,6 +111,21 @@ const IO = {
 
     onScoresReceived: function (data) {
         App.toScores(data);
+    },
+
+    onGamesReceived: function (data) {
+        console.log(`games: ${JSON.stringify(data.games, null, 4)}`); // TODO: Remove
+
+        const gamesList = document.getElementById('gamesList');
+        if (undefined !== gamesList) {
+            // Remove previous buttons
+            while (gamesList.firstChild) {
+                gamesList.removeChild(gamesList.firstChild);
+            }
+
+            // Add new buttons
+            Util.makeGameButtons(gamesList, data.games);
+        }
     },
 
     onError: function (data) {
@@ -224,6 +240,9 @@ const App = {
                 document.getElementById('btnJoinGame').click();
             }
         });
+
+        // Get games list
+        IO.socket.emit('requestGames', {});
     },
 
     toLobby: function (data) {
@@ -386,6 +405,29 @@ const Util = {
 
         // Finally, return the constructed list:
         return list;
+    },
+
+    makeGameButtons: function (buttonGroup, gameIds) {
+        for (var i = 0; i < gameIds.length; i++) {
+            // Create the button
+            const gameId = gameIds[i];
+            const gameButton = document.createElement("button");
+            gameButton.innerHTML = gameId;
+            gameButton.classList.add('gameListBtn');
+
+            // Add callback
+            gameButton.addEventListener('click', () => {
+                const name = Util.getName();
+                if (!name) {
+                    return;
+                }
+
+                IO.socket.emit('joinGame', { gameId: gameId, name: name });
+            });
+
+            // Add the button to the group
+            buttonGroup.appendChild(gameButton);
+        }
     },
 
     // Max is exclusive so it's [0, max)

@@ -23,8 +23,8 @@ A collection of web games.
 
 ## TODO
 1. Add more games
-1. Cool background images in places
-1. Send error and terminate client side game if room no longer exists (host leaves and causes room to drop)
+1. Send error and terminate client side game if room no longer exists (host leaving should cause room to drop)
+   1. Also `onRequestGames({ isUpdate: true })` for this case
 1. What to do if user does not consent to cookies?
 1. Add animations to dogfight for bullet collisions with enemies and enemy bullets with self
 1. Bullet cone in front of plane based on pointer position
@@ -46,8 +46,6 @@ A collection of web games.
    1. tie with 2 people alive 1 dead
    1. tie with 3 people alive no dead
    1. test concurrent games
-1. Ships immune for the first few seconds of dogfight
-1. Multicast pending games on intro page so you can click to enter rather than type game code
 1. Separate log in from nickname so scores are tied to your real name but you can still use funny nicknames
 1. Start new game with same players functionality
    1. Everyone in the game returns to lobby following a game but it's a new game
@@ -56,12 +54,12 @@ A collection of web games.
 1. Add unique colors to dogfight instead of self blue enemy red
 1. Get rid of tooltips when game starts
 1. For dogfight, hold down does not work on track pad for firing bullets
-1. Consider making unique colors and tell the player during countdown what color you are
+1. Consider making unique colors and tell the player during countdown (or under game timer) what color you are
 1. Display player name above/below plane in dogfight game
 1. Bullets not tied to players except for scoring (so you could theoretically shoot yourself - although maybe not since when you first shoot it's overlapping)
    1. And the game itself could simulate the bullets instead of players doing it for their own bullets
    1. Invert bullet logic so you report if you get hit (not if you hit someone else)
    1. Server sets a velocity for it and updates everyone else’s bullet on their own client. When you fire it sends creation even to server and server tells everyone about new bullet to simulate
    1. Bullet create and bullet delete events instead of update
-1. Switch order so Create Game is above Join Game so that Join Game is just above list of games to join
+   1. Should handle case where player fires a bullet and then disconnects (which currently does not work)
 1. Add game code to URL so sharing link gets you into game
