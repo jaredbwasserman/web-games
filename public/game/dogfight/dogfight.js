@@ -12,6 +12,7 @@ var dogfightKeyD;
 var dogfightKeyW;
 var dogfightKilled;
 var dogfightEndTime;
+var dogfightCanFire;
 
 function dogfightInit(data) {
     // Create game
@@ -43,6 +44,7 @@ function dogfightInit(data) {
     dogfightPlayers = data.players;
     dogfightEnemies = {};
     dogfightEndTime = data.gameEndTime;
+    dogfightCanFire = false;
 
     IO.socket.on('playerMoved', dogfightOnPlayerMoved);
     IO.socket.on('bulletMoved', dogfightOnBulletMoved);
@@ -168,7 +170,7 @@ function dogfightUpdate() {
         // Handle firing bullets
         const bullet = getFirstInactiveBullet();
         const dateNow = Date.now();
-        if (bullet && this.input.activePointer.isDown && dateNow - dogfightLastFired > 1000) {
+        if (dogfightCanFire && bullet && this.input.activePointer.isDown && dateNow - dogfightLastFired > 1000) {
             bullet.setPosition(dogfightShip.x, dogfightShip.y);
             bullet.setRotation(dogfightShip.rotation);
             bullet.setMaxVelocity(1000);
@@ -231,6 +233,17 @@ function dogfightAddPlayer(self, player) {
     dogfightShip.setAngularDrag(100);
     dogfightShip.setMaxVelocity(200);
     dogfightShip.setDepth(10);
+
+    // Flash to indicate bullets cannot be shot yet
+    self.tweens.add({
+        targets: dogfightShip,
+        alpha: 0.1,
+        duration: 400,
+        ease: 'Power0',
+        yoyo: true,
+        repeat: 5,
+        onComplete: () => dogfightCanFire = true
+    });
 }
 
 function dogfightAddEnemy(self, player) {
@@ -238,6 +251,16 @@ function dogfightAddEnemy(self, player) {
     enemy.setDepth(5);
     enemy.socketId = player.socketId;
     dogfightEnemies[enemy.socketId] = enemy;
+
+    // Flash to indicate bullets cannot be shot yet
+    self.tweens.add({
+        targets: enemy,
+        alpha: 0.1,
+        duration: 400,
+        ease: 'Power0',
+        yoyo: true,
+        repeat: 5
+    });
 }
 
 function dogfightAddPlayerBullet(self, bulletIn) {
