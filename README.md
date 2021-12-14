@@ -1,5 +1,5 @@
 # Web Game
-A collection of web games.
+A collection of multiplayer minigames.
 
 ## Run Locally
 ### Set up
