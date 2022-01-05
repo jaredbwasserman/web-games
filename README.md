@@ -63,3 +63,4 @@ A collection of multiplayer minigames.
    1. Bullet create and bullet delete events instead of update
    1. Should handle case where player fires a bullet and then disconnects (which currently does not work)
 1. Add game code to URL so sharing link gets you into game
+1. Exactly one screen wrap for bullets in dogfight game (currently 0)
