@@ -64,3 +64,18 @@ A collection of multiplayer minigames.
    1. Should handle case where player fires a bullet and then disconnects (which currently does not work)
 1. Add game code to URL so sharing link gets you into game
 1. Exactly one screen wrap for bullets in dogfight game (currently 0)
+1. Spectator mode for dogfight (and maybe clicker and all games?)
+   1. Can join as spectator if you do any of
+      1. Click on join game button for a game that is already in progress
+      1. Type in game code and join game that is already in progress
+      1. Check a box in lobby of pending game saying you want to be a spectator
+   1. Color of join game buttons is green right now and filtered to pending games
+      1. Can modify so filter includes in progress games too
+      1. Still remove buttons for games that have ended
+      1. In progress games would have yellow button instead of green button
+      1. The button could change color using event (similar to remove event) so it happens immediately without need refresh
+      1. Test cases like state change and add game works for both existing people looking at home page and new people joining home page
+   1. Modify errors
+      1. Instead of error message when join in progress game, should let you in as spectator
+1. Fix client lag
+   1. See https://www.gabrielgambetta.com/client-server-game-architecture.html
