@@ -79,3 +79,4 @@ A collection of multiplayer minigames.
       1. Instead of error message when join in progress game, should let you in as spectator
 1. Fix client lag
    1. See https://www.gabrielgambetta.com/client-server-game-architecture.html
+1. Refactor dogfight to airfight

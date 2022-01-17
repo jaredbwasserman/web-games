@@ -31,6 +31,7 @@ exports.init = function (ioIn, socketIn, gamesIn, playersIn, scoresIn) {
     socket.on('gameTypeChanged', onGameTypeChanged);
     socket.on('startGame', onStartGame);
     socket.on('gameStarted', onGameStarted);
+    socket.on('requestSpectate', onRequestSpectate);
     socket.on('requestGames', onRequestGames);
 }
 
@@ -124,9 +125,15 @@ function onJoinGame(data) {
         return;
     }
 
-    // Error if game is in progress
-    if (games[gameId] && games[gameId].status !== 'pending') {
+    // Error if game is over
+    if (!['pending', 'in progress'].includes(games[gameId].status)) {
         this.emit('error', { message: `Unable to join ${games[gameId].status} game.` });
+        return;
+    }
+
+    // Cannot spectate games that do not allow spectating
+    if ('in progress' === games[gameId].status && !games[gameId].canSpectate) {
+        this.emit('error', { message: `Unable to spectate games of type "${games[gameId].gameType}".` });
         return;
     }
 
@@ -148,9 +155,10 @@ function onJoinGame(data) {
     // Add player
     const playerEntry = {
         gameId: gameId,
+        gameType: games[gameId].gameType,
         socketId: this.id,
         name: data.name,
-        role: 'player'
+        role: ('pending' === games[gameId].status ? 'player' : 'spectator')
     };
     players[this.id] = playerEntry;
 
@@ -161,6 +169,7 @@ function onJoinGame(data) {
 }
 
 function onGameTypeChanged(data) {
+    games[data.gameId].gameType = data.gameType;
     io.sockets.in(data.gameId).emit('gameTypeChanged', { gameType: data.gameType });
 }
 
@@ -191,9 +200,11 @@ function onStartGame(data) {
     // Update game
     games[gameId].status = 'in progress';
     games[gameId].gameType = gameType;
+    games[gameId].canSpectate = game[data.gameType].canSpectate
     games[gameId].startTime = Date.now();
 
     // Init game
+    console.log(`players is ${JSON.stringify(players, null, 4)}`) // TODO: Remove
     game[data.gameType](io, this, games, players, gameId, gameType, scores).init(data);
 
     // Emit updated game list
@@ -201,14 +212,21 @@ function onStartGame(data) {
 }
 
 function onGameStarted(data) {
-    // Only players (not host) will end up here
+    // Only players will end up here
     game[data.gameType](io, this, games, data.players, data.gameId, data.gameType, scores).handleEvents();
+}
+
+function onRequestSpectate(data) {
+    console.log(`request spectate ${JSON.stringify(data, null, 4)}`); // TODO: Remove
+    // Only spectators will end up here
+    game[data.gameType](io, this, games, players, data.gameId, data.gameType, scores).handleSpectate();
 }
 
 function onRequestGames(data) {
     const gamesToReturn = [];
     for (const [gameId, gameObj] of Object.entries(games)) {
-        if (gameObj.status === 'pending') {
+        if ('pending' === gameObj.status ||
+            ('in progress' === gameObj.status && gameObj.canSpectate)) {
             gamesToReturn.push(gameId);
         }
     }
@@ -225,7 +243,7 @@ function onRequestGames(data) {
 
 // Helper function to return whether a game exists
 function gameExists(gameId) {
-    return Array.from(io.sockets.adapter.rooms.keys()).includes(gameId);
+    return Array.from(io.sockets.adapter.rooms.keys()).includes(gameId) && games[gameId];
 }
 
 // Helper function to get a list of player names

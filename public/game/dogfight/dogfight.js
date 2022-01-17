@@ -11,8 +11,11 @@ var dogfightKeyS;
 var dogfightKeyD;
 var dogfightKeyW;
 var dogfightKilled;
+var dogfightSpectator;
+var dogfightStartTime;
 var dogfightEndTime;
 var dogfightCanFire;
+var dogfightTweens;
 
 function dogfightInit(data) {
     // Create game
@@ -43,8 +46,15 @@ function dogfightInit(data) {
     dogfightLastFired = 0;
     dogfightPlayers = data.players;
     dogfightEnemies = {};
+    dogfightStartTime = data.clientStartTime;
     dogfightEndTime = data.gameEndTime;
     dogfightCanFire = false;
+    dogfightTweens = [];
+
+    // Handle spectators
+    if ('spectator' === App.role) {
+        dogfightSpectator = true;
+    }
 
     IO.socket.on('playerMoved', dogfightOnPlayerMoved);
     IO.socket.on('bulletMoved', dogfightOnBulletMoved);
@@ -129,6 +139,18 @@ function dogfightCreate() {
     this.dogfightKeyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.dogfightKeyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.dogfightKeyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+
+    // Stop ship flashing 3.5 seconds after the start of the game
+    setTimeout(
+        function () {
+            dogfightTweens.forEach(tween => {
+                tween.stop();
+                tween.targets[0].setAlpha(1);
+            });
+            dogfightCanFire = true;
+        },
+        dogfightStartTime + 3500 - Date.now()
+    );
 }
 
 function dogfightUpdate() {
@@ -136,9 +158,16 @@ function dogfightUpdate() {
     if (dogfightEndTime) {
         const minutesRemaining = String(Math.max(0, Math.floor((dogfightEndTime - Date.now()) / (60.0 * 1000.0)) % 60));
         const secondsRemaining = String(Math.max(0, Math.floor((dogfightEndTime - Date.now()) / 1000.0) % 60));
-        document.getElementById('gameTimer').innerHTML = minutesRemaining.padStart(2, '0') +
-            ':' +
-            secondsRemaining.padStart(2, '0');
+        if (null !== document.getElementById('gameTimer')) {
+            document.getElementById('gameTimer').innerHTML = minutesRemaining.padStart(2, '0') +
+                ':' +
+                secondsRemaining.padStart(2, '0');
+        }
+    }
+
+    // Skip everything if spectating
+    if (dogfightSpectator) {
+        return;
     }
 
     if (!dogfightKilled) {
@@ -235,15 +264,16 @@ function dogfightAddPlayer(self, player) {
     dogfightShip.setDepth(10);
 
     // Flash to indicate bullets cannot be shot yet
-    self.tweens.add({
-        targets: dogfightShip,
-        alpha: 0.1,
-        duration: 400,
-        ease: 'Power0',
-        yoyo: true,
-        repeat: 5,
-        onComplete: () => dogfightCanFire = true
-    });
+    dogfightTweens.push(
+        self.tweens.add({
+            targets: dogfightShip,
+            alpha: 0.1,
+            duration: 400,
+            ease: 'Power0',
+            yoyo: true,
+            repeat: -1
+        })
+    );
 }
 
 function dogfightAddEnemy(self, player) {
@@ -253,14 +283,16 @@ function dogfightAddEnemy(self, player) {
     dogfightEnemies[enemy.socketId] = enemy;
 
     // Flash to indicate bullets cannot be shot yet
-    self.tweens.add({
-        targets: enemy,
-        alpha: 0.1,
-        duration: 400,
-        ease: 'Power0',
-        yoyo: true,
-        repeat: 5
-    });
+    dogfightTweens.push(
+        self.tweens.add({
+            targets: enemy,
+            alpha: 0.1,
+            duration: 400,
+            ease: 'Power0',
+            yoyo: true,
+            repeat: -1
+        })
+    );
 }
 
 function dogfightAddPlayerBullet(self, bulletIn) {
@@ -322,5 +354,5 @@ function onScreen(self, object) {
     return self.cameras.main.worldView.contains(object.x, object.y);
 }
 
-App.games['dogfight'] = {};
-App.games['dogfight'].init = dogfightInit;
+App.games['airfight'] = {};
+App.games['airfight'].init = dogfightInit;

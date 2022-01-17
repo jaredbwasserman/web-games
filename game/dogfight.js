@@ -3,7 +3,11 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
     const socket = socketIn;
     const games = gamesIn;
     const players = Object.fromEntries(
-        Object.entries(playersIn).filter(([socketId, player]) => gameIdIn === player.gameId)
+        // Filter to player or host role (exclude spectator)
+        Object.entries(playersIn).filter(([socketId, player]) => {
+            return gameIdIn === player.gameId &&
+                ['host', 'player'].includes(player.role);
+        })
     );
     const gameId = gameIdIn;
     const gameType = gameTypeIn;
@@ -48,9 +52,27 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             data.gameEndTime = data.clientStartTime + 60000;
             setTimeout(this.onGameEnd(this), data.gameEndTime - games[gameId].startTime);
 
-            // Broadcast game started to everyone
+            // Set game players
             data.players = players;
+
+            // Save the init data for spectators
+            games[gameId].initData = data;
+
+            // Broadcast game started to everyone
             io.sockets.in(gameId).emit('gameStarted', data);
+
+            // Broadcast game can be spectated to everyone
+            io.sockets.in(gameId).emit('spectateStarted', data);
+
+            // Handle events
+            this.handleEvents();
+        },
+
+        handleSpectate: function () {
+            console.log(`Handle spectate with data ${JSON.stringify(games[gameId].initData, null, 4)}.`); // TODO: Remove
+
+            // Tell the requestor to start spectating
+            socket.emit('spectateStarted', games[gameId].initData); // TODO: This should be dynamic for some stuff like players, bullets
 
             // Handle events
             this.handleEvents();

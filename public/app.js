@@ -34,6 +34,7 @@ const IO = {
         IO.socket.on('playersUpdate', IO.onPlayersUpdated);
         IO.socket.on('gameTypeChanged', IO.onGameTypeChanged);
         IO.socket.on('gameStarted', IO.onGameStarted);
+        IO.socket.on('spectateStarted', IO.onSpectateStarted);
         IO.socket.on('gameEnded', IO.onGameEnded);
         IO.socket.on('scoresReceived', IO.onScoresReceived);
         IO.socket.on('gamesReceived', IO.onGamesReceived);
@@ -47,6 +48,9 @@ const IO = {
     onGameJoined: function (data) {
         console.log(`${data.name} joined game!`); // TODO: Remove
         App.toLobby(data);
+        if ('spectator' === data.role) {
+            IO.socket.emit('requestSpectate', data);
+        }
     },
 
     onGameCreated: function (data) {
@@ -59,6 +63,10 @@ const IO = {
         console.log(`New list of players!`);
         for (let i = 0; i < data.players.length; i++) {
             console.log(data.players[i]);
+        }
+
+        if (0 === document.getElementsByClassName('lobbyScreen').length) {
+            return;
         }
 
         const playersList = document.getElementById('playersList');
@@ -100,6 +108,22 @@ const IO = {
             IO.socket.emit('gameStarted', data);
         }
 
+        if ('spectator' === App.role) {
+            IO.socket.emit('requestSpectate', data);
+        }
+        else {
+            // Update client
+            App.toGame(data);
+        }
+    },
+
+    onSpectateStarted: function (data) {
+        if ('spectator' !== App.role) {
+            return;
+        }
+
+        console.log(`started spectating game ${JSON.stringify(data, null, 4)}`); // TODO: Remove
+
         // Update client
         App.toGame(data);
     },
@@ -115,6 +139,10 @@ const IO = {
 
     onGamesReceived: function (data) {
         console.log(`games: ${JSON.stringify(data.games, null, 4)}`); // TODO: Remove
+
+        if (0 === document.getElementsByClassName('introScreen').length) {
+            return;
+        }
 
         const gamesList = document.getElementById('gamesList');
         if (undefined !== gamesList) {
