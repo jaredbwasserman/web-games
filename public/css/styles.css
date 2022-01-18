@@ -162,6 +162,15 @@ textarea {
     transform: translateY(4px);
 }
 
+.gameListBtnYellow {
+    background-color: #a7a418;
+}
+
+.gameListBtnYellow:hover,
+.gameListBtnYellow:focus {
+    background-color: #b9b72b;
+}
+
 /* Lobby */
 #btnReturnHomeLobby {
     margin-bottom: 50px;
@@ -173,6 +182,32 @@ textarea {
 
 #startGameArea {
     margin-bottom: 50px;
+}
+
+.checkboxArea {
+    text-align: center;
+    margin: 0 auto;
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 1.5em;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+#spectateCheckbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+#spectateCheckboxLabel {
+    cursor: pointer;
 }
 
 #playersList {

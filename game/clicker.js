@@ -3,7 +3,11 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
     const socket = socketIn;
     const games = gamesIn;
     const players = Object.fromEntries(
-        Object.entries(playersIn).filter(([socketId, player]) => gameIdIn === player.gameId)
+        // Filter to player or host role (exclude spectator)
+        Object.entries(playersIn).filter(([socketId, player]) => {
+            return gameIdIn === player.gameId &&
+                ['host', 'player'].includes(player.role);
+        })
     );
     const gameId = gameIdIn;
     const gameType = gameTypeIn;

@@ -28,6 +28,7 @@ exports.init = function (ioIn, socketIn, gamesIn, playersIn, scoresIn) {
     socket.on('requestScores', onRequestScores);
     socket.on('createGame', onCreateGame);
     socket.on('joinGame', onJoinGame);
+    socket.on('roleChanged', onRoleChanged);
     socket.on('gameTypeChanged', onGameTypeChanged);
     socket.on('startGame', onStartGame);
     socket.on('gameStarted', onGameStarted);
@@ -144,7 +145,7 @@ function onJoinGame(data) {
             foundMatch = true;
         }
     }
-    if (foundMatch) {
+    if ('pending' === games[gameId].status && foundMatch) {
         this.emit('error', { message: `Name "${data.name}" taken. Please select a different name.` });
         return;
     }
@@ -168,6 +169,11 @@ function onJoinGame(data) {
     io.sockets.in(gameId).emit('playersUpdate', { players: getPlayerNames(gameId) });
 }
 
+function onRoleChanged(data) {
+    console.log(`role changed for ${this.id} from ${players[this.id].role} to ${data.role}`); // TODO: Remove
+    players[this.id].role = data.role;
+}
+
 function onGameTypeChanged(data) {
     games[data.gameId].gameType = data.gameType;
     io.sockets.in(data.gameId).emit('gameTypeChanged', { gameType: data.gameType });
@@ -179,14 +185,8 @@ function onStartGame(data) {
 
     console.log(`Start game ${gameId} with gameType ${gameType}`); // TODO: Remove
 
-    // Error if room does not exist
+    // Error if game does not exist
     if (!gameExists(gameId)) {
-        this.emit('error', { message: 'Game does not exist.' });
-        return;
-    }
-
-    // Error if game entry does not exist
-    if (!games[gameId]) {
         this.emit('error', { message: 'Game does not exist.' });
         return;
     }
@@ -197,6 +197,19 @@ function onStartGame(data) {
         return;
     }
 
+    // Error if there are no players
+    const playersForGame = Object.fromEntries(
+        // Filter to player or host role (exclude spectator)
+        Object.entries(players).filter(([socketId, player]) => {
+            return gameId === player.gameId &&
+                ['host', 'player'].includes(player.role);
+        })
+    );
+    if (Object.keys(playersForGame).length <= 0) {
+        this.emit('error', { message: 'Cannot start a game with no players.' });
+        return;
+    }
+
     // Update game
     games[gameId].status = 'in progress';
     games[gameId].gameType = gameType;
@@ -204,7 +217,6 @@ function onStartGame(data) {
     games[gameId].startTime = Date.now();
 
     // Init game
-    console.log(`players is ${JSON.stringify(players, null, 4)}`) // TODO: Remove
     game[data.gameType](io, this, games, players, gameId, gameType, scores).init(data);
 
     // Emit updated game list
@@ -217,17 +229,24 @@ function onGameStarted(data) {
 }
 
 function onRequestSpectate(data) {
-    console.log(`request spectate ${JSON.stringify(data, null, 4)}`); // TODO: Remove
+    // Cannot spectate games that do not allow spectating
+    if (!games[data.gameId].canSpectate) {
+        this.emit('reset', { message: `Unable to spectate games of type "${games[data.gameId].gameType}".` });
+        return;
+    }
+
     // Only spectators will end up here
     game[data.gameType](io, this, games, players, data.gameId, data.gameType, scores).handleSpectate();
 }
 
 function onRequestGames(data) {
+    console.log(`request games with ${JSON.stringify(data, null, 4)}`); // TODO: Remove
+
     const gamesToReturn = [];
     for (const [gameId, gameObj] of Object.entries(games)) {
         if ('pending' === gameObj.status ||
             ('in progress' === gameObj.status && gameObj.canSpectate)) {
-            gamesToReturn.push(gameId);
+            gamesToReturn.push({id: gameId, status: gameObj.status});
         }
     }
 

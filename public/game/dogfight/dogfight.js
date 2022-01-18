@@ -258,6 +258,7 @@ function dogfightUpdate() {
 
 function dogfightAddPlayer(self, player) {
     dogfightShip = self.physics.add.image(player.x, player.y, 'playerShip').setOrigin(0.5, 0.5);
+    dogfightShip.setRotation(player.rotation);
     dogfightShip.setDrag(100);
     dogfightShip.setAngularDrag(100);
     dogfightShip.setMaxVelocity(200);
@@ -278,6 +279,7 @@ function dogfightAddPlayer(self, player) {
 
 function dogfightAddEnemy(self, player) {
     const enemy = self.physics.add.sprite(player.x, player.y, 'enemyShip').setOrigin(0.5, 0.5);
+    enemy.setRotation(player.rotation);
     enemy.setDepth(5);
     enemy.socketId = player.socketId;
     dogfightEnemies[enemy.socketId] = enemy;

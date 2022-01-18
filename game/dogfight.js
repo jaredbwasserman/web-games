@@ -71,8 +71,9 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
         handleSpectate: function () {
             console.log(`Handle spectate with data ${JSON.stringify(games[gameId].initData, null, 4)}.`); // TODO: Remove
 
+            // TODO: The data is the host's copy, so data for other players will not be current
             // Tell the requestor to start spectating
-            socket.emit('spectateStarted', games[gameId].initData); // TODO: This should be dynamic for some stuff like players, bullets
+            socket.emit('spectateStarted', games[gameId].initData);
 
             // Handle events
             this.handleEvents();

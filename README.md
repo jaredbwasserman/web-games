@@ -80,3 +80,5 @@ A collection of multiplayer minigames.
 1. Fix client lag
    1. See https://www.gabrielgambetta.com/client-server-game-architecture.html
 1. Refactor dogfight to airfight
+1. Make it so the spectator start state is accurate
+   1. The data is the host's copy, so data for other players will not be current

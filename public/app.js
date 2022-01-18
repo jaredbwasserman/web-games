@@ -16,6 +16,21 @@ window.cookieconsent.initialise({
     'position': 'top'
 });
 
+// In case there was a reset
+window.onload = function () {
+    const resetting = sessionStorage.getItem('reset');
+    if (resetting) {
+        Swal.fire({
+            position: 'top',
+            icon: 'error',
+            title: resetting,
+            showConfirmButton: false,
+            timer: 1500
+        });
+        sessionStorage.removeItem('reset');
+    }
+}
+
 // Socket IO
 const IO = {
     socket: undefined,
@@ -39,6 +54,7 @@ const IO = {
         IO.socket.on('scoresReceived', IO.onScoresReceived);
         IO.socket.on('gamesReceived', IO.onGamesReceived);
         IO.socket.on('error', IO.onError);
+        IO.socket.on('reset', IO.onReset);
     },
 
     onConnected: function () {
@@ -79,17 +95,12 @@ const IO = {
             // Add new list
             playersList.appendChild(Util.makeUL(data.players));
         }
-
-        // Tell server game type so new player can see game type
-        if ('host' === App.role) {
-            IO.socket.emit('gameTypeChanged', { gameId: App.gameId, gameType: App.gameType });
-        }
     },
 
     onGameTypeChanged: function (data) {
         console.log(`game type is now ${data.gameType}`); // TODO: Remove
 
-        if ('player' === App.role) {
+        if ('host' !== App.role) {
             // Remove curGame from all the game buttons
             App.gameButtons.forEach(gameButton => {
                 gameButton.removeAttribute('curGame');
@@ -164,6 +175,11 @@ const IO = {
             showConfirmButton: false,
             timer: 1500
         });
+    },
+
+    onReset: function (data) {
+        sessionStorage.setItem('reset', data.message);
+        window.location.reload();
     }
 };
 
@@ -292,6 +308,9 @@ const App = {
         // Init game buttons
         App.gameButtons = Array.from(document.getElementsByClassName('gameBtn'));
 
+        // Set game type
+        IO.onGameTypeChanged({gameType: data.gameType});
+
         // Only host can start game
         if ('host' === App.role) {
             // Game button clicks change gameType
@@ -324,6 +343,18 @@ const App = {
                 placement: `${item.getAttribute('tippy-placement')}`,
                 trigger: 'mouseenter'
             });
+        });
+
+        // Spectator
+        document.getElementById('spectateCheckbox').addEventListener('change', () => {
+            if (document.getElementById('spectateCheckbox').checked) {
+                App.prevRole = App.role;
+                App.role = 'spectator';
+            }
+            else {
+                App.role = App.prevRole;
+            }
+            IO.socket.emit('roleChanged', { role: App.role });
         });
     },
 
@@ -411,6 +442,9 @@ const App = {
 
             document.getElementById('scorestab_0_row_0').click();
         }
+
+        // Emit updated game list (to remove this game that just ended)
+        IO.socket.emit('requestGames', { isUpdate: true });
     }
 };
 
@@ -435,13 +469,19 @@ const Util = {
         return list;
     },
 
-    makeGameButtons: function (buttonGroup, gameIds) {
-        for (var i = 0; i < gameIds.length; i++) {
+    makeGameButtons: function (buttonGroup, gameButtonInfo) {
+        for (var i = 0; i < gameButtonInfo.length; i++) {
             // Create the button
-            const gameId = gameIds[i];
+            const gameId = gameButtonInfo[i].id;
+            const status = gameButtonInfo[i].status;
             const gameButton = document.createElement("button");
             gameButton.innerHTML = gameId;
+
+            // Colors
             gameButton.classList.add('gameListBtn');
+            if ('in progress' === status) {
+                gameButton.classList.add('gameListBtnYellow');
+            }
 
             // Add callback
             gameButton.addEventListener('click', () => {
