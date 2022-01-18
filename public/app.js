@@ -309,7 +309,7 @@ const App = {
         App.gameButtons = Array.from(document.getElementsByClassName('gameBtn'));
 
         // Set game type
-        IO.onGameTypeChanged({gameType: data.gameType});
+        IO.onGameTypeChanged({ gameType: data.gameType });
 
         // Only host can start game
         if ('host' === App.role) {

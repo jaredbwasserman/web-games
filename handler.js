@@ -246,7 +246,7 @@ function onRequestGames(data) {
     for (const [gameId, gameObj] of Object.entries(games)) {
         if ('pending' === gameObj.status ||
             ('in progress' === gameObj.status && gameObj.canSpectate)) {
-            gamesToReturn.push({id: gameId, status: gameObj.status});
+            gamesToReturn.push({ id: gameId, status: gameObj.status });
         }
     }
 
