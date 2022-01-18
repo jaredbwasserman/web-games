@@ -25,7 +25,7 @@ window.onload = function () {
             icon: 'error',
             title: resetting,
             showConfirmButton: false,
-            timer: 1500
+            timer: 2000
         });
         sessionStorage.removeItem('reset');
     }
@@ -173,7 +173,7 @@ const IO = {
             icon: 'error',
             title: data.message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 2000
         });
     },
 
@@ -225,7 +225,7 @@ const App = {
                 icon: 'error',
                 title: 'Please enter a game code.',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 2000
             });
             return;
         }
@@ -366,7 +366,7 @@ const App = {
                 icon: 'error',
                 title: 'Game type does not exist.',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 2000
             });
             return;
         }
@@ -437,7 +437,7 @@ const App = {
                 icon: 'info',
                 title: 'Game over!',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 2000
             });
 
             document.getElementById('scorestab_0_row_0').click();
@@ -534,7 +534,7 @@ const Util = {
                 icon: 'error',
                 title: 'Please enter a name.',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 2000
             });
             return '';
         }
