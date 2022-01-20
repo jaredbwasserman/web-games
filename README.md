@@ -70,3 +70,8 @@ A collection of multiplayer minigames.
 1. Make it so the spectator start state is accurate
    1. The data is the host's copy, so data for other players will not be current
 1. Add dodge functionality to airfight similar to Super Smash
+1. More gameplay modes for airfight
+   1. Add barriers into the map that block planes and bullets
+   1. Add some CPU planes that shoot at people
+   1. Add a PvP mode maybe with teams
+1. Add indicator in lobby saying if someone is a spectator
