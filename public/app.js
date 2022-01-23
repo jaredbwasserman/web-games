@@ -75,12 +75,6 @@ const IO = {
     },
 
     onPlayersUpdated: function (data) {
-        // TODO: Remove
-        console.log(`New list of players!`);
-        for (let i = 0; i < data.players.length; i++) {
-            console.log(data.players[i]);
-        }
-
         if (0 === document.getElementsByClassName('lobbyScreen').length) {
             return;
         }
@@ -354,7 +348,7 @@ const App = {
             else {
                 App.role = App.prevRole;
             }
-            IO.socket.emit('roleChanged', { role: App.role });
+            IO.socket.emit('roleChanged', { role: App.role, gameId: App.gameId });
         });
     },
 
@@ -451,21 +445,24 @@ const App = {
 // Util
 const Util = {
     makeUL: function (array) {
-        // Create the list element:
+        // Create the list element
         const list = document.createElement('ul');
 
         for (var i = 0; i < array.length; i++) {
-            // Create the list item:
+            // Create the list item
             var item = document.createElement('li');
 
-            // Set its contents:
-            item.appendChild(document.createTextNode(array[i]));
+            // Set its contents
+            var text = array[i].name;
+            if ('spectator' === array[i].role) {
+                text += ' (' + array[i].role + ')';
+            }
+            item.appendChild(document.createTextNode(text));
 
-            // Add it to the list:
+            // Add it to the list
             list.appendChild(item);
         }
 
-        // Finally, return the constructed list:
         return list;
     },
 

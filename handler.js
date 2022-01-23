@@ -53,9 +53,6 @@ function onDisconnect(data) {
         io.sockets.in(gameId).emit('playersUpdate', { players: getPlayerNames(gameId) });
     }
 
-    // TODO: Remove
-    // console.log(`players is ${getPlayerNames(gameId)}`);
-
     // Check if the game has any players
     var playerCount = 0;
     for (const [socketId, player] of Object.entries(players)) {
@@ -170,8 +167,10 @@ function onJoinGame(data) {
 }
 
 function onRoleChanged(data) {
-    console.log(`role changed for ${this.id} from ${players[this.id].role} to ${data.role}`); // TODO: Remove
     players[this.id].role = data.role;
+
+    // Emit all players in room
+    io.sockets.in(data.gameId).emit('playersUpdate', { players: getPlayerNames(data.gameId) });
 }
 
 function onGameTypeChanged(data) {
@@ -270,7 +269,10 @@ function getPlayerNames(gameId) {
     const names = [];
     for (const [socketId, player] of Object.entries(players)) {
         if (player.gameId === gameId) {
-            names.push(player.name);
+            names.push({
+                name: player.name,
+                role: player.role
+            });
         }
     }
     return names;
