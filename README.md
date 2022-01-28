@@ -74,3 +74,5 @@ A collection of multiplayer minigames.
    1. Add barriers into the map that block planes and bullets
    1. Add some CPU planes that shoot at people
    1. Add a PvP mode maybe with teams
+1. Tournament mode
+1. Investigate bug where if you click enter game twice and there was lag, it gives name already taken error
