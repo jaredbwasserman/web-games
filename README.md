@@ -76,3 +76,8 @@ A collection of multiplayer minigames.
    1. Add a PvP mode maybe with teams
 1. Tournament mode
 1. Investigate bug where if you click enter game twice and there was lag, it gives name already taken error
+1. Add more control options for airfight
+   1. Space to shoot (in addition to mouse) and tapping/holding down should work the same as for mouse
+   1. Arrow keys to move (in addition to WASD)
+   1. Update tooltip for new controls
+1. Look into not using client time for airfight to avoid errors when someone's time is off
