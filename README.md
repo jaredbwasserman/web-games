@@ -81,3 +81,5 @@ A collection of multiplayer minigames.
    1. Arrow keys to move (in addition to WASD)
    1. Update tooltip for new controls
 1. Look into not using client time for airfight to avoid errors when someone's time is off
+1. Replay functionality to rewatch games
+1. Initials on scoreboard (not sure what this is for)
