@@ -83,3 +83,10 @@ A collection of multiplayer minigames.
 1. Look into not using client time for airfight to avoid errors when someone's time is off
 1. Replay functionality to rewatch games
 1. Initials on scoreboard (not sure what this is for)
+1. Names and colors idea for airfight
+   1. Make a key at the bottom of the screen (under timer)
+   1. Key shows up when countdown starts and remains throughout game
+   1. Key shows Name -> Color
+   1. Possibly keep myself same color always and everyone mapped color or obey colors for me too
+   1. Need to cap number of players at number of distinct colors
+   1. Max players config for airfight, but unlimited max players clicker
