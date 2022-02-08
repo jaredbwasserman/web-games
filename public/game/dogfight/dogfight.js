@@ -268,7 +268,7 @@ function dogfightAddPlayer(self, player) {
         self.tweens.add({
             targets: dogfightShip,
             alpha: 0.1,
-            duration: 400,
+            duration: 250,
             ease: 'Power0',
             yoyo: true,
             repeat: -1
@@ -292,7 +292,7 @@ function dogfightAddEnemy(self, player) {
         self.tweens.add({
             targets: enemy,
             alpha: 0.1,
-            duration: 400,
+            duration: 250,
             ease: 'Power0',
             yoyo: true,
             repeat: -1
