@@ -19,7 +19,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Init player positions
             for (const [socketId, player] of Object.entries(players)) {
-                player.rotation = 0;
+                player.rotation = -Math.PI / 2.0;
                 player.x = Math.floor(Math.random() * 701) + 50;
                 player.y = Math.floor(Math.random() * 501) + 50;
             }
@@ -28,7 +28,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             const bullets = {};
             for (const [socketId, player] of Object.entries(players)) {
                 bullets[socketId] = [];
-                for (var i = 0; i < 3; i++) {
+                for (var i = 0; i < 5; i++) {
                     bullets[socketId].push({
                         socketId: socketId,
                         index: i,
