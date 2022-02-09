@@ -22,8 +22,8 @@ function dogfightInit(data) {
     const config = {
         type: Phaser.AUTO,
         parent: 'gameScreen',
-        width: 800,
-        height: 600,
+        width: data.gameWidth,
+        height: data.gameHeight,
         physics: {
             default: 'arcade',
             arcade: {

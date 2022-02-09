@@ -372,7 +372,7 @@ const App = {
         document.getElementById('gameTitle').innerHTML = data.gameType.toUpperCase();
 
         // Return home button
-        document.getElementById('btnReturnHomeGame').addEventListener('click', () => window.location.reload());
+        // document.getElementById('btnReturnHomeGame').addEventListener('click', () => window.location.reload());
 
         // Countdown timer
         if (data.clientStartTime) {
