@@ -26,10 +26,9 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Button position
             const buttonWidth = 136;
-            const buttonWidthHalf = 68;
             data.buttonPosition = {
-                x: Math.floor(Math.random() * (data.gameWidth - buttonWidth + 1)) + buttonWidthHalf,
-                y: Math.floor(Math.random() * (data.gameHeight - buttonWidth + 1)) + buttonWidthHalf
+                x: Math.floor(Math.random() * (data.gameWidth - buttonWidth + 1)) + buttonWidth / 2,
+                y: Math.floor(Math.random() * (data.gameHeight - buttonWidth + 1)) + buttonWidth / 2
             };
 
             // Button animal index (30 animals total)

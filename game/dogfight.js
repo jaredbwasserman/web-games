@@ -23,11 +23,10 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Init player positions
             const playerWidth = 31;
-            const playerWidthHalf = 15;
             for (const [socketId, player] of Object.entries(players)) {
                 player.rotation = -Math.PI / 2.0;
-                player.x = Math.floor(Math.random() * (data.gameWidth - playerWidth + 1)) + playerWidthHalf;
-                player.y = Math.floor(Math.random() * (data.gameHeight - playerWidth + 1)) + playerWidthHalf;
+                player.x = Math.floor(Math.random() * (data.gameWidth - playerWidth + 1)) + playerWidth / 2;
+                player.y = Math.floor(Math.random() * (data.gameHeight - playerWidth + 1)) + playerWidth / 2;
             }
 
             // Init bullets
