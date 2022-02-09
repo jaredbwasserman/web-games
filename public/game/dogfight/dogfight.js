@@ -7,9 +7,9 @@ var dogfightLastFired;
 var dogfightPlayers;
 var dogfightEnemies;
 var dogfightKeyA;
-var dogfightKeyS;
 var dogfightKeyD;
 var dogfightKeyW;
+var dogfightKeySpace;
 var dogfightKilled;
 var dogfightSpectator;
 var dogfightStartTime;
@@ -86,7 +86,7 @@ function dogfightOnBulletMoved(data) {
 function dogfightOnKilled(data) {
     if (App.socketId === data.socketId) {
         console.log(`My ship ${JSON.stringify(dogfightShip, null, 4)} is killed.`); // TODO: Remove
-        disableObject(dogfightShip);
+        dogfightDisableObject(dogfightShip);
         dogfightKilled = true;
     }
     else {
@@ -133,9 +133,9 @@ function dogfightCreate() {
 
     // Set up input
     this.dogfightKeyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.dogfightKeyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.dogfightKeyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.dogfightKeyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.dogfightKeySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     // Stop ship flashing 3.5 seconds after the start of the game
     setTimeout(
@@ -169,14 +169,14 @@ function dogfightUpdate() {
 
     if (!dogfightKilled) {
         // Handle movement
-        if (this.dogfightKeyA.isDown) {
+        if (dogfightHasLeftInput(this) && !dogfightHasRightInput(this)) {
             dogfightShip.setAngularVelocity(-300);
-        } else if (this.dogfightKeyD.isDown) {
+        } else if (dogfightHasRightInput(this) && !dogfightHasLeftInput(this)) {
             dogfightShip.setAngularVelocity(300);
         } else {
             dogfightShip.setAngularVelocity(0);
         }
-        if (this.dogfightKeyW.isDown) {
+        if (dogfightHasUpInput(this)) {
             this.physics.velocityFromRotation(dogfightShip.rotation, 250, dogfightShip.body.acceleration);
         } else {
             dogfightShip.setAcceleration(0);
@@ -187,16 +187,16 @@ function dogfightUpdate() {
 
     // Handle disabling off-screen bullets
     dogfightPlayerBullets.forEach(bullet => {
-        if (!onScreen(this, bullet)) {
-            disableObject(bullet);
+        if (!dogfightOnScreen(this, bullet)) {
+            dogfightDisableObject(bullet);
         }
     });
 
     if (!dogfightKilled) {
         // Handle firing bullets
-        const bullet = getFirstInactiveBullet();
+        const bullet = dogfightGetFirstInactiveBullet();
         const dateNow = Date.now();
-        if (dogfightCanFire && bullet && this.input.activePointer.isDown && dateNow - dogfightLastFired > 500) {
+        if (dogfightCanFire && bullet && dogfightHasFireInput(this) && dateNow - dogfightLastFired > 500) {
             bullet.setPosition(dogfightShip.x, dogfightShip.y);
             this.physics.velocityFromRotation(dogfightShip.rotation, 350, bullet.body.velocity);
             bullet.setActive(true);
@@ -314,7 +314,7 @@ function dogfightAddPlayerBullet(self, bulletIn) {
     for (const [socketId, enemy] of Object.entries(dogfightEnemies)) {
         self.physics.add.overlap(enemy, bullet, function () {
             console.log(`bullet collide with enemy!`); // TODO: Remove
-            disableObject(bullet);
+            dogfightDisableObject(bullet);
             enemy.destroy();
             IO.socket.emit('enemyHit', { killerSocketId: App.socketId, socketId: socketId, killTime: Date.now() });
         }, null, self);
@@ -339,7 +339,7 @@ function dogfightAddEnemyBullet(self, bulletIn) {
     dogfightEnemyBullets[bullet.socketId].push(bullet);
 }
 
-function getFirstInactiveBullet() {
+function dogfightGetFirstInactiveBullet() {
     var bulletToReturn = null;
     dogfightPlayerBullets.forEach(bullet => {
         if (!bulletToReturn && !bullet.active) {
@@ -349,7 +349,7 @@ function getFirstInactiveBullet() {
     return bulletToReturn;
 }
 
-function disableObject(obj) {
+function dogfightDisableObject(obj) {
     if (!obj) {
         return;
     }
@@ -360,8 +360,24 @@ function disableObject(obj) {
     obj.setVisible(false);
 }
 
-function onScreen(self, object) {
+function dogfightOnScreen(self, object) {
     return self.cameras.main.worldView.contains(object.x, object.y);
+}
+
+function dogfightHasLeftInput(self) {
+    return self.dogfightKeyA.isDown;
+}
+
+function dogfightHasRightInput(self) {
+    return self.dogfightKeyD.isDown;
+}
+
+function dogfightHasUpInput(self) {
+    return self.dogfightKeyW.isDown;
+}
+
+function dogfightHasFireInput(self) {
+    return self.input.activePointer.isDown || self.dogfightKeySpace.isDown;
 }
 
 App.games['airfight'] = {};
