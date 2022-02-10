@@ -42,12 +42,14 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             data.gameEndTime = data.clientStartTime + 10000;
             setTimeout(this.onGameEnd(this), data.gameEndTime - games[gameId].startTime);
 
+            // Set game players
+            data.players = players;
+
             // Button appear time
             const buttonDelay = Math.floor(Math.random() * 2001) + 1000;
             data.buttonAppearTime = data.clientStartTime + buttonDelay;
 
             // Broadcast game started to everyone
-            data.players = players;
             io.sockets.in(gameId).emit('gameStarted', data);
 
             // Handle events

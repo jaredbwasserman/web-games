@@ -60,6 +60,12 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             // Set game players
             data.players = players;
 
+            // Set countdown info
+            data.countdownInfo = {}
+            for (const [socketId, player] of Object.entries(players)) {
+                data.countdownInfo[socketId] = 'plane color'; // TODO: HTML color
+            }
+
             // Save the init data for spectators
             games[gameId].initData = data;
 

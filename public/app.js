@@ -376,15 +376,23 @@ const App = {
 
         // Countdown timer
         if (data.clientStartTime) {
+            document.getElementById('countdownArea').setAttribute('style', `height:${data.gameHeight}px`);
+
+            var countdownInfo = '';
+            if (data.countdownInfo) {
+                countdownInfo = data.countdownInfo[App.socketId];
+            }
+
             const interval = setInterval(function () {
                 const secondsRemaining = Math.ceil((data.clientStartTime - Date.now()) / 1000.0) % 60;
                 document.getElementById('countdownTimer').innerHTML = secondsRemaining;
+                document.getElementById('countdownInfo').innerHTML = countdownInfo;
             }, 100);
 
             await Util.sleep(data.clientStartTime - Date.now());
             clearInterval(interval);
         }
-        document.getElementById('countdownTimer').remove();
+        document.getElementById('countdownArea').remove();
 
         // Load game
         App.games[data.gameType].init(data);
