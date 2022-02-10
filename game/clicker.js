@@ -18,8 +18,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             console.log('starting clicker server side code'); // TODO: Remove
 
             // Game width and height
-            data.gameWidth = 1000;
-            data.gameHeight = 750;
+            data.gameWidth = 900;
+            data.gameHeight = 675;
 
             // Init click times
             games[gameId].clickTimes = {};
