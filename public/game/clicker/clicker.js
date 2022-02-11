@@ -29,38 +29,7 @@ function clickerInit(data) {
     clickerGame = new Phaser.Game(config);
 
     // Init vars
-    clickerAnimals = [
-        'bear',
-        'buffalo',
-        'chick',
-        'chicken',
-        'cow',
-        'crocodile',
-        'dog',
-        'duck',
-        'elephant',
-        'frog',
-        'giraffe',
-        'goat',
-        'gorilla',
-        'hippo',
-        'horse',
-        'monkey',
-        'moose',
-        'narwhal',
-        'owl',
-        'panda',
-        'parrot',
-        'penguin',
-        'pig',
-        'rabbit',
-        'rhino',
-        'sloth',
-        'snake',
-        'walrus',
-        'whale',
-        'zebra'
-    ];
+    clickerAnimals = data.animals;
     clickerButtonPosition = data.buttonPosition;
     clickerButtonAppearTime = data.buttonAppearTime;
     clickerButtonIndex = data.buttonIndex;

@@ -34,6 +34,40 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             // Button animal index (30 animals total)
             data.buttonIndex = Math.floor(Math.random() * 30);
 
+            // Animal names
+            data.animals = [
+                'bear',
+                'buffalo',
+                'chick',
+                'chicken',
+                'cow',
+                'crocodile',
+                'dog',
+                'duck',
+                'elephant',
+                'frog',
+                'giraffe',
+                'goat',
+                'gorilla',
+                'hippo',
+                'horse',
+                'monkey',
+                'moose',
+                'narwhal',
+                'owl',
+                'panda',
+                'parrot',
+                'penguin',
+                'pig',
+                'rabbit',
+                'rhino',
+                'sloth',
+                'snake',
+                'walrus',
+                'whale',
+                'zebra'
+            ];
+
             // Countdown timer 3 seconds
             games[gameId].clientStartTime = games[gameId].startTime + 3000;
             data.clientStartTime = games[gameId].clientStartTime;
@@ -44,6 +78,12 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
             // Set game players
             data.players = players;
+
+            // Set countdown info
+            data.countdownInfo = {}
+            for (const [socketId, player] of Object.entries(players)) {
+                data.countdownInfo[socketId] = `Look out for a ${data.animals[data.buttonIndex]}!`;
+            }
 
             // Button appear time
             const buttonDelay = Math.floor(Math.random() * 2001) + 1000;
