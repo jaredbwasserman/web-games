@@ -22,7 +22,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
         '0xc32afa',
         '0xffffff',
         '0x823819',
-        '0x17e8c2'
+        '0xff429a'
     ];
 
     return {
