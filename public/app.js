@@ -380,7 +380,7 @@ const App = {
 
             var countdownInfo = '';
             if (data.countdownInfo) {
-                countdownInfo = data.countdownInfo[App.socketId];
+                countdownInfo = data.countdownInfo[App.socketId] || '';
             }
 
             const interval = setInterval(function () {

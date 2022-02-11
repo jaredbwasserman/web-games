@@ -12,6 +12,18 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
     const gameId = gameIdIn;
     const gameType = gameTypeIn;
     const scores = scoresIn;
+    const colors = [
+        '0x2cc5f6',
+        '0xf51414',
+        '0xf26f11',
+        '0xffe312',
+        '0x17ff26',
+        '0x1a35e8',
+        '0xc32afa',
+        '0xffffff',
+        '0x823819',
+        '0x17e8c2'
+    ];
 
     return {
         init: function (data) {
@@ -21,12 +33,30 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             data.gameWidth = 900;
             data.gameHeight = 675;
 
-            // Init player positions
+            // Random color order
+            // See https://www.quora.com/How-do-you-find-the-nth-permutation-of-an-array-of-integers
+            const colorIndices = [];
+            for (var i = 0; i < colors.length; i++) {
+                colorIndices[i] = i;
+            }
+            for (var curIndex = 0; curIndex < colors.length; curIndex++) {
+                // Get a random index
+                const randomIndex = Math.floor(Math.random() * colors.length);
+
+                // Swap element at current index with element at random index
+                const temp = colorIndices[curIndex];
+                colorIndices[curIndex] = colorIndices[randomIndex];
+                colorIndices[randomIndex] = temp;
+            }
+
+            // Init players
             const playerWidth = 31;
+            var playerCount = 0;
             for (const [socketId, player] of Object.entries(players)) {
                 player.rotation = -Math.PI / 2.0;
                 player.x = Math.floor(Math.random() * (data.gameWidth - playerWidth + 1)) + playerWidth / 2;
                 player.y = Math.floor(Math.random() * (data.gameHeight - playerWidth + 1)) + playerWidth / 2;
+                player.color = colors[colorIndices[playerCount++]];
             }
 
             // Init bullets
@@ -39,7 +69,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                         index: i,
                         rotation: 0,
                         x: -100,
-                        y: -100
+                        y: -100,
+                        color: players[socketId].color
                     });
                 }
             }
@@ -63,7 +94,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             // Set countdown info
             data.countdownInfo = {}
             for (const [socketId, player] of Object.entries(players)) {
-                data.countdownInfo[socketId] = 'This is your plane color.'; // TODO: HTML color
+                data.countdownInfo[socketId] = `<div style="color:${player.color.replace('0x', '#')};">This is your plane color.</div>`;
             }
 
             // Save the init data for spectators
@@ -131,7 +162,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 if (!deathTimes[data.socketId]) {
                     deathTimes[data.socketId] = {
                         deathTime: data.killTime,
-                        killedBy: players[data.killerSocketId].name
+                        killedBy: players[data.killerSocketId]
                     };
                 }
 
@@ -202,7 +233,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                         {
                             data: {
                                 'RANK': 1,
-                                'NAME': player.name
+                                'NAME': `<div style="color:${player.color.replace('0x', '#')};">${player.name}</div>`
                             },
                             kids: []
                         }
@@ -233,9 +264,9 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                             {
                                 data: {
                                     'RANK': curRank,
-                                    'NAME': player.name,
+                                    'NAME': `<div style="color:${player.color.replace('0x', '#')};">${player.name}</div>`,
                                     'KILLED AFTER': Math.floor((deathTime - games[gameId].clientStartTime) / 1000.0) + ' s',
-                                    'KILLED BY': deathTimes[socketId].killedBy
+                                    'KILLED BY': `<div style="color:${deathTimes[socketId].killedBy.color.replace('0x', '#')};">${deathTimes[socketId].killedBy.name}</div>`
                                 },
                                 kids: []
                             }

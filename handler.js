@@ -196,7 +196,7 @@ function onStartGame(data) {
         return;
     }
 
-    // Error if there are no players
+    // Get players for this game
     const playersForGame = Object.fromEntries(
         // Filter to player or host role (exclude spectator)
         Object.entries(players).filter(([socketId, player]) => {
@@ -204,15 +204,24 @@ function onStartGame(data) {
                 ['host', 'player'].includes(player.role);
         })
     );
+
+    // Error if there are no players
     if (Object.keys(playersForGame).length <= 0) {
         this.emit('error', { message: 'Cannot start a game with no players.' });
+        return;
+    }
+
+    // Error if there are too many players
+    const maxPlayers = game[data.gameType].maxPlayers;
+    if (Object.keys(playersForGame).length > maxPlayers) {
+        this.emit('error', { message: `Cannot start ${gameType} game with more than ${maxPlayers} players.` });
         return;
     }
 
     // Update game
     games[gameId].status = 'in progress';
     games[gameId].gameType = gameType;
-    games[gameId].canSpectate = game[data.gameType].canSpectate
+    games[gameId].canSpectate = game[data.gameType].canSpectate;
     games[gameId].startTime = Date.now();
 
     // Init game

@@ -254,7 +254,7 @@ function dogfightUpdate() {
 function dogfightAddPlayer(self, player) {
     dogfightShip = self.physics.add.image(player.x, player.y, 'ship');
     dogfightShip.setRotation(player.rotation);
-    dogfightShip.setTint(0x2cc5f6);
+    dogfightShip.setTint(player.color);
     dogfightShip.setOrigin(0.5, 0.5);
     dogfightShip.setCircle(15, 0, 0);
     dogfightShip.setGravity(0, 0);
@@ -279,7 +279,7 @@ function dogfightAddPlayer(self, player) {
 function dogfightAddEnemy(self, player) {
     const enemy = self.physics.add.image(player.x, player.y, 'ship');
     enemy.setRotation(player.rotation);
-    enemy.setTint(0xf51414);
+    enemy.setTint(player.color);
     enemy.setOrigin(0.5, 0.5);
     enemy.setCircle(15, 0, 0);
     enemy.setGravity(0, 0);
@@ -302,7 +302,7 @@ function dogfightAddEnemy(self, player) {
 
 function dogfightAddPlayerBullet(self, bulletIn) {
     const bullet = self.physics.add.image(bulletIn.x, bulletIn.y, 'bullet');
-    bullet.setTint(0x2cc5f6);
+    bullet.setTint(bulletIn.color);
     bullet.setOrigin(0.5, 0.5);
     bullet.setCircle(7, 0, 0);
     bullet.setGravity(0, 0);
@@ -325,7 +325,7 @@ function dogfightAddPlayerBullet(self, bulletIn) {
 
 function dogfightAddEnemyBullet(self, bulletIn) {
     const bullet = self.physics.add.image(bulletIn.x, bulletIn.y, 'bullet');
-    bullet.setTint(0xf51414);
+    bullet.setTint(bulletIn.color);
     bullet.setOrigin(0.5, 0.5);
     bullet.setCircle(7, 0, 0);
     bullet.setGravity(0, 0);

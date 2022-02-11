@@ -35,26 +35,13 @@ A collection of multiplayer minigames.
    1. Scores in View Scores would populate from DB
    1. Flush game score to DB after game socket room no longer exists (last player leaves)
    1. Players table, Scores table, Games table
-1. Test cases
-   1. test disconnect works
-   1. test host can win
-   1. test player can win
-   1. test 3 people where one wins
-   1. test 3 people with timeout
-   1. check die and then disconnect
-   1. check disconnect before die
-   1. tie with 2 people alive 1 dead
-   1. tie with 3 people alive no dead
-   1. test concurrent games
 1. Separate log in from nickname so scores are tied to your real name but you can still use funny nicknames
 1. Start new game with same players functionality
    1. Everyone in the game returns to lobby following a game but it's a new game
    1. Only host would have a button to "New Game with Existing Players" that would appear on the Scores page after a game is over
    1. How to deal with people leaving the Scores page (since it would assign a new socket ID)?
-1. Add unique colors to dogfight instead of self blue enemy red
 1. Get rid of tooltips when game starts
 1. For dogfight, hold down does not work on track pad for firing bullets
-1. Consider making unique colors and tell the player during countdown (or under game timer) what color you are
 1. Display player name above/below plane in dogfight game
 1. Bullets not tied to players except for scoring (so you could theoretically shoot yourself - although maybe not since when you first shoot it's overlapping)
    1. And the game itself could simulate the bullets instead of players doing it for their own bullets
@@ -63,7 +50,8 @@ A collection of multiplayer minigames.
    1. Bullet create and bullet delete events instead of update
    1. Should handle case where player fires a bullet and then disconnects (which currently does not work)
 1. Add game code to URL so sharing link gets you into game
-1. Exactly one screen wrap for bullets in dogfight game (currently 0)
+1. Power ups
+   1. Exactly one screen wrap for bullets in dogfight game (currently 0)
 1. Fix client lag
    1. See https://www.gabrielgambetta.com/client-server-game-architecture.html
 1. Refactor dogfight to airfight
@@ -79,13 +67,5 @@ A collection of multiplayer minigames.
    1. Similar bug happens where you can end up with multiple games that do not exist but they show up as buttons
 1. Look into not using client time for airfight to avoid errors when someone's time is off
 1. Replay functionality to rewatch games
-1. Initials on scoreboard (not sure what this is for)
-1. Names and colors (colors apply to plane and bullets) idea for airfight
-   1. Make a key at the bottom of the screen (under timer)
-   1. Key shows up when countdown starts and remains throughout game
-   1. Key shows Name -> Color
-   1. Possibly keep myself same color always and everyone mapped color or obey colors for me too
-   1. Need to cap number of players at number of distinct colors
-   1. Max players config for airfight, but unlimited max players clicker
 1. Add some easter eggs
    1. Maybe a special name entered could make something strange happen and could rotate special names over time
