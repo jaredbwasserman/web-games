@@ -68,6 +68,17 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
                 'zebra'
             ];
 
+            // Animal articles
+            data.animalArticles = {};
+            data.animals.forEach(animal => {
+                if (['elephant', 'owl'].includes(animal)) {
+                    data.animalArticles[animal] = 'an'
+                }
+                else {
+                    data.animalArticles[animal] = 'a'
+                }
+            });
+
             // Countdown timer 3 seconds
             games[gameId].clientStartTime = games[gameId].startTime + 3000;
             data.clientStartTime = games[gameId].clientStartTime;
@@ -82,7 +93,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             // Set countdown info
             data.countdownInfo = {}
             for (const [socketId, player] of Object.entries(players)) {
-                data.countdownInfo[socketId] = `Look out for a ${data.animals[data.buttonIndex]}!`;
+                const animal = data.animals[data.buttonIndex];
+                data.countdownInfo[socketId] = `Look out for ${data.animalArticles[animal]} ${animal}!`;
             }
 
             // Button appear time
