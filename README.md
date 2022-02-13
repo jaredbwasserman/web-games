@@ -66,5 +66,3 @@ A collection of multiplayer minigames.
    1. Similar bug happens where you can end up with multiple games that do not exist but they show up as buttons
 1. Look into not using client time for airfight to avoid errors when someone's time is off
 1. Replay functionality to rewatch games
-1. Add some easter eggs
-   1. Maybe a special name entered could make something strange happen and could rotate special names over time
