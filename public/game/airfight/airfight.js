@@ -16,29 +16,10 @@ var airfightStartTime;
 var airfightEndTime;
 var airfightCanFire;
 var airfightTweens;
+var airfightEnableDebug;
 var airfightToggleDebug;
 
 function airfightInit(data) {
-    // Create game
-    const config = {
-        type: Phaser.AUTO,
-        parent: 'gameScreen',
-        width: data.gameWidth,
-        height: data.gameHeight,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                debug: true
-            }
-        },
-        scene: {
-            preload: airfightPreload,
-            create: airfightCreate,
-            update: airfightUpdate
-        }
-    };
-    airfightGame = new Phaser.Game(config);
-
     // Init vars
     airfightBullets = data.bullets;
     airfightPlayerBullets = [];
@@ -50,11 +31,32 @@ function airfightInit(data) {
     airfightEndTime = data.gameEndTime;
     airfightCanFire = false;
     airfightTweens = [];
+    airfightEnableDebug = App.name.toLowerCase().startsWith('debug');
 
     // Handle spectators
     if ('spectator' === App.role) {
         airfightSpectator = true;
     }
+
+    // Create game
+    const config = {
+        type: Phaser.AUTO,
+        parent: 'gameScreen',
+        width: data.gameWidth,
+        height: data.gameHeight,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                debug: airfightEnableDebug
+            }
+        },
+        scene: {
+            preload: airfightPreload,
+            create: airfightCreate,
+            update: airfightUpdate
+        }
+    };
+    airfightGame = new Phaser.Game(config);
 
     IO.socket.on('playerMoved', airfightOnPlayerMoved);
     IO.socket.on('bulletMoved', airfightOnBulletMoved);
@@ -169,7 +171,7 @@ function airfightUpdate() {
     }
 
     // Dynamic debug
-    if (Phaser.Input.Keyboard.JustDown(this.airfightToggleDebug)) {
+    if (airfightEnableDebug && Phaser.Input.Keyboard.JustDown(this.airfightToggleDebug)) {
         if (this.physics.world.drawDebug) {
             this.physics.world.drawDebug = false;
             this.physics.world.debugGraphic.clear();
