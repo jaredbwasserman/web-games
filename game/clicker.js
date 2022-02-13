@@ -72,10 +72,10 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             data.animalArticles = {};
             data.animals.forEach(animal => {
                 if (['elephant', 'owl'].includes(animal)) {
-                    data.animalArticles[animal] = 'an'
+                    data.animalArticles[animal] = 'an';
                 }
                 else {
-                    data.animalArticles[animal] = 'a'
+                    data.animalArticles[animal] = 'a';
                 }
             });
 

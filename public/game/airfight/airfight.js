@@ -16,6 +16,7 @@ var airfightStartTime;
 var airfightEndTime;
 var airfightCanFire;
 var airfightTweens;
+var airfightToggleDebug;
 
 function airfightInit(data) {
     // Create game
@@ -27,7 +28,7 @@ function airfightInit(data) {
         physics: {
             default: 'arcade',
             arcade: {
-                debug: false
+                debug: true
             }
         },
         scene: {
@@ -148,6 +149,11 @@ function airfightCreate() {
         },
         airfightStartTime + 3500 - Date.now()
     );
+
+    // Dynamic debug
+    // See https://phaser.discourse.group/t/turn-on-off-debug-at-runtime/3681/2
+    this.physics.world.drawDebug = false;
+    this.airfightToggleDebug = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.BACKTICK);
 }
 
 function airfightUpdate() {
@@ -159,6 +165,17 @@ function airfightUpdate() {
             document.getElementById('gameTimer').innerHTML = minutesRemaining.padStart(2, '0') +
                 ':' +
                 secondsRemaining.padStart(2, '0');
+        }
+    }
+
+    // Dynamic debug
+    if (Phaser.Input.Keyboard.JustDown(this.airfightToggleDebug)) {
+        if (this.physics.world.drawDebug) {
+            this.physics.world.drawDebug = false;
+            this.physics.world.debugGraphic.clear();
+        }
+        else {
+            this.physics.world.drawDebug = true;
         }
     }
 
