@@ -1,23 +1,23 @@
-var dogfightGame;
-var dogfightShip;
-var dogfightBullets;
-var dogfightPlayerBullets;
-var dogfightEnemyBullets;
-var dogfightLastFired;
-var dogfightPlayers;
-var dogfightEnemies;
-var dogfightKeyA;
-var dogfightKeyD;
-var dogfightKeyW;
-var dogfightKeySpace;
-var dogfightKilled;
-var dogfightSpectator;
-var dogfightStartTime;
-var dogfightEndTime;
-var dogfightCanFire;
-var dogfightTweens;
+var airfightGame;
+var airfightShip;
+var airfightBullets;
+var airfightPlayerBullets;
+var airfightEnemyBullets;
+var airfightLastFired;
+var airfightPlayers;
+var airfightEnemies;
+var airfightKeyA;
+var airfightKeyD;
+var airfightKeyW;
+var airfightKeySpace;
+var airfightKilled;
+var airfightSpectator;
+var airfightStartTime;
+var airfightEndTime;
+var airfightCanFire;
+var airfightTweens;
 
-function dogfightInit(data) {
+function airfightInit(data) {
     // Create game
     const config = {
         type: Phaser.AUTO,
@@ -31,37 +31,37 @@ function dogfightInit(data) {
             }
         },
         scene: {
-            preload: dogfightPreload,
-            create: dogfightCreate,
-            update: dogfightUpdate
+            preload: airfightPreload,
+            create: airfightCreate,
+            update: airfightUpdate
         }
     };
-    dogfightGame = new Phaser.Game(config);
+    airfightGame = new Phaser.Game(config);
 
     // Init vars
-    dogfightBullets = data.bullets;
-    dogfightPlayerBullets = [];
-    dogfightEnemyBullets = {};
-    dogfightLastFired = 0;
-    dogfightPlayers = data.players;
-    dogfightEnemies = {};
-    dogfightStartTime = data.clientStartTime;
-    dogfightEndTime = data.gameEndTime;
-    dogfightCanFire = false;
-    dogfightTweens = [];
+    airfightBullets = data.bullets;
+    airfightPlayerBullets = [];
+    airfightEnemyBullets = {};
+    airfightLastFired = 0;
+    airfightPlayers = data.players;
+    airfightEnemies = {};
+    airfightStartTime = data.clientStartTime;
+    airfightEndTime = data.gameEndTime;
+    airfightCanFire = false;
+    airfightTweens = [];
 
     // Handle spectators
     if ('spectator' === App.role) {
-        dogfightSpectator = true;
+        airfightSpectator = true;
     }
 
-    IO.socket.on('playerMoved', dogfightOnPlayerMoved);
-    IO.socket.on('bulletMoved', dogfightOnBulletMoved);
-    IO.socket.on('killed', dogfightOnKilled);
+    IO.socket.on('playerMoved', airfightOnPlayerMoved);
+    IO.socket.on('bulletMoved', airfightOnBulletMoved);
+    IO.socket.on('killed', airfightOnKilled);
 }
 
-function dogfightOnPlayerMoved(data) {
-    for (const [socketId, enemy] of Object.entries(dogfightEnemies)) {
+function airfightOnPlayerMoved(data) {
+    for (const [socketId, enemy] of Object.entries(airfightEnemies)) {
         if (socketId === data.socketId) {
             enemy.setRotation(data.rotation);
             enemy.setPosition(data.x, data.y);
@@ -69,9 +69,9 @@ function dogfightOnPlayerMoved(data) {
     }
 }
 
-function dogfightOnBulletMoved(data) {
+function airfightOnBulletMoved(data) {
     // Handle enemy bullets
-    for (const [socketId, bullets] of Object.entries(dogfightEnemyBullets)) {
+    for (const [socketId, bullets] of Object.entries(airfightEnemyBullets)) {
         if (socketId === data.socketId) {
             bullets.forEach(bullet => {
                 if (bullet.index === data.index) {
@@ -83,14 +83,14 @@ function dogfightOnBulletMoved(data) {
     }
 }
 
-function dogfightOnKilled(data) {
+function airfightOnKilled(data) {
     if (App.socketId === data.socketId) {
-        console.log(`My ship ${JSON.stringify(dogfightShip, null, 4)} is killed.`); // TODO: Remove
-        dogfightDisableObject(dogfightShip);
-        dogfightKilled = true;
+        console.log(`My ship ${JSON.stringify(airfightShip, null, 4)} is killed.`); // TODO: Remove
+        airfightDisableObject(airfightShip);
+        airfightKilled = true;
     }
     else {
-        for (const [socketId, enemy] of Object.entries(dogfightEnemies)) {
+        for (const [socketId, enemy] of Object.entries(airfightEnemies)) {
             if (socketId === data.socketId) {
                 enemy.destroy();
             }
@@ -98,63 +98,63 @@ function dogfightOnKilled(data) {
     }
 }
 
-function dogfightPreload() {
-    this.load.image('ship', 'game/dogfight/assets/ship.png');
-    this.load.image('bullet', 'game/dogfight/assets/bullet.png');
+function airfightPreload() {
+    this.load.image('ship', 'game/airfight/assets/ship.png');
+    this.load.image('bullet', 'game/airfight/assets/bullet.png');
 }
 
-function dogfightCreate() {
+function airfightCreate() {
     const self = this;
 
     // Init ships
-    for (const [socketId, player] of Object.entries(dogfightPlayers)) {
+    for (const [socketId, player] of Object.entries(airfightPlayers)) {
         if (socketId === App.socketId) {
-            dogfightAddPlayer(self, player);
+            airfightAddPlayer(self, player);
         }
         else {
-            dogfightAddEnemy(self, player);
+            airfightAddEnemy(self, player);
         }
     }
 
     // Init bullets
-    for (const [socketId, bullets] of Object.entries(dogfightBullets)) {
+    for (const [socketId, bullets] of Object.entries(airfightBullets)) {
         if (socketId === App.socketId) {
             bullets.forEach(bullet => {
                 console.log('add bullet'); // TODO: Remove
-                dogfightAddPlayerBullet(self, bullet);
+                airfightAddPlayerBullet(self, bullet);
             });
         }
         else {
             bullets.forEach(bullet => {
-                dogfightAddEnemyBullet(self, bullet);
+                airfightAddEnemyBullet(self, bullet);
             });
         }
     }
 
     // Set up input
-    this.dogfightKeyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.dogfightKeyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.dogfightKeyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.dogfightKeySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.airfightKeyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.airfightKeyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.airfightKeyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.airfightKeySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     // Stop ship flashing 3.5 seconds after the start of the game
     setTimeout(
         function () {
-            dogfightTweens.forEach(tween => {
+            airfightTweens.forEach(tween => {
                 tween.stop();
                 tween.targets[0].setAlpha(1);
             });
-            dogfightCanFire = true;
+            airfightCanFire = true;
         },
-        dogfightStartTime + 3500 - Date.now()
+        airfightStartTime + 3500 - Date.now()
     );
 }
 
-function dogfightUpdate() {
+function airfightUpdate() {
     // Game timer
-    if (dogfightEndTime) {
-        const minutesRemaining = String(Math.max(0, Math.floor((dogfightEndTime - Date.now()) / (60.0 * 1000.0)) % 60));
-        const secondsRemaining = String(Math.max(0, Math.floor((dogfightEndTime - Date.now()) / 1000.0) % 60));
+    if (airfightEndTime) {
+        const minutesRemaining = String(Math.max(0, Math.floor((airfightEndTime - Date.now()) / (60.0 * 1000.0)) % 60));
+        const secondsRemaining = String(Math.max(0, Math.floor((airfightEndTime - Date.now()) / 1000.0) % 60));
         if (null !== document.getElementById('gameTimer')) {
             document.getElementById('gameTimer').innerHTML = minutesRemaining.padStart(2, '0') +
                 ':' +
@@ -163,72 +163,72 @@ function dogfightUpdate() {
     }
 
     // Skip everything if spectating
-    if (dogfightSpectator) {
+    if (airfightSpectator) {
         return;
     }
 
-    if (!dogfightKilled) {
+    if (!airfightKilled) {
         // Handle movement
-        if (dogfightHasLeftInput(this) && !dogfightHasRightInput(this)) {
-            dogfightShip.setAngularVelocity(-300);
-        } else if (dogfightHasRightInput(this) && !dogfightHasLeftInput(this)) {
-            dogfightShip.setAngularVelocity(300);
+        if (airfightHasLeftInput(this) && !airfightHasRightInput(this)) {
+            airfightShip.setAngularVelocity(-300);
+        } else if (airfightHasRightInput(this) && !airfightHasLeftInput(this)) {
+            airfightShip.setAngularVelocity(300);
         } else {
-            dogfightShip.setAngularVelocity(0);
+            airfightShip.setAngularVelocity(0);
         }
-        if (dogfightHasUpInput(this)) {
-            this.physics.velocityFromRotation(dogfightShip.rotation, 250, dogfightShip.body.acceleration);
+        if (airfightHasUpInput(this)) {
+            this.physics.velocityFromRotation(airfightShip.rotation, 250, airfightShip.body.acceleration);
         } else {
-            dogfightShip.setAcceleration(0);
+            airfightShip.setAcceleration(0);
         }
     }
 
-    this.physics.world.wrap(dogfightShip, -10);
+    this.physics.world.wrap(airfightShip, -10);
 
     // Handle disabling off-screen bullets
-    dogfightPlayerBullets.forEach(bullet => {
-        if (!dogfightOnScreen(this, bullet)) {
-            dogfightDisableObject(bullet);
+    airfightPlayerBullets.forEach(bullet => {
+        if (!airfightOnScreen(this, bullet)) {
+            airfightDisableObject(bullet);
         }
     });
 
-    if (!dogfightKilled) {
+    if (!airfightKilled) {
         // Handle firing bullets
-        const bullet = dogfightGetFirstInactiveBullet();
+        const bullet = airfightGetFirstInactiveBullet();
         const dateNow = Date.now();
-        if (dogfightCanFire && bullet && dogfightHasFireInput(this) && dateNow - dogfightLastFired > 500) {
-            bullet.setPosition(dogfightShip.x, dogfightShip.y);
-            this.physics.velocityFromRotation(dogfightShip.rotation, 350, bullet.body.velocity);
+        if (airfightCanFire && bullet && airfightHasFireInput(this) && dateNow - airfightLastFired > 500) {
+            bullet.setPosition(airfightShip.x, airfightShip.y);
+            this.physics.velocityFromRotation(airfightShip.rotation, 350, bullet.body.velocity);
             bullet.setActive(true);
             bullet.setVisible(true);
-            dogfightLastFired = dateNow;
+            airfightLastFired = dateNow;
         }
     }
 
     // Emit player movement
-    const curX = dogfightShip.x;
-    const curY = dogfightShip.y;
-    const curR = dogfightShip.rotation;
-    if (dogfightShip.oldPosition && (
-        curX !== dogfightShip.oldPosition.x ||
-        curY !== dogfightShip.oldPosition.y ||
-        curR !== dogfightShip.oldPosition.rotation)) {
+    const curX = airfightShip.x;
+    const curY = airfightShip.y;
+    const curR = airfightShip.rotation;
+    if (airfightShip.oldPosition && (
+        curX !== airfightShip.oldPosition.x ||
+        curY !== airfightShip.oldPosition.y ||
+        curR !== airfightShip.oldPosition.rotation)) {
         IO.socket.emit('playerMovement', {
-            x: dogfightShip.x,
-            y: dogfightShip.y,
-            rotation: dogfightShip.rotation
+            x: airfightShip.x,
+            y: airfightShip.y,
+            rotation: airfightShip.rotation
         });
     }
 
     // Save old position data
-    dogfightShip.oldPosition = {
+    airfightShip.oldPosition = {
         x: curX,
         y: curY,
         rotation: curR
     };
 
     // Emit bullet movement
-    for (const [index, bullet] of Object.entries(dogfightPlayerBullets)) {
+    for (const [index, bullet] of Object.entries(airfightPlayerBullets)) {
         const curX = bullet.x;
         const curY = bullet.y;
         if (bullet.oldPosition && (
@@ -251,22 +251,22 @@ function dogfightUpdate() {
     }
 }
 
-function dogfightAddPlayer(self, player) {
-    dogfightShip = self.physics.add.image(player.x, player.y, 'ship');
-    dogfightShip.setRotation(player.rotation);
-    dogfightShip.setTint(player.color);
-    dogfightShip.setOrigin(0.5, 0.5);
-    dogfightShip.setCircle(15, 0, 0);
-    dogfightShip.setGravity(0, 0);
-    dogfightShip.setDamping(true);
-    dogfightShip.setDrag(0.65);
-    dogfightShip.setMaxVelocity(250);
-    dogfightShip.setDepth(100);
+function airfightAddPlayer(self, player) {
+    airfightShip = self.physics.add.image(player.x, player.y, 'ship');
+    airfightShip.setRotation(player.rotation);
+    airfightShip.setTint(player.color);
+    airfightShip.setOrigin(0.5, 0.5);
+    airfightShip.setCircle(15, 0, 0);
+    airfightShip.setGravity(0, 0);
+    airfightShip.setDamping(true);
+    airfightShip.setDrag(0.65);
+    airfightShip.setMaxVelocity(250);
+    airfightShip.setDepth(100);
 
     // Flash to indicate bullets cannot be shot yet
-    dogfightTweens.push(
+    airfightTweens.push(
         self.tweens.add({
-            targets: dogfightShip,
+            targets: airfightShip,
             alpha: 0.1,
             duration: 250,
             ease: 'Power0',
@@ -276,7 +276,7 @@ function dogfightAddPlayer(self, player) {
     );
 }
 
-function dogfightAddEnemy(self, player) {
+function airfightAddEnemy(self, player) {
     const enemy = self.physics.add.image(player.x, player.y, 'ship');
     enemy.setRotation(player.rotation);
     enemy.setTint(player.color);
@@ -285,10 +285,10 @@ function dogfightAddEnemy(self, player) {
     enemy.setGravity(0, 0);
     enemy.setDepth(50);
     enemy.socketId = player.socketId;
-    dogfightEnemies[enemy.socketId] = enemy;
+    airfightEnemies[enemy.socketId] = enemy;
 
     // Flash to indicate bullets cannot be shot yet
-    dogfightTweens.push(
+    airfightTweens.push(
         self.tweens.add({
             targets: enemy,
             alpha: 0.1,
@@ -300,7 +300,7 @@ function dogfightAddEnemy(self, player) {
     );
 }
 
-function dogfightAddPlayerBullet(self, bulletIn) {
+function airfightAddPlayerBullet(self, bulletIn) {
     const bullet = self.physics.add.image(bulletIn.x, bulletIn.y, 'bullet');
     bullet.setTint(bulletIn.color);
     bullet.setOrigin(0.5, 0.5);
@@ -311,19 +311,19 @@ function dogfightAddPlayerBullet(self, bulletIn) {
     bullet.setVisible(false);
 
     // Collision handler
-    for (const [socketId, enemy] of Object.entries(dogfightEnemies)) {
+    for (const [socketId, enemy] of Object.entries(airfightEnemies)) {
         self.physics.add.overlap(enemy, bullet, function () {
             console.log(`bullet collide with enemy!`); // TODO: Remove
-            dogfightDisableObject(bullet);
+            airfightDisableObject(bullet);
             enemy.destroy();
             IO.socket.emit('enemyHit', { killerSocketId: App.socketId, socketId: socketId, killTime: Date.now() });
         }, null, self);
     }
 
-    dogfightPlayerBullets.push(bullet);
+    airfightPlayerBullets.push(bullet);
 }
 
-function dogfightAddEnemyBullet(self, bulletIn) {
+function airfightAddEnemyBullet(self, bulletIn) {
     const bullet = self.physics.add.image(bulletIn.x, bulletIn.y, 'bullet');
     bullet.setTint(bulletIn.color);
     bullet.setOrigin(0.5, 0.5);
@@ -333,15 +333,15 @@ function dogfightAddEnemyBullet(self, bulletIn) {
     bullet.socketId = bulletIn.socketId;
     bullet.index = bulletIn.index;
 
-    if (!dogfightEnemyBullets[bullet.socketId]) {
-        dogfightEnemyBullets[bullet.socketId] = [];
+    if (!airfightEnemyBullets[bullet.socketId]) {
+        airfightEnemyBullets[bullet.socketId] = [];
     }
-    dogfightEnemyBullets[bullet.socketId].push(bullet);
+    airfightEnemyBullets[bullet.socketId].push(bullet);
 }
 
-function dogfightGetFirstInactiveBullet() {
+function airfightGetFirstInactiveBullet() {
     var bulletToReturn = null;
-    dogfightPlayerBullets.forEach(bullet => {
+    airfightPlayerBullets.forEach(bullet => {
         if (!bulletToReturn && !bullet.active) {
             bulletToReturn = bullet;
         }
@@ -349,7 +349,7 @@ function dogfightGetFirstInactiveBullet() {
     return bulletToReturn;
 }
 
-function dogfightDisableObject(obj) {
+function airfightDisableObject(obj) {
     if (!obj) {
         return;
     }
@@ -360,25 +360,25 @@ function dogfightDisableObject(obj) {
     obj.setVisible(false);
 }
 
-function dogfightOnScreen(self, object) {
+function airfightOnScreen(self, object) {
     return self.cameras.main.worldView.contains(object.x, object.y);
 }
 
-function dogfightHasLeftInput(self) {
-    return self.dogfightKeyA.isDown;
+function airfightHasLeftInput(self) {
+    return self.airfightKeyA.isDown;
 }
 
-function dogfightHasRightInput(self) {
-    return self.dogfightKeyD.isDown;
+function airfightHasRightInput(self) {
+    return self.airfightKeyD.isDown;
 }
 
-function dogfightHasUpInput(self) {
-    return self.dogfightKeyW.isDown;
+function airfightHasUpInput(self) {
+    return self.airfightKeyW.isDown;
 }
 
-function dogfightHasFireInput(self) {
-    return self.input.activePointer.isDown || self.dogfightKeySpace.isDown;
+function airfightHasFireInput(self) {
+    return self.input.activePointer.isDown || self.airfightKeySpace.isDown;
 }
 
 App.games['airfight'] = {};
-App.games['airfight'].init = dogfightInit;
+App.games['airfight'].init = airfightInit;

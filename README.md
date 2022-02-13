@@ -26,9 +26,9 @@ A collection of multiplayer minigames.
 1. Send error and terminate client side game if room no longer exists (host leaving should cause room to drop)
    1. Also `onRequestGames({ isUpdate: true })` for this case
 1. What to do if user does not consent to cookies?
-1. Add animations to dogfight for bullet collisions with enemies and enemy bullets with self
+1. Add animations to airfight for bullet collisions with enemies and enemy bullets with self
 1. Bullet cone in front of plane based on pointer position
-1. Add kill count stat for dogfight
+1. Add kill count stat for airfight
 1. Persist scores to database or file
    1. Clean up scores array after persisting
    1. Score immediately following a game would come from memory
@@ -41,8 +41,8 @@ A collection of multiplayer minigames.
    1. Only host would have a button to "New Game with Existing Players" that would appear on the Scores page after a game is over
    1. How to deal with people leaving the Scores page (since it would assign a new socket ID)?
 1. Get rid of tooltips when game starts
-1. For dogfight, hold down does not work on track pad for firing bullets
-1. Display player name above/below plane in dogfight game
+1. For airfight, hold down does not work on track pad for firing bullets
+1. Display player name above/below plane in airfight game
 1. Bullets not tied to players except for scoring (so you could theoretically shoot yourself - although maybe not since when you first shoot it's overlapping)
    1. And the game itself could simulate the bullets instead of players doing it for their own bullets
    1. Invert bullet logic so you report if you get hit (not if you hit someone else)
@@ -51,10 +51,9 @@ A collection of multiplayer minigames.
    1. Should handle case where player fires a bullet and then disconnects (which currently does not work)
 1. Add game code to URL so sharing link gets you into game
 1. Power ups
-   1. Exactly one screen wrap for bullets in dogfight game (currently 0)
+   1. Exactly one screen wrap for bullets in airfight game (currently 0)
 1. Fix client lag
    1. See https://www.gabrielgambetta.com/client-server-game-architecture.html
-1. Refactor dogfight to airfight
 1. Make it so the spectator start state is accurate
    1. The data is the host's copy, so data for other players will not be current
 1. Add dodge functionality to airfight similar to Super Smash

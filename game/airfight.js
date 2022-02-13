@@ -27,7 +27,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
 
     return {
         init: function (data) {
-            console.log('starting dogfight server side code'); // TODO: Remove
+            console.log('starting airfight server side code'); // TODO: Remove
 
             // Game width and height
             data.gameWidth = 900;
