@@ -66,7 +66,6 @@ A collection of multiplayer minigames.
    1. Similar bug happens where you can end up with multiple games that do not exist but they show up as buttons
 1. Look into not using client time for airfight to avoid errors when someone's time is off
 1. Replay functionality to rewatch games
-1. Add favicon to game
 1. White as a color is bad (maybe swap it for something)
 1. Put name of color in parens
 1. Make it easier to find plane at beginning since have to look around (highlight maybe?)
