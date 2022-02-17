@@ -20,7 +20,7 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
         '0x17ff26',
         '0x1a35e8',
         '0xc32afa',
-        '0xffffff',
+        '0x3d853a',
         '0x823819',
         '0xff429a'
     ];
