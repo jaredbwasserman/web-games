@@ -140,13 +140,21 @@ function airfightCreate() {
     this.airfightKeyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.airfightKeySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    // Stop ship flashing 3.5 seconds after the start of the game
+    // Start next game phase after 3.5 seconds
     setTimeout(
         function () {
+            // Set player plane alpha to 1
             airfightTweens.forEach(tween => {
                 tween.stop();
                 tween.targets[0].setAlpha(1);
             });
+
+            // Set enemy plane alphas to 1
+            for (const [socketId, enemy] of Object.entries(airfightEnemies)) {
+                enemy.setAlpha(1);
+            }
+
+            // Able to fire bullets
             airfightCanFire = true;
         },
         airfightStartTime + 3500 - Date.now()
@@ -303,20 +311,9 @@ function airfightAddEnemy(self, player) {
     enemy.setCircle(15, 0, 0);
     enemy.setGravity(0, 0);
     enemy.setDepth(50);
+    enemy.setAlpha(0.2);
     enemy.socketId = player.socketId;
     airfightEnemies[enemy.socketId] = enemy;
-
-    // Flash to indicate bullets cannot be shot yet
-    airfightTweens.push(
-        self.tweens.add({
-            targets: enemy,
-            alpha: 0.1,
-            duration: 250,
-            ease: 'Power0',
-            yoyo: true,
-            repeat: -1
-        })
-    );
 }
 
 function airfightAddPlayerBullet(self, bulletIn) {

@@ -68,8 +68,6 @@ A collection of multiplayer minigames.
 1. Replay functionality to rewatch games
 1. White as a color is bad (maybe swap it for something)
 1. Put name of color in parens
-1. Make it easier to find plane at beginning since have to look around (highlight maybe?)
-   1. Fade (like 20% alpha?) the other planes for the first few seconds, and maybe extend the no shoot time a few seconds too
 1. Add sideways movement with Q and E for airfight
 1. Make airfight planes forward accelerate faster to make it easier to move
 1. Sim bullets on client only send create destroy events for them (since there are a lot bullets) - test this with 2 play and 3 play
