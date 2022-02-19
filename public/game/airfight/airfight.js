@@ -311,7 +311,7 @@ function airfightAddEnemy(self, player) {
     enemy.setCircle(15, 0, 0);
     enemy.setGravity(0, 0);
     enemy.setDepth(50);
-    enemy.setAlpha(0.2);
+    enemy.setAlpha(0.5); // Enemies slightly transparent at the beginning of the game
     enemy.socketId = player.socketId;
     airfightEnemies[enemy.socketId] = enemy;
 }
