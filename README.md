@@ -67,6 +67,8 @@ A collection of multiplayer minigames.
 1. Look into not using client time for airfight to avoid errors when someone's time is off
 1. Replay functionality to rewatch games
 1. Put name of color in parens
-1. Add sideways movement with Q and E for airfight
+1. Airfight movement
+   1. Add sideways movement with Q and E for airfight
+   1. Add ability for plane to move backwards in airfight
 1. Make airfight planes forward accelerate faster to make it easier to move
 1. Sim bullets on client only send create destroy events for them (since there are a lot bullets) - test this with 2 play and 3 play
