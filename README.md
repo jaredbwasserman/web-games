@@ -72,3 +72,7 @@ A collection of multiplayer minigames.
    1. Add ability for plane to move backwards in airfight
 1. Make airfight planes forward accelerate faster to make it easier to move
 1. Sim bullets on client only send create destroy events for them (since there are a lot bullets) - test this with 2 play and 3 play
+1. Airfight battle royale mode
+   1. Shrinking arena
+   1. Maybe circular?
+1. Airfight kill streak similar to LoL “double kill”
