@@ -75,4 +75,4 @@ A collection of multiplayer minigames.
 1. Airfight battle royale mode
    1. Shrinking arena
    1. Maybe circular?
-1. Airfight kill streak similar to LoL “double kill”
+1. Airfight kill streak similar to LoL "double kill"
