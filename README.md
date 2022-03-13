@@ -1,4 +1,4 @@
-# Web Game
+# Web Games
 A collection of multiplayer minigames.
 
 ## Run Locally
