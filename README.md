@@ -76,3 +76,4 @@ A collection of multiplayer minigames.
    1. Shrinking arena
    1. Maybe circular?
 1. Airfight kill streak similar to LoL "double kill"
+1. Make countdown audible (in addition to visual) so you can hear "3, 2, 1" to alert you
