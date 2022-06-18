@@ -80,3 +80,4 @@ A collection of multiplayer minigames.
 1. Make multiple animals for clicker and you have to click the correct one
 1. Bug where you refresh while in an airfight game and then you end up in your own game
 1. Light green and dark green are too close to each other for airfight
+1. Color priority to reduce the odds of color collision
