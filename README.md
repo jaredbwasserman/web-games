@@ -81,3 +81,5 @@ A collection of multiplayer minigames.
 1. Bug where you refresh while in an airfight game and then you end up in your own game
 1. Light green and dark green are too close to each other for airfight
 1. Color priority to reduce the odds of color collision
+1. Increase player cap for the airplane game
+1. See if moving mouse around a lot before clicking on animal causes delay for click time because it’s processing mouse move events
