@@ -83,3 +83,4 @@ A collection of multiplayer minigames.
 1. Color priority to reduce the odds of color collision
 1. Increase player cap for the airplane game
 1. See if moving mouse around a lot before clicking on animal causes delay for click time because it’s processing mouse move events
+1. Add count of players to lobby
