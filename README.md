@@ -28,7 +28,6 @@ A collection of multiplayer minigames.
 1. What to do if user does not consent to cookies?
 1. Add animations to airfight for bullet collisions with enemies and enemy bullets with self
 1. Bullet cone in front of plane based on pointer position
-1. Add kill count stat for airfight
 1. Persist scores to database or file
    1. Clean up scores array after persisting
    1. Score immediately following a game would come from memory
@@ -79,8 +78,6 @@ A collection of multiplayer minigames.
 1. Make countdown audible (in addition to visual) so you can hear "3, 2, 1" to alert you
 1. Make multiple animals for clicker and you have to click the correct one
 1. Bug where you refresh while in an airfight game and then you end up in your own game
-1. Light green and dark green are too close to each other for airfight
-1. Color priority to reduce the odds of color collision
-1. Increase player cap for the airplane game
 1. See if moving mouse around a lot before clicking on animal causes delay for click time because it’s processing mouse move events
-1. Add count of players to lobby
+1. Calculate killed after time in airfight based on server time not client time (in case client time is wrong)
+1. If host leaves, make someone else host

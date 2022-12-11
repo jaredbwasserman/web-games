@@ -13,16 +13,36 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
     const gameType = gameTypeIn;
     const scores = scoresIn;
     const colors = [
-        '0x2cc5f6',
-        '0xf51414',
-        '0xf26f11',
-        '0xffe312',
-        '0x17ff26',
-        '0x1a35e8',
-        '0xc32afa',
-        '0x3d853a',
-        '0x823819',
-        '0xff429a'
+		'0x696969',
+		'0x7f0000',
+		'0x808000',
+		'0x483d8b',
+		'0x008000',
+		'0x008b8b',
+		'0x9acd32',
+		'0x00008b',
+		'0x8fbc8f',
+		'0x800080',
+		'0xb03060',
+		'0xff4500',
+		'0xff8c00',
+		'0xffff00',
+		'0x00ff00',
+		'0x8a2be2',
+		'0x00ff7f',
+		'0xdc143c',
+		'0x00ffff',
+		'0x0000ff',
+		'0xff00ff',
+		'0x1e90ff',
+		'0xfa8072',
+		'0x90ee90',
+		'0xff1493',
+		'0x7b68ee',
+		'0xee82ee',
+		'0x87cefa',
+		'0xffdead',
+		'0xffb6c1',
     ];
 
     return {
@@ -30,8 +50,8 @@ module.exports = function (ioIn, socketIn, gamesIn, playersIn, gameIdIn, gameTyp
             console.log('starting airfight server side code'); // TODO: Remove
 
             // Game width and height
-            data.gameWidth = 900;
-            data.gameHeight = 675;
+            data.gameWidth = 1000;
+            data.gameHeight = 750;
 
             // Random color order
             // See https://www.quora.com/How-do-you-find-the-nth-permutation-of-an-array-of-integers

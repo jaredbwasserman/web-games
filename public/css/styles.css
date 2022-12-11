@@ -181,7 +181,7 @@ textarea {
 }
 
 #startGameArea {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .checkboxArea {
@@ -208,6 +208,17 @@ textarea {
 
 #spectateCheckboxLabel {
     cursor: pointer;
+}
+
+#playerCount {
+    text-align: center;
+    margin: 0 auto;
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 1.5em;
+    line-height: 1.2;
+	margin-bottom: 30px;
 }
 
 #playersList {

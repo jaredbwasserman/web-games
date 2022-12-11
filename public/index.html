@@ -40,11 +40,6 @@
                 <button id="btnCreateGame" class="btn">CREATE GAME</button>
             </div>
 
-            <div class="joinGame">
-                <textarea id="joinGameCode" rows="1" cols="50" maxlength="50" placeholder="ENTER GAME CODE"></textarea>
-                <button id="btnJoinGame" class="btn">JOIN GAME</button>
-            </div>
-
             <div id="gamesArea">
                 <div id="gamesList" class="btn-group"></div>
             </div>
@@ -82,6 +77,7 @@
             </div>
 
             <div id="playersArea">
+				<div id="playerCount"></div>
                 <div id="playersList"></div>
             </div>
         </div>
@@ -89,7 +85,7 @@
 
     <!-- Game template -->
     <script id="gameTemplate" type="text/template">
-        <div id="gameTitle" class="title"></div>
+        <!-- <div id="gameTitle" class="title"></div> -->
 
         <!-- <div class="returnHome">
             <button id="btnReturnHomeGame" class="btn">RETURN HOME</button>

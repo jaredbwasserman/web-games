@@ -88,6 +88,11 @@ const IO = {
 
             // Add new list
             playersList.appendChild(Util.makeUL(data.players));
+
+			// Update count
+			const playerCount = data.players.filter(e => e.role !== 'spectator').length;
+			const spectatorCount = data.players.filter(e => e.role === 'spectator').length;
+			document.getElementById('playerCount').innerHTML = 'PLAYERS: ' + playerCount + '&emsp;SPECTATORS: ' + spectatorCount;
         }
     },
 
@@ -197,37 +202,11 @@ const App = {
 
     bindEvents: function () {
         document.getElementById('btnViewScores').addEventListener('click', App.onViewScoresClick);
-        document.getElementById('btnJoinGame').addEventListener('click', App.onJoinClick);
         document.getElementById('btnCreateGame').addEventListener('click', App.onCreateClick);
     },
 
     onViewScoresClick: function () {
         IO.socket.emit('requestScores');
-    },
-
-    onJoinClick: function () {
-        console.log('Clicked "Join A Game"'); // TODO: Remove
-
-        const name = Util.getName();
-        if (!name) {
-            return;
-        }
-
-        if ('' === document.getElementById('joinGameCode').value.trim()) {
-            Swal.fire({
-                position: 'top',
-                icon: 'error',
-                title: 'Please enter a game code.',
-                showConfirmButton: false,
-                timer: 2000
-            });
-            return;
-        }
-
-        // Get the game code
-        const gameId = document.getElementById('joinGameCode').value.trim()
-
-        IO.socket.emit('joinGame', { gameId: gameId, name: name });
     },
 
     onCreateClick: function () {
@@ -270,14 +249,6 @@ const App = {
 
         // Name from cookie
         document.getElementById('name').value = Util.getCookie('name');
-
-        // Enter to join game
-        document.getElementById('joinGameCode').addEventListener('keydown', function (e) {
-            if ('Enter' === e.key && !e.shiftKey) {
-                e.preventDefault();
-                document.getElementById('btnJoinGame').click();
-            }
-        });
 
         // Get games list
         IO.socket.emit('requestGames', {});
@@ -369,7 +340,7 @@ const App = {
         document.getElementById('currentScreen').innerHTML = document.getElementById('gameTemplate').innerHTML;
 
         // Update title
-        document.getElementById('gameTitle').innerHTML = data.gameType.toUpperCase();
+        // document.getElementById('gameTitle').innerHTML = data.gameType.toUpperCase();
 
         // Return home button
         // document.getElementById('btnReturnHomeGame').addEventListener('click', () => window.location.reload());
