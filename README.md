@@ -81,3 +81,6 @@ A collection of multiplayer minigames.
 1. See if moving mouse around a lot before clicking on animal causes delay for click time because it’s processing mouse move events
 1. Calculate killed after time in airfight based on server time not client time (in case client time is wrong)
 1. If host leaves, make someone else host
+1. Add colors for airfight
+   1. In lobby each player's name should be the color of their plane
+   1. In game there should be an indicator somewhere of your own plane color
