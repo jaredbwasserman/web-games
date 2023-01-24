@@ -84,3 +84,5 @@ A collection of multiplayer minigames.
 1. Add colors for airfight
    1. In lobby each player's name should be the color of their plane
    1. In game there should be an indicator somewhere of your own plane color
+1. Prioritize using the best colors first for airfight
+1. Bug where game cannot start if lobby creator leaves
