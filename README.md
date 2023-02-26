@@ -2,15 +2,10 @@
 A collection of multiplayer minigames.
 
 ## Run Locally
-### Set up
-1. Node.js: `v14.0.0`
-
-### Run
 ```
-> npm install
-> node server.js
-
-# Open browser at localhost:8080
+nvm use 18.14.2
+npm install
+node server.js
 ```
 
 ## Notes
