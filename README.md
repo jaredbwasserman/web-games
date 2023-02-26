@@ -80,3 +80,6 @@ node server.js
    1. In lobby each player's name should be the color of their plane
 1. Bug where game cannot start if lobby creator leaves
 1. Indicator in the lobby of who is the host - perhaps an icon next to their name
+1. More validation to avoid errors
+   1. When a player is in the lobby of a stale deployment, new deployment will crash if that player refreshes
+1. Put "Look out for a ..." in gameInfo for clicker to be consistent with airfight
