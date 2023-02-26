@@ -89,10 +89,10 @@ const IO = {
             // Add new list
             playersList.appendChild(Util.makeUL(data.players));
 
-			// Update count
-			const playerCount = data.players.filter(e => e.role !== 'spectator').length;
-			const spectatorCount = data.players.filter(e => e.role === 'spectator').length;
-			document.getElementById('playerCount').innerHTML = 'PLAYERS: ' + playerCount + '&emsp;SPECTATORS: ' + spectatorCount;
+            // Update count
+            const playerCount = data.players.filter(e => e.role !== 'spectator').length;
+            const spectatorCount = data.players.filter(e => e.role === 'spectator').length;
+            document.getElementById('playerCount').innerHTML = 'PLAYERS: ' + playerCount + '&emsp;SPECTATORS: ' + spectatorCount;
         }
     },
 
