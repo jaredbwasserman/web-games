@@ -345,7 +345,7 @@ ul {
     margin-bottom: 20px;
 }
 
-#gameTimer {
+#gameTimer, #gameInfo {
     text-align: center;
     margin: 0 auto;
     color: #ffffff;
@@ -353,6 +353,7 @@ ul {
     font-weight: 700;
     font-size: 1.5em;
     line-height: 1.2;
+    margin-bottom: 20px;
 }
 
 /* Scores */

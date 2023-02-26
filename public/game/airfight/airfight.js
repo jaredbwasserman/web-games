@@ -113,6 +113,11 @@ function airfightCreate() {
     for (const [socketId, player] of Object.entries(airfightPlayers)) {
         if (socketId === App.socketId) {
             airfightAddPlayer(self, player);
+
+            // Indicate my own plane color
+            const gameInfo = document.getElementById('gameInfo');
+            gameInfo.innerText = 'This is your plane color.'
+            gameInfo.style.color = player.color.replace('0x', '#');
         }
         else {
             airfightAddEnemy(self, player);
