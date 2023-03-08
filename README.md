@@ -83,3 +83,4 @@ node server.js
 1. More validation to avoid errors
    1. When a player is in the lobby of a stale deployment, new deployment will crash if that player refreshes
 1. Put "Look out for a ..." in gameInfo for clicker to be consistent with airfight
+1. Make it so you can use a shield during airfight
