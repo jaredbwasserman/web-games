@@ -84,3 +84,6 @@ node server.js
    1. When a player is in the lobby of a stale deployment, new deployment will crash if that player refreshes
 1. Put "Look out for a ..." in gameInfo for clicker to be consistent with airfight
 1. Make it so you can use a shield during airfight
+1. Fix bug where the bullets move really slowly
+   1. It is very likely due to the fact that the updates are sent from the client, which means slow client == slow bullets
+   1. See if tracking server-side rather than client-side would fix this issue
