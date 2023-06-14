@@ -17,6 +17,7 @@ node server.js
    1. https://www.kenney.nl/assets/animal-pack-redux
 
 ## TODO
+1. Add some sort of fun fact about the animal (or adjective) being used for the lobby name
 1. Add more games
 1. Send error and terminate client side game if room no longer exists (host leaving should cause room to drop)
    1. Also `onRequestGames({ isUpdate: true })` for this case
